@@ -1,0 +1,1 @@
+net = WSApplication.current_network
