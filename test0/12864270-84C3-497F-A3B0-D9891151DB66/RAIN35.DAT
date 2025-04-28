@@ -1,0 +1,25 @@
+IWTDB002
+#Children,1,()
+#Parent,1,6831
+#UsedBy,1,()
+#Uses,1,()
+Blob Handler,0,
+Buildup Time,0,
+Catchment Runoff Data Storage,0,
+Comment,0,
+CreationGUID,1,{EC322004-DF21-45E5-A96A-715A3A3124C4}
+Flow Survey,0,
+Hidden,0,
+ID,0,
+Live Group,0,
+Model Group,1,26
+ModificationGUID,1,{EC322004-DF21-45E5-A96A-715A3A3124C4}
+ModifiedBy,1,grista
+Name,1,2001 Typical Year_Evap
+Rainfall Event Storage,0,
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,44622.48078704
+WhenModified,1,45099.66631944
+WhenRecycled,0,

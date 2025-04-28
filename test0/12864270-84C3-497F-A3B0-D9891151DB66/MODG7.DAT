@@ -1,0 +1,22 @@
+IWTDB002
+#Children,1,"(1037,1293,1549,1805,2061,2317,2573,2829,3085,3341,3597,3853,4109)"
+#Parent,1,687
+#UsedBy,1,()
+#Uses,1,()
+Comment,0,
+CreationGUID,1,{6378F15F-9149-4FF7-8A8B-6304C4C94887}
+Hidden,1,0
+ID,1,7
+Live Group,0,
+Master Group,0,
+ModificationGUID,1,{6378F15F-9149-4FF7-8A8B-6304C4C94887}
+ModifiedBy,1,rgn2
+Name,1,Standaard buien
+NoInheritUserRoles,0,
+Parent,1,2
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.44182870
+WhenModified,1,42615.44182870
+WhenRecycled,0,

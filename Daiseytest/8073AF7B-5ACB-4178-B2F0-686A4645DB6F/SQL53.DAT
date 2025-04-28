@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,4527
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{C7A8C966-A7BD-4463-89B1-A7EEFDFFA7D4}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,17
+ModificationGUID,1,{C7A8C966-A7BD-4463-89B1-A7EEFDFFA7D4}
+ModifiedBy,1,tmg
+Name,1,Selecteer DS b.o.b. hoger dan US b.o.b.
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,45105.46289352
+WhenModified,1,45105.46459491
+WhenRecycled,0,

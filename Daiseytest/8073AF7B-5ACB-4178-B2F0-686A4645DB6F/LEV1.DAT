@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,431
+#UsedBy,1,()
+#Uses,1,()
+Comment,0,
+CreationGUID,1,{087C8475-0126-41BF-ACC4-41B1BBD5FF5E}
+Flow Survey,0,
+Hidden,0,
+ID,0,
+Live Group,0,
+Model Group,1,1
+ModificationGUID,1,{E61E9E84-CFB2-453D-90E0-CA91E3B622AC}
+ModifiedBy,1,tby
+Name,1,Levelfile
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,44740.54929398
+WhenModified,1,44740.54929398
+WhenRecycled,0,

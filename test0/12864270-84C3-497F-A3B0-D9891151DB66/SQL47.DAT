@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,4271
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,1,Note: handmatig de ontbrekende b.o.b.s een waarde geven
+CreationGUID,1,{56E48EA6-CEB1-4C17-A347-1038E73EA0F8}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,16
+ModificationGUID,1,{3F1F991E-A591-4B05-A9B0-EEF3ACA39972}
+ModifiedBy,1,pkn
+Name,1,Selecteert: BOB_Ontbrekend_Onrealistisch
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.54825231
+WhenModified,1,44876.35636574
+WhenRecycled,0,

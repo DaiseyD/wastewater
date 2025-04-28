@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,2991
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{523DD0AD-851D-4391-9933-C8DBC9E28ACD}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,11
+ModificationGUID,1,{523DD0AD-851D-4391-9933-C8DBC9E28ACD}
+ModifiedBy,1,rgn2
+Name,1,Stap 6 > 900 mm
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42621.45409722
+WhenModified,1,42621.45932870
+WhenRecycled,0,

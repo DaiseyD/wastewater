@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,1199
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{D90EF08D-5B7C-44BD-96B1-B57FFFE6EE5F}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,4
+ModificationGUID,1,{D90EF08D-5B7C-44BD-96B1-B57FFFE6EE5F}
+ModifiedBy,1,mitt
+Name,1,2D Water op Maaiveld (incl stelsel)
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,44803.43684028
+WhenModified,1,44803.43685185
+WhenRecycled,0,

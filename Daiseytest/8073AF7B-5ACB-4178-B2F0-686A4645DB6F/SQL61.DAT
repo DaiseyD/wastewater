@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,5807
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{B9B890D9-9139-413D-A7FC-E882D4C4C3AB}
+Hidden,0,
+ID,0,
+Live Group,0,
+Model Group,1,22
+ModificationGUID,1,{F9E2EBFA-F4C2-4ED0-A9E9-9F00F1D5354F}
+ModifiedBy,1,pkn
+Name,1,Stap 2. Selecteert b.o.b-verschil >0.10m
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,44993.61851852
+WhenModified,1,44993.64130787
+WhenRecycled,0,

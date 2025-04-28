@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,5295
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{F0853E57-C170-4C70-A42B-BFA1C9D5476F}
+Hidden,0,
+ID,0,
+Live Group,0,
+Model Group,1,20
+ModificationGUID,1,{91F84BEC-AF7D-4221-9A9E-92E678EEFF28}
+ModifiedBy,1,rgn2
+Name,1,Stroomsnelheid
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42741.41328704
+WhenModified,1,42741.41339120
+WhenRecycled,0,

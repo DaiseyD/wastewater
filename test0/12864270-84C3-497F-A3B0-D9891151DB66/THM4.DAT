@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,1199
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{EAC66D79-1F61-4915-8D83-071C9C83CC78}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,4
+ModificationGUID,1,{CBF61D10-6B7B-4DB3-AE63-D106563681AF}
+ModifiedBy,1,tmg
+Name,1,"Stelseltype putten, kolken en leidingen"
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,44515.63447917
+WhenModified,1,45216.35523148
+WhenRecycled,0,

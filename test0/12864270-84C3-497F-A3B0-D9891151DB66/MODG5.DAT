@@ -1,0 +1,22 @@
+IWTDB002
+#Children,1,"(271,527)"
+#Parent,1,431
+#UsedBy,1,()
+#Uses,1,()
+Comment,0,
+CreationGUID,1,{231032A4-0A52-4925-BA0B-7114F19125FB}
+Hidden,1,0
+ID,1,5
+Live Group,0,
+Master Group,0,
+ModificationGUID,1,{231032A4-0A52-4925-BA0B-7114F19125FB}
+ModifiedBy,1,rgn2
+Name,1,Waste Water Group
+NoInheritUserRoles,0,
+Parent,1,1
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.44381944
+WhenModified,1,42615.44381944
+WhenRecycled,0,

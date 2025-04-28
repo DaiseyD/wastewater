@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,3247
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{B028BA54-38EC-4A64-8E72-0A0E363E9B69}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,12
+ModificationGUID,1,{B028BA54-38EC-4A64-8E72-0A0E363E9B69}
+ModifiedBy,1,Tomg
+Name,1,selecteert leidingen waar us<ds
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,38799.54364583
+WhenModified,1,38799.54539352
+WhenRecycled,0,

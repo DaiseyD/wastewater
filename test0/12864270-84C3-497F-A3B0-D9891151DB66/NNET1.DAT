@@ -1,0 +1,27 @@
+IWTDB002
+#Children,1,()
+#Parent,1,431
+#UsedBy,1,()
+#Uses,1,()
+CheckInGUID,0,
+Comment,0,
+Computer,0,
+CreationGUID,1,{99494946-A5C4-4520-815B-77B47F21748F}
+Current,0,
+Default,0,
+Hidden,0,
+ID,0,
+Locked,0,
+Model Group,1,1
+ModificationGUID,1,{99494946-A5C4-4520-815B-77B47F21748F}
+ModifiedBy,1,tmg
+Name,1,Uitgangssituatie - Gebruik dit model als basis
+Parent,0,
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+ServerBranchID,0,
+WhenCreated,1,45476.39570602
+WhenModified,1,45476.39570602
+WhenRecycled,0,
+WhenValidated,0,

@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,5295
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{8FAC6105-F981-44EE-BB3C-145BEE2ACDEE}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,20
+ModificationGUID,1,{8FAC6105-F981-44EE-BB3C-145BEE2ACDEE}
+ModifiedBy,1,rgn2
+Name,1,Vullingsgraad
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.67238426
+WhenModified,1,42615.67238426
+WhenRecycled,0,

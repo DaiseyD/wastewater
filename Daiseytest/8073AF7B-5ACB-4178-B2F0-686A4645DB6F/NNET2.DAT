@@ -1,0 +1,27 @@
+IWTDB002
+#Children,1,()
+#Parent,1,6319
+#UsedBy,1,"(278,534)"
+#Uses,1,()
+CheckInGUID,0,
+Comment,0,
+Computer,0,
+CreationGUID,1,{248D61B3-14D6-4D60-ACE7-4CFA8C8695A4}
+Current,0,
+Default,0,
+Hidden,0,
+ID,1,2
+Locked,0,
+Model Group,1,24
+ModificationGUID,1,{248D61B3-14D6-4D60-ACE7-4CFA8C8695A4}
+ModifiedBy,1,alex.grist
+Name,1,1D Simulation Model
+Parent,0,
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+ServerBranchID,0,
+WhenCreated,1,43689.50814815
+WhenModified,1,43689.50814815
+WhenRecycled,0,
+WhenValidated,0,

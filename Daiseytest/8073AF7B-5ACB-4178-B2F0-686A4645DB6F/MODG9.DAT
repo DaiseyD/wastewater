@@ -1,0 +1,22 @@
+IWTDB002
+#Children,1,"(4877,5133,5389,5645,5901,6157,6413,6669,6925,7181,7437)"
+#Parent,1,687
+#UsedBy,1,()
+#Uses,1,()
+Comment,0,
+CreationGUID,1,{A23B1A72-D31B-4EAB-A296-909FAB2C2BF6}
+Hidden,1,0
+ID,1,9
+Live Group,0,
+Master Group,0,
+ModificationGUID,1,{A23B1A72-D31B-4EAB-A296-909FAB2C2BF6}
+ModifiedBy,1,rgn2
+Name,1,KNMI 10 jarige reeks
+NoInheritUserRoles,0,
+Parent,1,2
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42621.47870370
+WhenModified,1,42621.47870370
+WhenRecycled,0,

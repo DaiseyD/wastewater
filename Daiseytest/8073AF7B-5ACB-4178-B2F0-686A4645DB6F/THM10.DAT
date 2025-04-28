@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,5295
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{E64B627C-1C74-4733-B5F5-2D6246927C01}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,20
+ModificationGUID,1,{E64B627C-1C74-4733-B5F5-2D6246927C01}
+ModifiedBy,1,rgn2
+Name,1,Maximaal debiet (bui)
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42737.62729167
+WhenModified,1,42737.62836806
+WhenRecycled,0,

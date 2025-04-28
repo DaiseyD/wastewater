@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,3759
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{762FD001-C9B5-4C15-A57A-B071F7A77476}
+Hidden,0,
+ID,0,
+Live Group,0,
+Model Group,1,14
+ModificationGUID,1,{C82C8385-BD86-4978-B54E-5C80F7CBA2B1}
+ModifiedBy,1,pkn
+Name,1,Generate_Shape_ID
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,45226.33424769
+WhenModified,1,45226.33505787
+WhenRecycled,0,

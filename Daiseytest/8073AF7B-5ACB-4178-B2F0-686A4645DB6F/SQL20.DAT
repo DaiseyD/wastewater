@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,2991
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{B300DA83-E523-4AE6-8A3F-A9CA0EA7CAD4}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,11
+ModificationGUID,1,{B300DA83-E523-4AE6-8A3F-A9CA0EA7CAD4}
+ModifiedBy,1,rgn2
+Name,1,Stap 11 Minimum floodable area 100 m2
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.53815972
+WhenModified,1,42615.54155093
+WhenRecycled,0,

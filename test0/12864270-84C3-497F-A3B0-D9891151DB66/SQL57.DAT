@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,4783
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,01J05P3FQDMCE1KD8EZVN9MSWC
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,18
+ModificationGUID,1,{DEC4203A-DA68-487C-9146-D0795DDC6A8F}
+ModifiedBy,1,Guy Van Hemel
+Name,1,Zet DS Duiker Invert op RR Bodemhoogte
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,45455.40134259
+WhenModified,1,45455.40238426
+WhenRecycled,0,

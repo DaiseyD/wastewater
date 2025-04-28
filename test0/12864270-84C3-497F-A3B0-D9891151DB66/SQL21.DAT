@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,2991
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{90F45977-B507-453E-A993-2C2B9E3E4038}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,11
+ModificationGUID,1,{90F45977-B507-453E-A993-2C2B9E3E4038}
+ModifiedBy,1,rgn2
+Name,1,Stap 1 Minimale putgrootte 0.64 m2
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.54333333
+WhenModified,1,42621.45736111
+WhenRecycled,0,

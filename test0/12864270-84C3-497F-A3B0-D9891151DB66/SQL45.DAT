@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,4015
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{55546247-2529-4D71-BA88-A753A22936D4}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,15
+ModificationGUID,1,{55546247-2529-4D71-BA88-A753A22936D4}
+ModifiedBy,1,tby
+Name,1,selecteer width WEIR <1.0m
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.61212963
+WhenModified,1,44740.59500000
+WhenRecycled,0,

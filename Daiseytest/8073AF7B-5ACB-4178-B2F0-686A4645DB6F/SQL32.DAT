@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,3247
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{CB45DB7A-A9EC-481E-8F5D-D50D04B645B5}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,12
+ModificationGUID,1,{CB45DB7A-A9EC-481E-8F5D-D50D04B645B5}
+ModifiedBy,1,tby
+Name,1,Selecteert: dekking< 1.0 m
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.64263889
+WhenModified,1,44740.56947917
+WhenRecycled,0,

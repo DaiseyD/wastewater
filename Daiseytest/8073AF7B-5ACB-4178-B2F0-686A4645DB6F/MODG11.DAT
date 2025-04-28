@@ -1,0 +1,22 @@
+IWTDB002
+#Children,1,"(5149,5405,5661,5917,6173,6429,6685,6941,7197,7453,7709)"
+#Parent,1,943
+#UsedBy,1,()
+#Uses,1,()
+Comment,0,
+CreationGUID,1,{F7CC43A0-A5DC-413A-BE52-8D95C45536AF}
+Hidden,1,0
+ID,1,11
+Live Group,0,
+Master Group,0,
+ModificationGUID,1,{F7CC43A0-A5DC-413A-BE52-8D95C45536AF}
+ModifiedBy,1,rgn2
+Name,1,Putten
+NoInheritUserRoles,0,
+Parent,1,3
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.49947917
+WhenModified,1,42615.49947917
+WhenRecycled,0,

@@ -1,0 +1,21 @@
+IWTDB002
+#Children,1,()
+#Parent,1,3503
+#UsedBy,1,()
+#Uses,1,()
+Asset Group,0,
+Comment,0,
+CreationGUID,1,{B35A554F-6B62-412F-9C14-215DCE6C954E}
+Hidden,1,0
+ID,0,
+Live Group,0,
+Model Group,1,13
+ModificationGUID,1,{B35A554F-6B62-412F-9C14-215DCE6C954E}
+ModifiedBy,1,rgn2
+Name,1,Tot.area=SOM runoff area
+RecycledBy,0,
+RecycleParent,0,
+RecycleParentType,0,
+WhenCreated,1,42615.53359954
+WhenModified,1,42615.53641204
+WhenRecycled,0,
