@@ -83,36 +83,65 @@ end
 def changeAllValues(openNetwork, type, field, value)
     objects = openNetwork.row_objects(type) # objects are all objects of a type, example: hw_conduit
     objects.each do | object | 
+
+            
         object[field] = value
         object.write
     end
 end
 
-def massSimulation(db, net, openNetwork, toModifyObj)
+def scenarioCreateStrategy(index, count, basename, network, modificationObj)
+    network.current_scenario = "aux"
+    keys = modificationObj.keys
+    if index>=keys.length()
+        return
+    end
+    currentKey = keys[index]
+    basenamepass = "#{basename}#{count}"
+    paramobj = modificationObj[currentKey]
+
+    fieldkeys = paramobj.keys
+    fieldkeys.each_with_index do |fieldkey, fieldindex|
+        fieldarr = paramobj[fieldkey]
+        fieldarr.each_with_index do | value, valindex | 
+            basenamepass = "#{basename}.#{index}.#{fieldindex}.#{valindex}"
+
+            #  this is where u modify the values
+
+            if(index==keys.length()-1 and fieldindex = fieldkeys.length()-1) 
+                network.add_scenario(basenamepass, "aux")
+            else
+                scenarioCreateStrategy(index)
+            end
+
+        end
+    end
+    
+end
+
+
+def massSimulation(db, net, openNetwork, modificationObj)
 
     base = db.root_model_objects[2] #dont remember why this is 2
     rainfallevent = db.model_object_from_type_and_id 'Rainfall Event', 1
-    basename = "we1231arawe"
+    basename = "testMassSim10"
     baseint = 0
     scenarios = []
-
-    toModifyObj.keys.each { |key|  
+ 
+    modificationObj.keys.each { |key|  
         scenarioname = "#{basename}#{baseint}"
         scenariotest = openNetwork.add_scenario(scenarioname, "Base", "testscenario")
         openNetwork.current_scenario = scenarioname
         scenarios << scenarioname
         openNetwork.transaction_begin  
-        changeAllValues(openNetwork, key, "top_roughness_CW", 1.4)
+        changeAllValues(openNetwork, key, "top_roughness_N", 1.4)
         openNetwork.transaction_commit
         baseint = baseint+1
     }
     
-    openNetwork.transaction_begin
-    validation = openNetwork.validate(scenarios)
-    openNetwork.transaction_commit
-    openNetwork.transaction_end
-
+    validations = openNetwork.validate(scenarios)
     runname = "12312"
+    net.commit("just testing the commit method")
     run = base.new_run(runname, net, nil, rainfallevent, scenarios, {"Duration" => 2, "TimeStep" => 1}) #run=mo.new_run(name,network,commit_id,rainfalls_and_flow_surveys,scenarios,parameters)
     sim = run.children[0]
     WSApplication.connect_local_agent(1)
@@ -129,6 +158,8 @@ def massSimulation(db, net, openNetwork, toModifyObj)
 
 end
 
+
+
 db = WSApplication.open 'C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm'
 net=db.model_object_from_type_and_id 'Model Network',2
 openNetwork = net.open
@@ -137,10 +168,10 @@ setupjsonfile(openNetwork, db)
 # launchui("test.json")
 # puts "Ui finished"
 puts "reading ui results"
-toModifyObj =  readuiresults("uiresults.json")
+modificationObj =  readuiresults("uiresultscopy.json")
 puts "finished processing ui results"
 puts "starting mass simulation"
-massSimulation(db, net, openNetwork, toModifyObj)
+massSimulation(db, net, openNetwork, modificationObj)
 puts "mass simulation finished"
 
 

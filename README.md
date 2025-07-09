@@ -1,23 +1,20 @@
 # wastewater
 Run the shell scripts from the wastewater folder, not from the shellscripts folder (is important for directory references)
 
-## new goals
-- run a full simulation with wastewater profile and rainfall
-- create a script to create a rainfall event
 
 
 
 ##
-- run the simulation with a rainfall event from the python ui
-    -- with output in csv
-- make a ui to create a rainfall event
-
+- properly run all scenarios with the change all strategy HIGH PRIORITY
+- refine the strategies
+- add selectionobject handling
+- add a highlighting function with search to the ui
 
 
 
 
 # requirements
 Ruby
-Python tkinter
+Python pyside6
 Iexchange
 Infoworks ICM
