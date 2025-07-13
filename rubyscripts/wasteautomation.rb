@@ -1,4 +1,5 @@
 require 'json'
+require_relative './ICMAPI.rb'
 
 def jsonobjecthelper(object)
     name = object.table_info.name
@@ -12,7 +13,6 @@ def jsonobjecthelper(object)
 end
 
 def setupjsonfile(on, db) # on means open network
-    
     networkobjects = []
     on.table_names.each do | tableName| 
         if on.row_objects(tableName).length > 0
@@ -22,17 +22,30 @@ def setupjsonfile(on, db) # on means open network
     end
     rainfallevents = []
     begin
-    i = 1
-    while true 
-        rainfallevent = db.model_object_from_type_and_id 'Rainfall Event', i
-        rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
-        i = i +1
-    end
+        i = 1
+        while true 
+            rainfallevent = modificationObj['rainfallevents']
+            rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
+            i = i +1
+        end
     rescue Exception => e
-        puts e
-        puts "last index = #{i-1}" #remove this at some point lol
     end
-    jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents}
+    i=1
+    selectionArray= []
+    while true
+        begin
+            selectionList = db.model_object_from_type_and_id 'Selection List',i
+            selectionArray << selectionList.name
+        rescue Exception => e
+            if e.message.include?("File Not Found")
+                    break
+            end
+            puts "recycled object index found: skipping"
+        end
+        i = i + 1
+    end
+        
+    jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "selectionobjects" => selectionArray}
     File.open("test.json", "w"){|f| f.write(jsonobject.to_json())}
 end
 
@@ -45,28 +58,6 @@ def launchui(filepath)
     end
 end
 
-def runSimulation(db, network) #simobject seems to be the first child of a run WSModelObject
-    #arr=WSApplication.launch_sims(sims, server, results_on_server, max_threads, after)
-    # puts db.root_model_objects.class
-
-    base = db.root_model_objects[2] #dont remember why this is 2
-    rainfallevent = db.model_object_from_type_and_id 'Rainfall Event', 1
-    runname = "meeting0"
-    run = base.new_run(runname, network, nil, rainfallevent, nil, {"Duration" => 2, "TimeStep" => 1}) #run=mo.new_run(name,network,commit_id,rainfalls_and_flow_surveys,scenarios,parameters)
-    sim = run.children[0]
-    WSApplication.connect_local_agent(1)
-    WSApplication.launch_sims([sim], '.', false, 1, 0)
-    while sim.status == "None" 
-        puts "running"
-        sleep(1)
-    end
-    puts "exporting hopefully"
-    path = "C:\\Users\\dijks\\Documents\\wastewatersimulation\\wastewater\\results\\#{runname}"
-    Dir.mkdir path
-    test=sim.results_csv_export(nil,  path)
-    puts test.class
-    puts "exported"
-end
 
 def readuiresults(filepath)
     file = File.open(filepath)
@@ -90,88 +81,114 @@ def changeAllValues(openNetwork, type, field, value)
     end
 end
 
-def scenarioCreateStrategy(index, count, basename, network, modificationObj)
-    network.current_scenario = "aux"
-    keys = modificationObj.keys
-    if index>=keys.length()
-        return
-    end
-    currentKey = keys[index]
-    basenamepass = "#{basename}#{count}"
-    paramobj = modificationObj[currentKey]
 
-    fieldkeys = paramobj.keys
-    fieldkeys.each_with_index do |fieldkey, fieldindex|
-        fieldarr = paramobj[fieldkey]
-        fieldarr.each_with_index do | value, valindex | 
-            basenamepass = "#{basename}.#{index}.#{fieldindex}.#{valindex}"
-
-            #  this is where u modify the values
-
-            if(index==keys.length()-1 and fieldindex = fieldkeys.length()-1) 
-                network.add_scenario(basenamepass, "aux")
-            else
-                scenarioCreateStrategy(index)
-            end
-
+def changeAllstrategy(scenarios, values, fieldName, typeName, icm)
+    newscenarios = []
+    scenarios.each do |s|
+        icm.openNetwork.current_scenario = s
+        values.each_with_index do | value, index | 
+            scenarioName = "#{s}.#{index}"
+            newscenarios << scenarioName
+            icm.openNetwork.add_scenario(scenarioName, "#{s}", "testscenario")
+            icm.openNetwork.current_scenario = scenarioName
+            icm.openNetwork.transaction_begin
+            icm.changeAllValues(typeName, fieldName, value)
+            icm.openNetwork.transaction_commit
         end
+    icm.openNetwork.delete_scenario(s)
     end
-    
+    return newscenarios
+
 end
 
-
-def massSimulation(db, net, openNetwork, modificationObj)
-
-    base = db.root_model_objects[2] #dont remember why this is 2
-    rainfallevent = db.model_object_from_type_and_id 'Rainfall Event', 1
-    basename = "testMassSim10"
+def massSimulation(icm, modificationObj)
+    base = icm.db.root_model_objects[2] #dont remember why this is 2
+    basename = "testStratSimulation"
     baseint = 0
     scenarios = []
- 
-    modificationObj.keys.each { |key|  
-        scenarioname = "#{basename}#{baseint}"
-        scenariotest = openNetwork.add_scenario(scenarioname, "Base", "testscenario")
-        openNetwork.current_scenario = scenarioname
-        scenarios << scenarioname
-        openNetwork.transaction_begin  
-        changeAllValues(openNetwork, key, "top_roughness_N", 1.4)
-        openNetwork.transaction_commit
-        baseint = baseint+1
+    
+    while true
+        begin
+            baseint = baseint + 1
+            scenarioname = "#{basename}#{baseint}"
+            scenariotest = icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")
+            puts "Scenario #{scenarioname} created"
+            break
+        rescue Exception => e
+            if !e.message.include?("already exists")
+                puts e
+                break
+            end
+        end
+    end
+    scenarios << scenarioname
+    modificationObj['parameters'].keys.each { |key|  
+        typeObject = modificationObj['parameters'][key]
+        typeObject.keys.each do  |fieldName|
+            scenarios = changeAllstrategy(scenarios, typeObject[fieldName], fieldName, key, icm)
+        end
     }
     
-    validations = openNetwork.validate(scenarios)
-    runname = "12312"
-    net.commit("just testing the commit method")
-    run = base.new_run(runname, net, nil, rainfallevent, scenarios, {"Duration" => 2, "TimeStep" => 1}) #run=mo.new_run(name,network,commit_id,rainfalls_and_flow_surveys,scenarios,parameters)
-    sim = run.children[0]
-    WSApplication.connect_local_agent(1)
-    WSApplication.launch_sims([sim], '.', false, 1, 0)
-    while sim.status == "None" 
-        puts "running"
-        sleep(1)
+    validations = icm.openNetwork.validate(scenarios)
+    icm.net.commit("committing scenarios")
+    puts("scenarios committed")
+    baseint =0 
+    while true 
+        begin
+            runname = "testfull#{baseint}"
+            baseint = baseint + 1
+            extraParameters = modificationObj['simparameters']
+            rainfallevents = modificationObj['rainfallevents']
+            run = base.new_run(runname, icm.net, nil, rainfallevents, scenarios, extraParameters) #run=mo.new_run(name,network,commit_id,rainfalls_and_flow_surveys,scenarios,parameters)
+            break
+        rescue Exception => e
+            if e.message != "new_run : name already in use"
+                puts "error: unknown problem encountered"
+                puts e
+                exit
+            else 
+                puts "name: #{runname} already in use, trying new name"
+            end
+        end
     end
-    puts "exporting hopefully"
-    path = "C:\\Users\\dijks\\Documents\\wastewatersimulation\\wastewater\\results\\#{runname}"
-    Dir.mkdir path
-    test=sim.results_csv_export(nil,  path)
-
-
+    puts "run created"
+    mocsims = run.children # sims as a modelobjectcollection object
+    sims = []
+    mocsims.each { |x| sims << x }
+    WSApplication.connect_local_agent(1)
+    jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
+    WSApplication.wait_for_jobs(jobids, true, 100000000)
+    currpath = Dir.pwd
+    basepath = "#{currpath}\\results\\#{runname}"
+    begin
+        Dir.mkdir basepath
+    rescue Exception => e
+    end
+    puts "exporting to #{basepath}"
+    sims.each do | sim | 
+        path = "#{currpath}\\#{runname}\\#{sim.name}"
+        begin
+            Dir.mkdir "#{currpath}\\#{runname}\\#{sim.name}"
+        rescue Exception => e
+        end
+        test=sim.results_csv_export(nil,  path)
+    end    
 end
 
 
 
-db = WSApplication.open 'C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm'
-net=db.model_object_from_type_and_id 'Model Network',2
-openNetwork = net.open
-setupjsonfile(openNetwork, db)
-# puts "launching ui"
-# launchui("test.json")
-# puts "Ui finished"
+
+icm = ICMUtil.new('C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm')
+setupjsonfile(icm.openNetwork, icm.db)
+
+puts "launching ui"
+launchui("test.json")
+puts "Ui finished"
 puts "reading ui results"
 modificationObj =  readuiresults("uiresultscopy.json")
 puts "finished processing ui results"
 puts "starting mass simulation"
-massSimulation(db, net, openNetwork, modificationObj)
+massSimulation(icm, modificationObj)
 puts "mass simulation finished"
 
 

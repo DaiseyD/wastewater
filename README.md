@@ -4,11 +4,25 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 
 
 
-##
-- properly run all scenarios with the change all strategy HIGH PRIORITY
-- refine the strategies
-- add selectionobject handling
-- add a highlighting function with search to the ui
+## crucial
+- base functionality
+    - try creating scenarios in ruby script with all things changed
+    - run the simulation
+    - make it runnable from the ui
+- selection object
+    - add to the ui
+    - make them usable
+- ui refining
+    - expandable raininfo cards
+- clean up code
+- refine the timestep and time of the simulations
+- add logging
+- add timeout parameter to UI
+
+## useful
+- rainfall event creator
+- wastewater output creator potentially
+
 
 
 

@@ -1,13 +1,24 @@
 {
-    "hw_conduit": {
-        "top_roughness_N": [
-            0.03,
-            0.02,
-            0.01
-        ],
-        "bottom_roughness_N": [
-            0.03,
-            0.04
-        ]
-    }
+    "parameters": {
+        "hw_conduit": {
+            "bottom_roughness_CW": [
+                1.0,
+                2.0,
+                3.0
+            ],
+            "top_roughness_CW": [
+                1.0,
+                2.0
+            ]
+        }
+    },
+    "simparameters": {
+        "Duration": 2,
+        "TimeStep": 1
+    },
+    "rainfallevents": [
+        1,
+        2,
+        3
+    ]
 }
