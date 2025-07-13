@@ -5,22 +5,26 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 
 
 ## crucial
-- base functionality
-    - try creating scenarios in ruby script with all things changed
-    - run the simulation
-    - make it runnable from the ui
+- export the network and not just the results
 - selection object
-    - add to the ui
     - make them usable
-- ui refining
-    - expandable raininfo cards
+        - find common parameters and add those to a new window
+- strategy coding refinement
+- functionality for other datatypes
+    - string
+    - flag
+    - int
+    
+
 - clean up code
-- refine the timestep and time of the simulations
+    - better error handling and scenario/run naming in ruby
+    - error  handling with datatarget in ui
+
 - add logging
-- add timeout parameter to UI
 
 ## useful
 - rainfall event creator
+
 - wastewater output creator potentially
 
 

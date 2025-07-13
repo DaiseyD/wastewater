@@ -103,7 +103,9 @@ end
 
 def massSimulation(icm, modificationObj)
     base = icm.db.root_model_objects[2] #dont remember why this is 2
-    basename = "testStratSimulation"
+    base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
+    
+    basename = modificationObj['SceneName']
     baseint = 0
     scenarios = []
     
@@ -133,10 +135,9 @@ def massSimulation(icm, modificationObj)
     icm.net.commit("committing scenarios")
     puts("scenarios committed")
     baseint =0 
+    runname = modificationObj['RunName']
     while true 
-        begin
-            runname = "testfull#{baseint}"
-            baseint = baseint + 1
+        begin  
             extraParameters = modificationObj['simparameters']
             rainfallevents = modificationObj['rainfallevents']
             run = base.new_run(runname, icm.net, nil, rainfallevents, scenarios, extraParameters) #run=mo.new_run(name,network,commit_id,rainfalls_and_flow_surveys,scenarios,parameters)
@@ -148,10 +149,12 @@ def massSimulation(icm, modificationObj)
                 exit
             else 
                 puts "name: #{runname} already in use, trying new name"
+                runname = "#{runname}#{baseint}"
+                baseint = baseint+1
             end
         end
     end
-    puts "run created"
+    puts "run #{runname} created"
     mocsims = run.children # sims as a modelobjectcollection object
     sims = []
     mocsims.each { |x| sims << x }
@@ -164,15 +167,19 @@ def massSimulation(icm, modificationObj)
         Dir.mkdir basepath
     rescue Exception => e
     end
-    puts "exporting to #{basepath}"
+    
     sims.each do | sim | 
-        path = "#{currpath}\\#{runname}\\#{sim.name}"
+        path = "#{basepath}\\#{sim.name}"
         begin
-            Dir.mkdir "#{currpath}\\#{runname}\\#{sim.name}"
+            Dir.mkdir path
         rescue Exception => e
+            puts "something went wrong creating directory for results"
+            exit
         end
+        puts "exporting to: #{path}"
         test=sim.results_csv_export(nil,  path)
-    end    
+    end 
+
 end
 
 

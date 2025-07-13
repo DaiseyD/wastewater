@@ -8,7 +8,14 @@
             ],
             "top_roughness_CW": [
                 1.0,
-                2.0
+                1.5
+            ]
+        },
+        "hw_pump": {
+            "maximum_flow": [
+                500.0,
+                600.0,
+                750.0
             ]
         }
     },
@@ -16,9 +23,11 @@
         "Duration": 2,
         "TimeStep": 1
     },
+    "RunName": "NodePumpTest",
+    "SceneName": "SimTest",
     "rainfallevents": [
         1,
         2,
-        3
+        14
     ]
 }
