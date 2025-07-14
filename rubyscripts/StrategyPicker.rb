@@ -62,7 +62,7 @@ class StrategyPicker
             max = values.max()
             min = values.min()
             @icm.openNetwork.transaction_begin
-            @icm.changeRandomRangeValues(typeName, fieldName, min, max)
+            @icm.changeRandomRangeValues(typeName, fieldName, min, max, random = Random.new)
             @icm.openNetwork.transaction_commit
         end
     end

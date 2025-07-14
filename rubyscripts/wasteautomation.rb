@@ -90,41 +90,29 @@ def readuiresults(filepath)
     file = File.open(filepath)
     uiresultsjson = JSON.load(file)
     file.close()
-    puts uiresultsjson
-    uiresultsjson.keys.each { | key | 
-        puts key
-        puts uiresultsjson[key]
-    }
     return uiresultsjson
 end
 
-def changeAllValues(openNetwork, type, field, value)
-    objects = openNetwork.row_objects(type) # objects are all objects of a type, example: hw_conduit
-    objects.each do | object | 
-
-            
-        object[field] = value
-        object.write
+def chooseScenarioName(icm, basename)
+    allScenarios = []
+    icm.openNetwork.scenarios do |s|
+        allScenarios << s
     end
-end
-
-
-def changeAllstrategy(scenarios, values, fieldName, typeName, icm)
-    newscenarios = []
-    scenarios.each do |s|
-        icm.openNetwork.current_scenario = s
-        values.each_with_index do | value, index | 
-            scenarioName = "#{s}.#{index}"
-            newscenarios << scenarioName
-            icm.openNetwork.add_scenario(scenarioName, "#{s}", "testscenario")
-            icm.openNetwork.current_scenario = scenarioName
-            icm.openNetwork.transaction_begin
-            icm.changeAllValues(typeName, fieldName, value)
-            icm.openNetwork.transaction_commit
+    workname = basename
+    baseint = 0
+    lambda_inScenario = lambda {|name, scenarios|
+        scenarios.each do | s |
+            if(s.include?(name))
+                return true
+            end
         end
-    icm.openNetwork.delete_scenario(s)
+        return false
+        }
+    while lambda_inScenario.call(workname, allScenarios)
+        workname = "#{basename}#{baseint}"
+        baseint = baseint+1
     end
-    return newscenarios
+    return workname
 end
 
 def massSimulation(icm, modificationObj)
@@ -133,31 +121,15 @@ def massSimulation(icm, modificationObj)
     
     basename = modificationObj['SceneName']
     baseint = 0
-    scenarios = []
     
-    while true
-        begin
-            baseint = baseint + 1
-            scenarioname = "#{basename}#{baseint}"
-            scenariotest = icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")
-            puts "Scenario #{scenarioname} created"
-            break
-        rescue Exception => e
-            if !e.message.include?("already exists")
-                puts e
-                break
-            end
-        end
-    end
+    scenarioname = chooseScenarioName(icm, basename)
+    scenariotest = icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")  
+    puts "Scenario #{scenarioname} created"
+    
+    scenarios = []
     scenarios << scenarioname
 
     stratPicker = StrategyPicker.new(icm, scenarios, modificationObj)
-    # modificationObj['parameters'].keys.each { |key|  
-    #     typeObject = modificationObj['parameters'][key]
-    #     typeObject.keys.each do  |fieldName|
-    #         scenarios = changeAllstrategy(scenarios, typeObject[fieldName], fieldName, key, icm)
-    #     end
-    # }
     stratPicker.runLoop
     scenarios = stratPicker.scenarios
     
@@ -201,8 +173,7 @@ def massSimulation(icm, modificationObj)
         Dir.mkdir basepath
     rescue Exception => e
     end
-    icm.net.csv_export("results/#{runname}/network.csv", {'Multiple Files' => true}) # this argument takes relative file position
-    sims.each do | sim | 
+    sims.each_with_index do | sim, index | 
         path = "#{basepath}\/#{sim.name}"
         begin
             Dir.mkdir path
@@ -211,6 +182,19 @@ def massSimulation(icm, modificationObj)
             puts e.message
             exit
         end
+        scenarioFoundFlag = false
+        scenarios.each do |scene| 
+            if sim.name.include?("#{scene} ")
+                icm.openNetwork.current_scenario = scene
+                scenarioFoundFlag = true
+                break
+            end
+        end
+        if !scenarioFoundFlag
+            raise Exception.new("scenario not found")
+        end
+
+        icm.openNetwork.csv_export("results/#{runname}/#{sim.name}/network_#{icm.openNetwork.current_scenario}", {'Multiple Files' => true}) # this argument takes relative file position
         puts "exporting to: #{path}"
         test=sim.results_csv_export(nil,  path)
     end 

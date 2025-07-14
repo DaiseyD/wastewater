@@ -39,11 +39,11 @@ class ICMUtil
         end
     end
 
-    def changeRandomRangeValues(type, field, min, max)
+    def changeRandomRangeValues(type, field, min, max, randomizer)
         objects = @openNetwork.row_objects(type)
         objects.each do | object |
-            random = Random.new
-            val = random.rand(min..max)
+
+            val = randomizer.rand(min..max)
             object[field] = val
             object.write
         end
