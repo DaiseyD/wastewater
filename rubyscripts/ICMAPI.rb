@@ -32,15 +32,21 @@ class ICMUtil
     end
 
     def changeAllValues(type, field, value)
-        objects = openNetwork.row_objects(type)
+        objects = @openNetwork.row_objects(type)
         objects.each do | object | 
             object[field] = value
             object.write
         end
     end
 
+    def changeRandomRangeValues(type, field, min, max)
+        objects = @openNetwork.row_objects(type)
+        objects.each do | object |
+            random = Random.new
+            val = random.rand(min..max)
+            object[field] = val
+            object.write
+        end
+    end
+
 end
-
-
-
-

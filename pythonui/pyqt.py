@@ -10,7 +10,7 @@ import json
 
 def getjsondata():
     try:
-        with(open("testcopy.json", "r")) as f:
+        with(open("test.json", "r")) as f:
             data = json.load(f)
             return data
     except Exception as e:
@@ -44,7 +44,7 @@ class Wastewindow(QMainWindow):
         leftFrame = QFrame()
         leftLayout = QGridLayout(leftFrame)
         self.hbox.addWidget(leftFrame)
-        paraframe = ParameterFrame(self.data['networkobjects'], self.datatarget)
+        paraframe = ParameterFrame(self.data['networkobjects'], self.datatarget, self.data['strategies'])
         leftLayout.addWidget(paraframe, 0, 0, 1, -1)
         selectFrame = SelectFrame(self.data, self.datatarget)
         leftLayout.addWidget(selectFrame, 1, 0, 1, -1)
@@ -57,7 +57,7 @@ class Wastewindow(QMainWindow):
         vbox = QVBoxLayout(rightFrame)
         rainFrame = RainFrame(self.data['rainfallevents'], self.datatarget)
         vbox.addWidget(rainFrame)
-        simParameterFrame = SimParameterFrame(self.datatarget)
+        simParameterFrame = SimParameterFrame(self.datatarget, self.data['wasteOutput'])
         vbox.addWidget(simParameterFrame)
         vbox.setStretch(0, 2)
         vbox.setStretch(1, 1)

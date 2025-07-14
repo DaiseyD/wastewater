@@ -17,7 +17,7 @@ def packFrame(widgets, direction):
 
 class ParameterFrame(QFrame):
 
-    def __init__(self, objectdata, datatarget):
+    def __init__(self, objectdata, datatarget, strategies):
         super().__init__()
         if 'parameters' not in datatarget.keys():
             datatarget['parameters'] = {}
@@ -34,17 +34,17 @@ class ParameterFrame(QFrame):
         for (index,item) in enumerate(self.objectdata):
             button = QPushButton(f"{index} {item['name']}")
             button.setStyleSheet("color: hsl(200, 30%, 20%); padding: 10px 2px;")
-            button.clicked.connect(lambda checked, item=item: self.openTypeWindow(item))
+            button.clicked.connect(lambda checked, item=item: self.openTypeWindow(item, strategies))
             rightLayout.addWidget(button)
             
         scrollLeft.setWidget(container)
     
-    def openTypeWindow(self, item):
-        self.w = TypeWindow(item, self.datatarget)
+    def openTypeWindow(self, item, strategies):
+        self.w = TypeWindow(item, self.datatarget, strategies)
         self.w.show()
 
 class TypeWindow(QWidget):
-    def __init__(self, dataobject, datatarget):
+    def __init__(self, dataobject, datatarget, strategies):
         super().__init__()
         self.data = dataobject
         self.datatarget = datatarget
@@ -63,7 +63,7 @@ class TypeWindow(QWidget):
         gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
         for (index,item) in enumerate(dataobject["fields"]):
-            self.addlinegrid(gridbox, index)
+            self.addlinegrid(gridbox, index, strategies)
         scrollArea.setWidget(container)
 
 
@@ -85,16 +85,16 @@ class TypeWindow(QWidget):
             else:
                 w.hide()
 
-    def addlinegrid(self, vbox, index):
+    def addlinegrid(self, vbox, index, strategies):
         fieldobject = self.data['fields'][index]
-        labFrame = self.LabelFrame(fieldobject, self)
+        labFrame = self.LabelFrame(fieldobject, self, strategies)
         vbox.addWidget(labFrame, index)
         labFrame.name = fieldobject['name']
         self.typeWidgets.append(labFrame)
 
     
     class LabelFrame(QFrame):
-        def __init__(self, fieldobject, parent):
+        def __init__(self, fieldobject, parent, strategies):
             self.parent = parent
             super().__init__() 
             labelframelayout = QGridLayout(self)
@@ -118,35 +118,36 @@ class TypeWindow(QWidget):
             checkbox = QCheckBox()
             inputarea = QLineEdit()
             infobox = QLabel()
-            checkbox.clicked.connect(lambda x, fieldobject=fieldobject, values=inputarea, checkbox=checkbox, infobox=infobox : self.parent.handlecheckbox(x, fieldobject, values, checkbox, infobox))
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             labelframelayout.addWidget(infobox, 1, 4, 1, -1)
             labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
             labelframelayout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
-            dropdown = QComboBox()
-            dropdown.addItem("randomselect")
-            dropdown.addItem("randomrange")
-            dropdown.addItem("changeall")
-            labelframelayout.addWidget(dropdown, 3, 2, 1, -1)
-
-            
+            strategybox = QComboBox()
+            for i in strategies:
+                strategybox.addItem(i)
+            labelframelayout.addWidget(strategybox, 3, 2, 1, -1)
+            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandle(fieldobject, inputarea, checkbox, strategybox, infobox)
+            checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
+            strategybox.activated.connect(lambda index: datahandlefunction())
+            inputarea.editingFinished.connect(datahandlefunction)
             self.setStyleSheet("LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
             self.parent.updateInfo(checkbox, infobox, fieldobject)
 
     def updateInfo(self, checkbox, infobox, fieldobject):
         #below line is a hard to read line which tests if data on the field has been written to the target for data passing
         if(self.data['name'] in self.datatarget and fieldobject['name'] in self.datatarget[self.data['name']] and self.datatarget[self.data['name']][fieldobject['name']]!=[]):
-            values =  self.datatarget[self.data['name']][fieldobject['name']]
+            uiresults = self.datatarget[self.data['name']][fieldobject['name']]
             infostring = ""
-            for i in values:
-                infostring = infostring + f"{i},"
-                infobox.setText(infostring)
-                checkbox.setCheckState(Qt.CheckState.Checked)
+            for i in uiresults['values']:
+                infostring = infostring + f"{i}, "
+            infostring = infostring + f"\n{uiresults["strategy"]}"
+            infobox.setText(infostring)
+            checkbox.setCheckState(Qt.CheckState.Checked)
         else:
             checkbox.setCheckState(Qt.CheckState.Unchecked)
             infobox.setText("")
                     
-    def handlecheckbox(self, state, object, inputarea, checkbox, infobox):
+    def handlecheckbox(self, state, object, inputarea, checkbox, infobox, strategybox):
         values = inputarea.text().split(',')
         if (state==True):
             try:
@@ -155,23 +156,52 @@ class TypeWindow(QWidget):
                 checkbox.setCheckState(Qt.CheckState.Unchecked)
                 ErrorPopup(str(e))
                 return
-            self.addToTarget(object, numvalues)
+            self.addToTarget(object, numvalues, )
         else:
             self.removeFromTarget(object)
         self.updateInfo(checkbox, infobox, object)
 
     def addToTarget(self, fieldobject, values):
-        propname = self.data['name']
-        if propname in self.datatarget:
-            self.datatarget[propname][fieldobject['name']] = values
+        typeName = self.data['name']
+        if typeName in self.datatarget:
+            self.datatarget[typeName][fieldobject['name']] = values
         else:
-            self.datatarget[propname] = {}
-            self.datatarget[propname][fieldobject['name']] = values
+            self.datatarget[typeName] = {}
+            self.datatarget[typeName][fieldobject['name']] = values
+
+    def dataHandle(self, fieldobject, inputarea, checkbox, strategybox, infobox):
+        typeName = self.data['name']
+        if(checkbox.isChecked()):
+            try:
+                values = inputarea.text().split(',')
+                numvalues = list(map(lambda x : float(x), values))
+                strategy = strategybox.currentText()
+                if typeName not in self.datatarget:
+                    self.datatarget[typeName] = {}
+                self.datatarget[typeName][fieldobject['name']] = {}
+                self.datatarget[typeName][fieldobject['name']]['values'] = numvalues
+                self.datatarget[typeName][fieldobject['name']]['strategy'] = strategy
+            except Exception as e:
+                checkbox.setCheckState(Qt.CheckState.Unchecked)
+                ErrorPopup(str(e))
+                return
+        else: 
+            if(typeName not in self.datatarget.keys()):
+                pass
+            else: 
+                try:
+                    self.datatarget[typeName].pop(fieldobject['name'])
+                except KeyError as ke:
+                    pass
+                if(self.datatarget[typeName] == None):
+                    self.datatarget.pop(typeName)
+        self.updateInfo(checkbox, infobox, fieldobject)
+        print(self.datatarget)
 
 
     def removeFromTarget(self, fieldobject):
-        propname = self.data['name']
-        self.datatarget[propname].pop(fieldobject['name'])
-        if(self.datatarget[propname] == None):
-            self.datatarget.pop(propname)
+        typeName = self.data['name']
+        self.datatarget[typeName].pop(fieldobject['name'])
+        if(self.datatarget[typeName] == None):
+            self.datatarget.pop(typeName)
 

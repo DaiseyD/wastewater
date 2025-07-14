@@ -1,5 +1,6 @@
 require 'json'
 require_relative './ICMAPI.rb'
+require_relative './StrategyPicker.rb'
 
 def jsonobjecthelper(object)
     name = object.table_info.name
@@ -12,6 +13,7 @@ def jsonobjecthelper(object)
     return jsonobject
 end
 
+
 def setupjsonfile(on, db) # on means open network
     networkobjects = []
     on.table_names.each do | tableName| 
@@ -21,6 +23,31 @@ def setupjsonfile(on, db) # on means open network
         end
     end
     rainfallevents = []
+    i=1
+    while true
+        begin
+            rainfallevent = db.model_object_from_type_and_id 'Rainfall Event', i
+            rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
+        rescue Exception => e
+            if !e.message.include?("Error 50 : Attempting to access a recycled object")
+                break
+            end
+        end
+        i = i + 1
+    end
+    i=1
+    wastewater = []
+    while true
+        begin
+            wastewaterobj = db.model_object_from_type_and_id 'Waste Water', i
+            wastewater << { 'id' => i, 'name' => wastewaterobj.name}
+        rescue Exception => e
+            if !e.message.include?("Error 50 : Attempting to access a recycled object")
+                break
+            end
+        end
+        i = i + 1
+    end
     begin
         i = 1
         while true 
@@ -45,7 +72,7 @@ def setupjsonfile(on, db) # on means open network
         i = i + 1
     end
         
-    jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "selectionobjects" => selectionArray}
+    jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "selectionobjects" => selectionArray, "strategies" => STRATEGIES, "wasteOutput" => wastewater}
     File.open("test.json", "w"){|f| f.write(jsonobject.to_json())}
 end
 
@@ -98,11 +125,10 @@ def changeAllstrategy(scenarios, values, fieldName, typeName, icm)
     icm.openNetwork.delete_scenario(s)
     end
     return newscenarios
-
 end
 
 def massSimulation(icm, modificationObj)
-    base = icm.db.root_model_objects[2] #dont remember why this is 2
+    # base = icm.db.root_model_objects[2] #dont remember why this is 2
     base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
     
     basename = modificationObj['SceneName']
@@ -124,18 +150,26 @@ def massSimulation(icm, modificationObj)
         end
     end
     scenarios << scenarioname
-    modificationObj['parameters'].keys.each { |key|  
-        typeObject = modificationObj['parameters'][key]
-        typeObject.keys.each do  |fieldName|
-            scenarios = changeAllstrategy(scenarios, typeObject[fieldName], fieldName, key, icm)
-        end
-    }
+
+    stratPicker = StrategyPicker.new(icm, scenarios, modificationObj)
+    # modificationObj['parameters'].keys.each { |key|  
+    #     typeObject = modificationObj['parameters'][key]
+    #     typeObject.keys.each do  |fieldName|
+    #         scenarios = changeAllstrategy(scenarios, typeObject[fieldName], fieldName, key, icm)
+    #     end
+    # }
+    stratPicker.runLoop
+    scenarios = stratPicker.scenarios
     
     validations = icm.openNetwork.validate(scenarios)
+    if validations.error_count > 0
+        raise Exception.new("could not validate, please check in infoworks icm what is wrong with the scenario")
+    end
     icm.net.commit("committing scenarios")
     puts("scenarios committed")
     baseint =0 
-    runname = modificationObj['RunName']
+    baserunname = modificationObj['RunName']
+    runname = baserunname
     while true 
         begin  
             extraParameters = modificationObj['simparameters']
@@ -149,7 +183,7 @@ def massSimulation(icm, modificationObj)
                 exit
             else 
                 puts "name: #{runname} already in use, trying new name"
-                runname = "#{runname}#{baseint}"
+                runname = "#{baserunname}#{baseint}"
                 baseint = baseint+1
             end
         end
@@ -162,18 +196,19 @@ def massSimulation(icm, modificationObj)
     jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
     WSApplication.wait_for_jobs(jobids, true, 100000000)
     currpath = Dir.pwd
-    basepath = "#{currpath}\\results\\#{runname}"
+    basepath = "#{currpath}\/results\/#{runname}"
     begin
         Dir.mkdir basepath
     rescue Exception => e
     end
-    
+    icm.net.csv_export("results/#{runname}/network.csv", {'Multiple Files' => true}) # this argument takes relative file position
     sims.each do | sim | 
-        path = "#{basepath}\\#{sim.name}"
+        path = "#{basepath}\/#{sim.name}"
         begin
             Dir.mkdir path
         rescue Exception => e
             puts "something went wrong creating directory for results"
+            puts e.message
             exit
         end
         puts "exporting to: #{path}"
@@ -186,24 +221,16 @@ end
 
 
 icm = ICMUtil.new('C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm')
+puts "setting up json file for ui"
 setupjsonfile(icm.openNetwork, icm.db)
-
-puts "launching ui"
-launchui("test.json")
-puts "Ui finished"
+puts "finished setting up json file"
+# puts "launching ui"
+# launchui("test.json")
+# puts "Ui finished"
 puts "reading ui results"
-modificationObj =  readuiresults("uiresultscopy.json")
+modificationObj =  readuiresults("uiresults.json")
 puts "finished processing ui results"
 puts "starting mass simulation"
 massSimulation(icm, modificationObj)
 puts "mass simulation finished"
-
-
-# puts "Running simulation"
-# runSimulation(db, net)
-# puts "Simulation finished"
-
-# objecttest = on.row_objects("hw_node").pop
-# puts objecttest.table_info.tableinfo_json
-
 puts "exiting"

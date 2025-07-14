@@ -3,30 +3,39 @@ from PySide6.QtCore import *
 import json
 
 
+
 class RainFrame(QFrame):
     def __init__(self, raindata, targetdata):
         super().__init__()
         self.raindata = raindata
         self.targetdata = targetdata
         vbox = QVBoxLayout(self)
-        title = QLabel("Rainfall events")
-        vbox.addWidget(title)
         scrollRight = QScrollArea()
         vbox.addWidget(scrollRight)
         rightContainer = QFrame()
-        rightLayout = QVBoxLayout(rightContainer)
+        hbox = QHBoxLayout(rightContainer)
+        rainContainer = QFrame()
+        hbox.addWidget(rainContainer)
+        rainLayout = QVBoxLayout(rainContainer)
 
-        for (index, rainfallevent) in enumerate(raindata):
+        self.setupRain(rainLayout)
+        rainLayout.addStretch() # align elements to top
+        scrollRight.setWidget(rightContainer)
+
+
+    def setupRain(self, rainLayout):
+        title = QLabel("<b>Rainfall events</b>")
+        rainLayout.addWidget(title)
+        for (index, rainfallevent) in enumerate(self.raindata):
             rainholder = QFrame()
-            rightLayout.addWidget(rainholder)
+            rainLayout.addWidget(rainholder)
             rainhbox = QHBoxLayout(rainholder)
             rainhbox.addWidget(QLabel(f"{rainfallevent['id']}: {rainfallevent['name']}"))
             checkbox = QCheckBox()
             rainhbox.addWidget(checkbox)
             checkbox.clicked.connect(lambda state, id=rainfallevent['id']: self.selectRainEvent(state,id))
-            # rightLayout.addWidget(QLabel(f"{index} {rainfallevent['name']}"))
-        scrollRight.setWidget(rightContainer)
 
+    
     def selectRainEvent(self,state, id):
         if "rainfallevents" not in self.targetdata.keys():
             self.targetdata['rainfallevents'] = []  

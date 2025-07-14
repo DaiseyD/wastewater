@@ -4,16 +4,25 @@ from components.popup import ErrorPopup
 
 class SimParameterFrame(QFrame):
 
-    def __init__(self, datatarget):
+    def __init__(self, datatarget, wasteOutputData):
         super().__init__()
         self.datatarget = datatarget
         self.initSimParameter()
         vbox = QVBoxLayout(self)
         vbox.addWidget(QLabel("Mandatory fields:"))
+        vbox.addWidget(self.setupWasteOutput(wasteOutputData))
         vbox.addWidget(self.setupDuration())
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
         vbox.addWidget(self.setupSceneName())
+
+
+    def setupWasteOutput(self, wasteOutputData):
+        comboBox = QComboBox()
+        for item in wasteOutputData:
+            comboBox.addItem(item['name'])
+        comboBox.activated.connect(lambda x, id=item['id']: self.updateWasteOutput(id))
+        return comboBox
 
 
     def setupDuration(self):
@@ -51,6 +60,7 @@ class SimParameterFrame(QFrame):
         edit.editingFinished.connect(lambda widget=edit: self.updateString(widget, "SceneName"))
         hbox.addWidget(edit)
         return frame
+    
 
     def initSimParameter(self):
         if 'simparameters' not in self.datatarget.keys():
@@ -63,6 +73,10 @@ class SimParameterFrame(QFrame):
             self.datatarget['simparameters'][field]= val
         except Exception as e:
             ErrorPopup(str(e))
+        print(self.datatarget)
+
+    def updateWasteOutput(self, id):
+        self.datatarget['simparameters']["Waste Water"] = id
         print(self.datatarget)
 
     def updateString(self, widget, field):

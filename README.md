@@ -9,12 +9,11 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 - selection object
     - make them usable
         - find common parameters and add those to a new window
-- strategy coding refinement
 - functionality for other datatypes
     - string
     - flag
     - int
-    
+
 
 - clean up code
     - better error handling and scenario/run naming in ruby
@@ -22,10 +21,6 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 
 - add logging
 
-## useful
-- rainfall event creator
-
-- wastewater output creator potentially
 
 
 
