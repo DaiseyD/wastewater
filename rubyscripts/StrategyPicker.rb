@@ -2,7 +2,7 @@ STRATEGIES = ['changeAll', "randomRange"]
 class StrategyPicker
     attr_accessor :icm, :scenarios, :modObj        
 
-    strategies = ['changeAll', "randomRange"]
+    strategies = ['changeAll', "randomRange", "randomSelect"]
 
     def initialize(icm, scenarios, modObj)
         @icm = icm
@@ -32,7 +32,7 @@ class StrategyPicker
         when "randomRange"
             self.randomRange(values, fieldName, typeName)
         else 
-            puts "error, no matching strategy was found"
+            raise Exception.new("Could not find strategy listed")
         end
     end
 
@@ -50,19 +50,29 @@ class StrategyPicker
                 @icm.changeAllValues(typeName, fieldName, value)
                 @icm.openNetwork.transaction_commit
             end
-        @icm.openNetwork.delete_scenario(s)
+            @icm.openNetwork.delete_scenario(s)
         end
         @scenarios = newscenarios
     end
 
     def randomRange(values, fieldName, typeName)
-        newscenarios = []
+        random = Random.new
         @scenarios.each do |s| 
             @icm.openNetwork.current_scenario = s
             max = values.max()
             min = values.min()
             @icm.openNetwork.transaction_begin
-            @icm.changeRandomRangeValues(typeName, fieldName, min, max, random = Random.new)
+            @icm.changeRandomRangeValues(typeName, fieldName, min, max, random)
+            @icm.openNetwork.transaction_commit
+        end
+    end
+
+    def randomSelect(values, fieldName, typeName)
+        random = Random.new
+        @scenarios.each do |s|
+            @icm.openNetwork.current_scenario = s
+            @icm.openNetwork.transaction_begin
+            @icm.changeRandomSelectValues(typeName, fieldName, values, random)
             @icm.openNetwork.transaction_commit
         end
     end

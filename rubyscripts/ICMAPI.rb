@@ -49,4 +49,13 @@ class ICMUtil
         end
     end
 
+    def changeRandomSelectValues(type, field, values, randomizer)
+        object = @openNetwork.row_objects(type)
+        objects.each do |object| 
+            index = randomizer.rand(0...values.length()) # triple dot not single dot (exclude max value)
+            object[field] = values[index]
+            object.write
+        end
+    end
+
 end

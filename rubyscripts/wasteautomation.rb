@@ -1,20 +1,32 @@
 require 'json'
 require_relative './ICMAPI.rb'
 require_relative './StrategyPicker.rb'
+require_relative './Simulator.rb'
+require 'logger'
+
+$logger = Logger.new("logfile.log")
 
 def jsonobjecthelper(object)
     name = object.table_info.name
     fieldarr = []
     object.table_info.fields.each do |field|
-        aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
-        fieldarr << aux
+        unsupported = ["Flag", "Date", "String", "Array:Long", "Array:Double", "GUID", "WSStructure"]
+        supported = ["Boolean", "Single", "Double", "Short", "Long"]
+        if unsupported.include?(field.data_type)
+
+        elsif supported.include?(field.data_type)
+            aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
+            fieldarr << aux
+        else 
+            puts field.data_type
+        end
     end
     jsonobject = {"name"=> name, "fields"=> fieldarr}
     return jsonobject
 end
 
 
-def setupjsonfile(on, db) # on means open network
+def setupjsonfile(on, db, filepath) # on means open network
     networkobjects = []
     on.table_names.each do | tableName| 
         if on.row_objects(tableName).length > 0
@@ -32,6 +44,7 @@ def setupjsonfile(on, db) # on means open network
             if !e.message.include?("Error 50 : Attempting to access a recycled object")
                 break
             end
+            $logger.info(e.message)
         end
         i = i + 1
     end
@@ -43,19 +56,12 @@ def setupjsonfile(on, db) # on means open network
             wastewater << { 'id' => i, 'name' => wastewaterobj.name}
         rescue Exception => e
             if !e.message.include?("Error 50 : Attempting to access a recycled object")
+                $logger.info(e.message)
                 break
             end
+            $logger.info(e.message)
         end
         i = i + 1
-    end
-    begin
-        i = 1
-        while true 
-            rainfallevent = modificationObj['rainfallevents']
-            rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
-            i = i +1
-        end
-    rescue Exception => e
     end
     i=1
     selectionArray= []
@@ -64,16 +70,16 @@ def setupjsonfile(on, db) # on means open network
             selectionList = db.model_object_from_type_and_id 'Selection List',i
             selectionArray << selectionList.name
         rescue Exception => e
-            if e.message.include?("File Not Found")
-                    break
+            if !e.message.include?("Error 50 : Attempting to access a recycled object")
+                $logger.info(e.message)
+                break
             end
-            puts "recycled object index found: skipping"
+            $logger.info(e.message)
         end
         i = i + 1
-    end
-        
+    end     
     jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "selectionobjects" => selectionArray, "strategies" => STRATEGIES, "wasteOutput" => wastewater}
-    File.open("test.json", "w"){|f| f.write(jsonobject.to_json())}
+    File.open(filepath, "w"){|f| f.write(jsonobject.to_json())}
 end
 
 
@@ -81,7 +87,8 @@ def launchui(filepath)
     if File.exists?(filepath)
         system("py pythonui/pyqt.py #{filepath}")
     else
-        puts "File #{filepath} does not exist."
+        $logger.error("file for ui to load does not exist")
+        raise Exception.new("file for ui to read does not exist")
     end
 end
 
@@ -116,19 +123,13 @@ def chooseScenarioName(icm, basename)
 end
 
 def massSimulation(icm, modificationObj)
-    # base = icm.db.root_model_objects[2] #dont remember why this is 2
     base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
-    
     basename = modificationObj['SceneName']
     baseint = 0
-    
     scenarioname = chooseScenarioName(icm, basename)
     scenariotest = icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")  
-    puts "Scenario #{scenarioname} created"
-    
-    scenarios = []
-    scenarios << scenarioname
-
+    $logger.info("Scenario #{scenarioname} created")
+    scenarios = [scenarioname]
     stratPicker = StrategyPicker.new(icm, scenarios, modificationObj)
     stratPicker.runLoop
     scenarios = stratPicker.scenarios
@@ -138,7 +139,7 @@ def massSimulation(icm, modificationObj)
         raise Exception.new("could not validate, please check in infoworks icm what is wrong with the scenario")
     end
     icm.net.commit("committing scenarios")
-    puts("scenarios committed")
+    $logger.info("scenarios committed")
     baseint =0 
     baserunname = modificationObj['RunName']
     runname = baserunname
@@ -150,20 +151,24 @@ def massSimulation(icm, modificationObj)
             break
         rescue Exception => e
             if e.message != "new_run : name already in use"
-                puts "error: unknown problem encountered"
-                puts e
+                $logger.fatal(e.message)
                 exit
             else 
-                puts "name: #{runname} already in use, trying new name"
+                $logger.info( "name: #{runname} already in use, trying new name")
                 runname = "#{baserunname}#{baseint}"
                 baseint = baseint+1
             end
         end
     end
-    puts "run #{runname} created"
+    $logger.info("run #{runname} created")
     mocsims = run.children # sims as a modelobjectcollection object
     sims = []
     mocsims.each { |x| sims << x }
+    runSimulations(icm, sims, runname, scenarios)
+end
+
+
+def runSimulations(icm, sims, runname, scenarios)
     WSApplication.connect_local_agent(1)
     jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
     WSApplication.wait_for_jobs(jobids, true, 100000000)
@@ -178,8 +183,8 @@ def massSimulation(icm, modificationObj)
         begin
             Dir.mkdir path
         rescue Exception => e
-            puts "something went wrong creating directory for results"
-            puts e.message
+            $logger.error("something went wrong creating directory for results")
+            $logger.error(e.message)
             exit
         end
         scenarioFoundFlag = false
@@ -195,26 +200,26 @@ def massSimulation(icm, modificationObj)
         end
 
         icm.openNetwork.csv_export("results/#{runname}/#{sim.name}/network_#{icm.openNetwork.current_scenario}", {'Multiple Files' => true}) # this argument takes relative file position
-        puts "exporting to: #{path}"
+        $logger.info( "exporting to: #{path}")
         test=sim.results_csv_export(nil,  path)
     end 
-
 end
 
 
-
-
 icm = ICMUtil.new('C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm')
-puts "setting up json file for ui"
-setupjsonfile(icm.openNetwork, icm.db)
-puts "finished setting up json file"
-# puts "launching ui"
+$logger.info "setting up json file for ui"
+setupjsonfile(icm.openNetwork, icm.db, "test.json")
+$logger.info "finished setting up json file"
+
+# $logger.info "launching ui"
 # launchui("test.json")
-# puts "Ui finished"
-puts "reading ui results"
+# $logger.info "Ui finished"
+# $logger.info "reading ui results"
+
 modificationObj =  readuiresults("uiresults.json")
-puts "finished processing ui results"
-puts "starting mass simulation"
-massSimulation(icm, modificationObj)
-puts "mass simulation finished"
-puts "exiting"
+$logger.info "finished processing ui results"
+$logger.info "starting mass simulation"
+simulator = Simulator.new(icm, modificationObj)
+simulator.setupAndRunSimulations()
+$logger.info "mass simulation finished"
+$logger.info "exiting"
