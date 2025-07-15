@@ -13,8 +13,6 @@ class SubmitFrame(QFrame):
         vbox.addWidget(button)
         button.clicked.connect(self.submit)
 
-
-
     def submit(self):
         canRun = True
         if(self.target['rainfallevents']==[]):

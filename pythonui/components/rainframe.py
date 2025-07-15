@@ -2,8 +2,6 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 import json
 
-
-
 class RainFrame(QFrame):
     def __init__(self, raindata, targetdata):
         super().__init__()

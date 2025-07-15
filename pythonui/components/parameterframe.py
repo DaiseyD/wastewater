@@ -14,7 +14,6 @@ def packFrame(widgets, direction):
         layout.addWidget(w)
     return frame
 
-
 class ParameterFrame(QFrame):
 
     def __init__(self, objectdata, datatarget, strategies):

@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 
 class SelectFrame(QFrame):
+    
     def __init__(self, data, datatarget):
         super().__init__()
         self.datatarget = datatarget
