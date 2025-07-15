@@ -6,16 +6,18 @@ class Simulator
         @modObj = modObj
     end
 
+    # read the params from the file created by the UI and sets up the simulation object, then runs and exports the simulations
     def setupAndRunSimulations()
         params = self.massSimulation(@icm, @modObj)
         self.runSimulations(@icm, params['sims'], params['runname'], params['scenarios'])
     end
     
+    # delete
     def cleanupScenarios(scenarios)
         @icm.openNetwork.current_scenario = "Base"
         scenarios.each do |scene| 
             @icm.openNetwork.delete_scenario(scene)
-            logger.info("deleted#{scene}")
+            $logger.info("deleted#{scene}")
         end
     end
     def massSimulation(icm, modificationObj)
@@ -99,6 +101,7 @@ class Simulator
             $logger.info( "exporting to: #{path}")
             sim.results_csv_export(nil,  path)
         end 
+        cleanupScenarios(scenarios)
     end
 
     def chooseScenarioName(icm, basename)

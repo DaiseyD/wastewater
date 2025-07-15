@@ -67,5 +67,6 @@ mainwindow = Wastewindow(getjsondata(), outputObject)
 mainwindow.show()
 # Run the main Qt loop
 app.exec()
+exit(1)
 
 

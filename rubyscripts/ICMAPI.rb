@@ -7,7 +7,8 @@ class ICMUtil
         @openNetwork = @net.open()
     end
 
-    def choosenetwork
+    # initializes which network to use using STDIN
+    def choosenetwork 
         begin
             i = 1
             while true
@@ -22,6 +23,7 @@ class ICMUtil
         return db.model_object_from_type_and_id 'Model Network', choice.to_i
     end
 
+    # deletes all scenarios not named base or aux
     def deleteAllScenarios()
         @openNetwork.scenarios do |s|
             if s.downcase!= "base" and s.downcase!= "aux"
@@ -31,11 +33,13 @@ class ICMUtil
         @net.commit("deleted all scenarios")
     end
 
+    #updates the [field] of [object] to [newValue]
     def changeValue(object, field, newvalue)
         object[field] = newvalue
         object.write
     end
 
+    #changes all values of the [field] of all objects of [type] to [value]
     def changeAllValues(type, field, value)
         objects = @openNetwork.row_objects(type)
         objects.each do | object | 
@@ -43,6 +47,7 @@ class ICMUtil
         end
     end
 
+    # changes the values of the [field] of all objects of [type] to a random value between [min] and [max]
     def changeRandomRangeValues(type, field, min, max, randomizer)
         objects = @openNetwork.row_objects(type)
         objects.each do | object |
@@ -51,6 +56,7 @@ class ICMUtil
         end
     end
 
+    # changes the value of the [field] of all objects of [type] to a random value in [values] 
     def changeRandomSelectValues(type, field, values, randomizer)
         objects = @openNetwork.row_objects(type)
         objects.each do |object| 
@@ -60,12 +66,12 @@ class ICMUtil
         end
     end
 
-
-    def setupjsonfile(on, db, filepath) # on means open network
+    # sets up the json file for the UI to show proper parameters
+    def setupjsonfile(openNetwork, db, filepath) # on means open network
         networkobjects = []
-        on.table_names.each do | tableName| 
-            if on.row_objects(tableName).length > 0
-                object = on.row_objects(tableName)[0]
+        openNetwork.table_names.each do | tableName| 
+            if openNetwork.row_objects(tableName).length > 0
+                object = openNetwork.row_objects(tableName)[0]
                 networkobjects << jsonobjecthelper(object)
             end
         end
@@ -117,6 +123,7 @@ class ICMUtil
         File.open(filepath, "w"){|f| f.write(jsonobject.to_json())}
     end
 
+    # helper function for putting parameter fields information into the jsonobject for the ui
     def jsonobjecthelper(object)
         name = object.table_info.name
         fieldarr = []
@@ -136,6 +143,7 @@ class ICMUtil
         return jsonobject
     end
 
+    # reads the simulations parameters from the UI
     def readuiresults(filepath)
         file = File.open(filepath)
         uiresultsjson = JSON.load(file)
