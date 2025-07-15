@@ -27,6 +27,7 @@ class SubmitFrame(QFrame):
         if(canRun):
             self.writejsonresult(self.target)
             self.mainwindow.close()
+            exit(0)
 
     def writejsonresult(self, result):
         try:
