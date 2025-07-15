@@ -11,7 +11,13 @@ class Simulator
         self.runSimulations(@icm, params['sims'], params['runname'], params['scenarios'])
     end
     
-
+    def cleanupScenarios(scenarios)
+        @icm.openNetwork.current_scenario = "Base"
+        scenarios.each do |scene| 
+            @icm.openNetwork.delete_scenario(scene)
+            logger.info("deleted#{scene}")
+        end
+    end
     def massSimulation(icm, modificationObj)
         base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
         basename = modificationObj['SceneName']
@@ -91,7 +97,7 @@ class Simulator
             end
             icm.openNetwork.csv_export("results/#{runname}/#{sim.name}/network_#{icm.openNetwork.current_scenario}", {'Multiple Files' => true}) # this argument takes relative file position
             $logger.info( "exporting to: #{path}")
-            test=sim.results_csv_export(nil,  path)
+            sim.results_csv_export(nil,  path)
         end 
     end
 
