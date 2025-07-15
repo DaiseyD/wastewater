@@ -62,8 +62,11 @@ class TypeWindow(QWidget):
         gridbox = QVBoxLayout(container)
         gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
+        i = 0
         for (index,item) in enumerate(dataobject["fields"]):
-            self.addlinegrid(gridbox, index, strategies)
+            if item['type'] in ["Single", "Double", "Short", "Long"]:
+                self.addlinegrid(gridbox, i, strategies)
+                i = i + 1 
         scrollArea.setWidget(container)
 
 

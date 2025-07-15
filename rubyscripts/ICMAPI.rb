@@ -31,30 +31,32 @@ class ICMUtil
         @net.commit("deleted all scenarios")
     end
 
+    def changeValue(object, field, newvalue)
+        object[field] = newvalue
+        object.write
+    end
+
     def changeAllValues(type, field, value)
         objects = @openNetwork.row_objects(type)
         objects.each do | object | 
-            object[field] = value
-            object.write
+            changeValue(object,field, value)
         end
     end
 
     def changeRandomRangeValues(type, field, min, max, randomizer)
         objects = @openNetwork.row_objects(type)
         objects.each do | object |
-
-            val = randomizer.rand(min..max)
-            object[field] = val
-            object.write
+            value = randomizer.rand(min..max)
+            changeValue(object,field, value)
         end
     end
 
     def changeRandomSelectValues(type, field, values, randomizer)
-        object = @openNetwork.row_objects(type)
+        objects = @openNetwork.row_objects(type)
         objects.each do |object| 
             index = randomizer.rand(0...values.length()) # triple dot not single dot (exclude max value)
-            object[field] = values[index]
-            object.write
+            value = values[index]
+            changeValue(object,field, value)
         end
     end
 

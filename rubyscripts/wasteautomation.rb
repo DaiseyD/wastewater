@@ -2,9 +2,10 @@ require 'json'
 require_relative './ICMAPI.rb'
 require_relative './StrategyPicker.rb'
 require_relative './Simulator.rb'
+require_relative './CONSTS.rb'
 require 'logger'
 
-$logger = Logger.new("logfile.log")
+$logger = Logger.new("logs/logfile.log")
 
 def jsonobjecthelper(object)
     name = object.table_info.name
@@ -83,16 +84,6 @@ def setupjsonfile(on, db, filepath) # on means open network
 end
 
 
-def launchui(filepath)
-    if File.exists?(filepath)
-        system("py pythonui/pyqt.py #{filepath}")
-    else
-        $logger.error("file for ui to load does not exist")
-        raise Exception.new("file for ui to read does not exist")
-    end
-end
-
-
 def readuiresults(filepath)
     file = File.open(filepath)
     uiresultsjson = JSON.load(file)
@@ -100,17 +91,17 @@ def readuiresults(filepath)
     return uiresultsjson
 end
 
-icm = ICMUtil.new('C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm')
+icm = ICMUtil.new(DBFILEPATH)
 $logger.info "setting up json file for ui"
-setupjsonfile(icm.openNetwork, icm.db, "test.json")
+setupjsonfile(icm.openNetwork, icm.db, "communication/ICMInfo.json")
 $logger.info "finished setting up json file"
 
 $logger.info "launching ui"
-launchui("test.json")
+system("py pythonui/pyqt.py")
 $logger.info "Ui finished"
 $logger.info "reading ui results"
 
-modificationObj =  readuiresults("uiresults.json")
+modificationObj =  readuiresults("communication/uiresults.json")
 $logger.info "finished processing ui results"
 $logger.info "starting mass simulation"
 simulator = Simulator.new(icm, modificationObj)

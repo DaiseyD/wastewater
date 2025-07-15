@@ -1,8 +1,6 @@
-STRATEGIES = ['changeAll', "randomRange"]
+STRATEGIES = ['changeAll', "randomRange", "randomSelect"]
 class StrategyPicker
     attr_accessor :icm, :scenarios, :modObj        
-
-    strategies = ['changeAll', "randomRange", "randomSelect"]
 
     def initialize(icm, scenarios, modObj)
         @icm = icm
@@ -10,9 +8,6 @@ class StrategyPicker
         @modObj = modObj
     end
 
-    def strategies
-        return @@strategies
-    end
 
     def runLoop()
         @modObj['parameters'].keys.each do |key|  
@@ -31,6 +26,8 @@ class StrategyPicker
             self.changeAllStrategy(values, fieldName, typeName)
         when "randomRange"
             self.randomRange(values, fieldName, typeName)
+        when "randomSelect"
+            self.randomSelect(values, fieldName, typeName)
         else 
             raise Exception.new("Could not find strategy listed")
         end

@@ -11,21 +11,13 @@ import json
 
 def getjsondata():
     try:
-        with(open("test.json", "r")) as f:
+        with(open("communication/ICMInfo.json", "r")) as f:
             data = json.load(f)
             return data
     except Exception as e:
         print(f"Error reading JSON file: {e}")
         exit(1)
 
-def writejsonresult(result):
-    try:
-        with(open("uiresults.json", "w")) as f:
-            f.write(json.dumps(result))
-
-    except Exception as e:
-        print(f"Error writing to JSON file: {e}")
-        exit(1)
 
 class Wastewindow(QMainWindow):
     
@@ -47,7 +39,7 @@ class Wastewindow(QMainWindow):
         self.hbox.addWidget(leftFrame)
         paraframe = ParameterFrame(self.data['networkobjects'], self.datatarget, self.data['strategies'])
         leftLayout.addWidget(paraframe, 0, 0, 1, -1)
-        submitFrame = SubmitFrame(self.datatarget)
+        submitFrame = SubmitFrame(self.datatarget, self)
         leftLayout.addWidget(submitFrame, 1, 0, 1, -1)
         leftLayout.setRowStretch(0, 3)
         leftLayout.setRowStretch(1, 2)
@@ -76,5 +68,4 @@ mainwindow.show()
 # Run the main Qt loop
 app.exec()
 
-writejsonresult(outputObject)
 
