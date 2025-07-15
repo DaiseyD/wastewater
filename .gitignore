@@ -5,3 +5,4 @@ test0/*
 test0
 test.json
 uiresults.json
+__pycache__
