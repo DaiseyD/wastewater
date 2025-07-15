@@ -1,3 +1,0 @@
-ObjectTable,antecedent_temp_idx,elevation,impervious_adc,negative_melt_ratio,pervious_adc,snow_temperature
-FieldDescription,Antecedent temperature index weight,Catchment elevation,Impervious areal depletion curve,Negative melt ratio,Pervious areal depletion curve,Dividing temperature between snow  rain
-NativeUnits,,m AD,,,,degC
