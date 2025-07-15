@@ -116,22 +116,41 @@ class TypeWindow(QWidget):
             labelframelayout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"), 1, 0, 1, 4)
             labelframelayout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"), 2, 0, 1, 4)
             checkbox = QCheckBox()
-            inputarea = QLineEdit()
             infobox = QLabel()
+            strategybox = QComboBox()
+            for i in strategies:
+                strategybox.addItem(i)
+
+            if(fieldobject["type"] == "Boolean"):
+                inputarea=QComboBox()
+                inputarea.addItem("True")
+                inputarea.addItem("False")
+            else: 
+                inputarea = QLineEdit()
+
+            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandle(fieldobject, inputarea, checkbox, strategybox, infobox)
+            if(fieldobject["type"] == "Boolean"):
+                inputarea.activated.connect(lambda index: datahandlefunction())
+            else: 
+                inputarea.editingFinished.connect(datahandlefunction)
+
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             labelframelayout.addWidget(infobox, 1, 4, 1, -1)
             labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
             labelframelayout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
-            strategybox = QComboBox()
-            for i in strategies:
-                strategybox.addItem(i)
+            
             labelframelayout.addWidget(strategybox, 3, 2, 1, -1)
-            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandle(fieldobject, inputarea, checkbox, strategybox, infobox)
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
             strategybox.activated.connect(lambda index: datahandlefunction())
-            inputarea.editingFinished.connect(datahandlefunction)
+    
+
+            labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
+            labelframelayout.addWidget(infobox, 1, 4, 1, -1)
+            labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
+            labelframelayout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
             self.setStyleSheet("LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
             self.parent.updateInfo(checkbox, infobox, fieldobject)
+            
 
     def updateInfo(self, checkbox, infobox, fieldobject):
         #below line is a hard to read line which tests if data on the field has been written to the target for data passing
@@ -147,19 +166,6 @@ class TypeWindow(QWidget):
             checkbox.setCheckState(Qt.CheckState.Unchecked)
             infobox.setText("")
                     
-    def handlecheckbox(self, state, object, inputarea, checkbox, infobox, strategybox):
-        values = inputarea.text().split(',')
-        if (state==True):
-            try:
-                numvalues = list(map(lambda x : float(x), values))
-            except Exception as e:
-                checkbox.setCheckState(Qt.CheckState.Unchecked)
-                ErrorPopup(str(e))
-                return
-            self.addToTarget(object, numvalues, )
-        else:
-            self.removeFromTarget(object)
-        self.updateInfo(checkbox, infobox, object)
 
     def addToTarget(self, fieldobject, values):
         typeName = self.data['name']
@@ -170,6 +176,45 @@ class TypeWindow(QWidget):
             self.datatarget[typeName][fieldobject['name']] = values
 
     def dataHandle(self, fieldobject, inputarea, checkbox, strategybox, infobox):
+        if(fieldobject['type'] in ["Single", "Double", "Short", "Long"]): 
+            self.dataHandleNum(fieldobject, inputarea, checkbox, strategybox, infobox)
+        elif fieldobject['type'] == "Boolean":
+            self.datahandleBool(fieldobject, inputarea, checkbox, strategybox, infobox)
+            
+        else:
+            ErrorPopup("Unsupported type found")
+
+
+    def datahandleBool(self, fieldobject, inputarea, checkbox, strategybox, infobox):
+        typeName = self.data['name']
+        if(checkbox.isChecked()):
+            try:
+                value = inputarea.currentText()=="True"
+                strategy = strategybox.currentText()
+                if typeName not in self.datatarget:
+                    self.datatarget[typeName] = {}
+                self.datatarget[typeName][fieldobject['name']] = {}
+                self.datatarget[typeName][fieldobject['name']]['values'] = [value]
+                self.datatarget[typeName][fieldobject['name']]['strategy'] = strategy
+            except Exception as e:
+                checkbox.setCheckState(Qt.CheckState.Unchecked)
+                ErrorPopup(str(e))
+                return
+        else: 
+            if(typeName not in self.datatarget.keys()):
+                pass
+            else: 
+                try:
+                    self.datatarget[typeName].pop(fieldobject['name'])
+                except KeyError as ke:
+                    pass
+                if(self.datatarget[typeName] == None):
+                    self.datatarget.pop(typeName)
+        self.updateInfo(checkbox, infobox, fieldobject)
+        print(self.datatarget)
+
+
+    def dataHandleNum(self, fieldobject, inputarea, checkbox, strategybox, infobox):
         typeName = self.data['name']
         if(checkbox.isChecked()):
             try:
@@ -197,11 +242,4 @@ class TypeWindow(QWidget):
                     self.datatarget.pop(typeName)
         self.updateInfo(checkbox, infobox, fieldobject)
         print(self.datatarget)
-
-
-    def removeFromTarget(self, fieldobject):
-        typeName = self.data['name']
-        self.datatarget[typeName].pop(fieldobject['name'])
-        if(self.datatarget[typeName] == None):
-            self.datatarget.pop(typeName)
 

@@ -5,6 +5,7 @@ from components.rainframe import RainFrame
 from components.parameterframe import ParameterFrame
 from components.selectframe import SelectFrame
 from components.simparameterframe import SimParameterFrame
+from components.submitframe import SubmitFrame
 import style
 import json
 
@@ -46,8 +47,8 @@ class Wastewindow(QMainWindow):
         self.hbox.addWidget(leftFrame)
         paraframe = ParameterFrame(self.data['networkobjects'], self.datatarget, self.data['strategies'])
         leftLayout.addWidget(paraframe, 0, 0, 1, -1)
-        selectFrame = SelectFrame(self.data, self.datatarget)
-        leftLayout.addWidget(selectFrame, 1, 0, 1, -1)
+        submitFrame = SubmitFrame(self.datatarget)
+        leftLayout.addWidget(submitFrame, 1, 0, 1, -1)
         leftLayout.setRowStretch(0, 3)
         leftLayout.setRowStretch(1, 2)
 

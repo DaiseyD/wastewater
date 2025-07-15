@@ -237,3 +237,63 @@ I, [2025-07-14T21:10:52.371420 #36368]  INFO -- : exporting to: C:/Users/dijks/D
 I, [2025-07-14T21:10:55.423495 #36368]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/rework1/structure1.1 Blokbui 90 mm
 I, [2025-07-14T21:10:57.612629 #36368]  INFO -- : mass simulation finished
 I, [2025-07-14T21:10:57.612629 #36368]  INFO -- : exiting
+I, [2025-07-14T21:12:14.323643 #15296]  INFO -- : setting up json file for ui
+I, [2025-07-14T21:12:14.424695 #15296]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=13,object_id=69), ModelObject "Rainfall Event"
+I, [2025-07-14T21:12:14.431077 #15296]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\WW6.DAT (error=2: "The system cannot find the file specified."), ModelObject "Waste Water"
+I, [2025-07-14T21:12:14.432591 #15296]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=31,object_id=2), ModelObject "Selection List"
+I, [2025-07-14T21:12:14.432591 #15296]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\SEL5.DAT (error=2: "The system cannot find the file specified."), ModelObject "Selection List"
+I, [2025-07-14T21:12:14.434600 #15296]  INFO -- : finished setting up json file
+I, [2025-07-14T21:12:14.434600 #15296]  INFO -- : finished processing ui results
+I, [2025-07-14T21:12:14.434600 #15296]  INFO -- : starting mass simulation
+I, [2025-07-14T21:12:14.445635 #15296]  INFO -- : Scenario structure2 created
+I, [2025-07-14T21:12:15.249698 #15296]  INFO -- : scenarios committed
+I, [2025-07-14T21:12:15.254774 #15296]  INFO -- : name: rework already in use, trying new name
+I, [2025-07-14T21:12:15.254774 #15296]  INFO -- : name: rework0 already in use, trying new name
+I, [2025-07-14T21:12:15.254774 #15296]  INFO -- : name: rework1 already in use, trying new name
+I, [2025-07-14T21:12:15.395685 #15296]  INFO -- : run rework2 created
+I, [2025-07-14T21:12:25.774780 #15296]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/rework2/structure2.0 Blokbui 70 mm
+I, [2025-07-14T21:12:29.167476 #15296]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/rework2/structure2.0 Blokbui 90 mm
+I, [2025-07-14T21:12:32.252839 #15296]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/rework2/structure2.1 Blokbui 70 mm
+I, [2025-07-14T21:12:35.358040 #15296]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/rework2/structure2.1 Blokbui 90 mm
+I, [2025-07-14T21:12:37.613147 #15296]  INFO -- : mass simulation finished
+I, [2025-07-14T21:12:37.613147 #15296]  INFO -- : exiting
+I, [2025-07-14T22:19:21.470434 #19096]  INFO -- : setting up json file for ui
+I, [2025-07-14T22:19:21.584204 #19096]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=13,object_id=69), ModelObject "Rainfall Event"
+I, [2025-07-14T22:19:21.597418 #19096]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\WW6.DAT (error=2: "The system cannot find the file specified."), ModelObject "Waste Water"
+I, [2025-07-14T22:19:21.598414 #19096]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=31,object_id=2), ModelObject "Selection List"
+I, [2025-07-14T22:19:21.599414 #19096]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\SEL5.DAT (error=2: "The system cannot find the file specified."), ModelObject "Selection List"
+I, [2025-07-14T22:19:21.601806 #19096]  INFO -- : finished setting up json file
+I, [2025-07-14T22:19:21.601806 #19096]  INFO -- : finished processing ui results
+I, [2025-07-14T22:19:21.601806 #19096]  INFO -- : starting mass simulation
+I, [2025-07-14T22:19:51.877985 #33860]  INFO -- : setting up json file for ui
+I, [2025-07-14T22:19:51.971405 #33860]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=13,object_id=69), ModelObject "Rainfall Event"
+I, [2025-07-14T22:19:51.978405 #33860]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\WW6.DAT (error=2: "The system cannot find the file specified."), ModelObject "Waste Water"
+I, [2025-07-14T22:19:51.978405 #33860]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=31,object_id=2), ModelObject "Selection List"
+I, [2025-07-14T22:19:51.979404 #33860]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\SEL5.DAT (error=2: "The system cannot find the file specified."), ModelObject "Selection List"
+I, [2025-07-14T22:19:51.981523 #33860]  INFO -- : finished setting up json file
+I, [2025-07-14T22:19:51.981523 #33860]  INFO -- : launching ui
+I, [2025-07-14T22:20:24.077788 #33860]  INFO -- : Ui finished
+I, [2025-07-14T22:20:24.077788 #33860]  INFO -- : reading ui results
+I, [2025-07-14T22:20:24.077788 #33860]  INFO -- : finished processing ui results
+I, [2025-07-14T22:20:24.077788 #33860]  INFO -- : starting mass simulation
+I, [2025-07-14T22:20:24.082335 #33860]  INFO -- : Scenario test created
+I, [2025-07-14T22:20:46.977925 #30884]  INFO -- : setting up json file for ui
+I, [2025-07-14T22:20:47.078609 #30884]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=13,object_id=69), ModelObject "Rainfall Event"
+I, [2025-07-14T22:20:47.087136 #30884]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\WW6.DAT (error=2: "The system cannot find the file specified."), ModelObject "Waste Water"
+I, [2025-07-14T22:20:47.087658 #30884]  INFO -- : Error 50 : Attempting to access a recycled object : (object_type=31,object_id=2), ModelObject "Selection List"
+I, [2025-07-14T22:20:47.088173 #30884]  INFO -- : Error 13 : File Not Found : C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\12864270-84C3-497F-A3B0-D9891151DB66\SEL5.DAT (error=2: "The system cannot find the file specified."), ModelObject "Selection List"
+I, [2025-07-14T22:20:47.090195 #30884]  INFO -- : finished setting up json file
+I, [2025-07-14T22:20:47.090195 #30884]  INFO -- : launching ui
+I, [2025-07-14T22:21:28.347153 #30884]  INFO -- : Ui finished
+I, [2025-07-14T22:21:28.347153 #30884]  INFO -- : reading ui results
+I, [2025-07-14T22:21:28.348153 #30884]  INFO -- : finished processing ui results
+I, [2025-07-14T22:21:28.348153 #30884]  INFO -- : starting mass simulation
+I, [2025-07-14T22:21:28.360196 #30884]  INFO -- : Scenario test0 created
+I, [2025-07-14T22:21:30.020008 #30884]  INFO -- : scenarios committed
+I, [2025-07-14T22:21:30.298070 #30884]  INFO -- : run test created
+I, [2025-07-14T22:21:41.300048 #30884]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/test/test0.0.0 Blokbui 70 mm
+I, [2025-07-14T22:21:44.790328 #30884]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/test/test0.0.0 Blokbui 90 mm
+I, [2025-07-14T22:21:47.924357 #30884]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/test/test0.0.1 Blokbui 70 mm
+I, [2025-07-14T22:21:51.032754 #30884]  INFO -- : exporting to: C:/Users/dijks/Documents/wastewatersimulation/wastewater/results/test/test0.0.1 Blokbui 90 mm
+I, [2025-07-14T22:21:53.313120 #30884]  INFO -- : Simulation has finished and is exported
+I, [2025-07-14T22:21:53.314120 #30884]  INFO -- : exiting

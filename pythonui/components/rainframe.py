@@ -7,8 +7,12 @@ import json
 class RainFrame(QFrame):
     def __init__(self, raindata, targetdata):
         super().__init__()
+        
         self.raindata = raindata
         self.targetdata = targetdata
+
+        if "rainfallevents" not in self.targetdata.keys():
+            self.targetdata['rainfallevents'] = []  
         vbox = QVBoxLayout(self)
         scrollRight = QScrollArea()
         vbox.addWidget(scrollRight)
@@ -37,8 +41,7 @@ class RainFrame(QFrame):
 
     
     def selectRainEvent(self,state, id):
-        if "rainfallevents" not in self.targetdata.keys():
-            self.targetdata['rainfallevents'] = []  
+        
         if state == True:
             self.targetdata['rainfallevents'].append(id)
         else:

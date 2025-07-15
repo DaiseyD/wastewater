@@ -16,7 +16,7 @@ class Simulator
         base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
         basename = modificationObj['SceneName']
         baseint = 0
-        scenarioname = chooseScenarioName(icm, basename)
+        scenarioname = self.chooseScenarioName(icm, basename)
         scenariotest = icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")  
         $logger.info("Scenario #{scenarioname} created")
         scenarios = [scenarioname]
@@ -94,6 +94,28 @@ class Simulator
             test=sim.results_csv_export(nil,  path)
         end 
     end
+
+    def chooseScenarioName(icm, basename)
+    allScenarios = []
+    icm.openNetwork.scenarios do |s|
+        allScenarios << s
+    end
+    workname = basename
+    baseint = 0
+    lambda_inScenario = lambda {|name, scenarios|
+        scenarios.each do | s |
+            if(s.include?(name))
+                return true
+            end
+        end
+        return false
+        }
+    while lambda_inScenario.call(workname, allScenarios)
+        workname = "#{basename}#{baseint}"
+        baseint = baseint+1
+    end
+    return workname
+end
 
 
 end
