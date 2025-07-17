@@ -6,7 +6,6 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 
 ## crucial
 - clean up code ruby
-    - better error handling and scenario/run naming in ruby
     - error handling with datatarget in ui
     - centralized datatarget singleton class
 - clean up code UI

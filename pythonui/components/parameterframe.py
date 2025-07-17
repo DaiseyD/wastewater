@@ -1,27 +1,26 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
+from components.DataTarget import DataTarget
 
-def packFrame(widgets, direction):
+def packFrame(widgets, direction): # this function puts widgets into a frame and into a vbox if direction = 'V' or an hbox if direction = 'H'
     frame = QFrame()
     if(direction=='V'):
         layout = QVBoxLayout(frame)
     elif (direction=="H"):
         layout = QHBoxLayout(frame)
     else: 
-        raise Exception("wrong argument to pack frame")
+        raise Exception("wrong direction argument to pack frame")
     for w in widgets:
         layout.addWidget(w)
     return frame
 
 class ParameterFrame(QFrame):
 
-    def __init__(self, objectdata, datatarget, strategies):
+    def __init__(self):
         super().__init__()
-        if 'parameters' not in datatarget.keys():
-            datatarget['parameters'] = {}
-        self.datatarget = datatarget['parameters']
-        self.objectdata = objectdata
+        self.datatarget = DataTarget().target
+        self.data = DataTarget().data
         vbox = QVBoxLayout(self)
         scrollLeft = QScrollArea()
         vbox.addWidget(scrollLeft)
@@ -30,23 +29,23 @@ class ParameterFrame(QFrame):
         title = QLabel("Parameters")
         title.setStyleSheet("color: hsl(200, 30%, 10%); font-size:16px;")
         rightLayout.addWidget(title)
-        for (index,item) in enumerate(self.objectdata):
+        for (index,item) in enumerate(self.data['networkobjects']):
             button = QPushButton(f"{index} {item['name']}")
             button.setStyleSheet("color: hsl(200, 30%, 20%); padding: 10px 2px;")
-            button.clicked.connect(lambda checked, item=item: self.openTypeWindow(item, strategies))
+            button.clicked.connect(lambda checked, item=item: self.openTypeWindow(item))
             rightLayout.addWidget(button)
-            
+        
         scrollLeft.setWidget(container)
     
-    def openTypeWindow(self, item, strategies):
-        self.w = TypeWindow(item, self.datatarget, strategies)
+    def openTypeWindow(self, item):
+        self.w = TypeWindow(item)
         self.w.show()
 
 class TypeWindow(QWidget):
-    def __init__(self, dataobject, datatarget, strategies):
+    def __init__(self, typeData):
         super().__init__()
-        self.data = dataobject
-        self.datatarget = datatarget
+        self.data = typeData
+        self.datatarget = DataTarget().target['parameters']
         vboxBase = QVBoxLayout(self)
         frameTop = QFrame()
         vboxBase.addWidget(frameTop)
@@ -62,9 +61,9 @@ class TypeWindow(QWidget):
         gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
         i = 0
-        for (index,item) in enumerate(dataobject["fields"]):
+        for (index,item) in enumerate(self.data['fields']):
             if item['type'] in ["Single", "Double", "Short", "Long"]:
-                self.addlinegrid(gridbox, i, strategies)
+                self.addlinegrid(gridbox, item)
                 i = i + 1 
         scrollArea.setWidget(container)
 
@@ -77,26 +76,24 @@ class TypeWindow(QWidget):
 
     def setupSearch(self, box):
         searchBar = QLineEdit()
-        searchBar.textChanged.connect(self.updateDisplay)
+        searchBar.textChanged.connect(self.filterLines)
         box.addWidget(searchBar)
 
-    def updateDisplay(self, text):
+    def filterLines(self, text):
         for w in self.typeWidgets:
             if text.lower() in w.name.lower():
                 w.show()
             else:
                 w.hide()
 
-    def addlinegrid(self, vbox, index, strategies):
-        fieldobject = self.data['fields'][index]
-        labFrame = self.LabelFrame(fieldobject, self, strategies)
-        vbox.addWidget(labFrame, index)
+    def addlinegrid(self, vbox, fieldobject):
+        labFrame = self.LabelFrame(fieldobject, self)
+        vbox.addWidget(labFrame)
         labFrame.name = fieldobject['name']
         self.typeWidgets.append(labFrame)
-
     
     class LabelFrame(QFrame):
-        def __init__(self, fieldobject, parent, strategies):
+        def __init__(self, fieldobject, parent):
             self.parent = parent
             super().__init__() 
             labelframelayout = QGridLayout(self)
@@ -120,21 +117,13 @@ class TypeWindow(QWidget):
             checkbox = QCheckBox()
             infobox = QLabel()
             strategybox = QComboBox()
+
+            strategies = DataTarget().data['strategies']
             for i in strategies:
                 strategybox.addItem(i)
-
-            if(fieldobject["type"] == "Boolean"):
-                inputarea=QComboBox()
-                inputarea.addItem("True")
-                inputarea.addItem("False")
-            else: 
-                inputarea = QLineEdit()
-
+            inputarea = QLineEdit()
             datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandle(fieldobject, inputarea, checkbox, strategybox, infobox)
-            if(fieldobject["type"] == "Boolean"):
-                inputarea.activated.connect(lambda index: datahandlefunction())
-            else: 
-                inputarea.editingFinished.connect(datahandlefunction)
+            inputarea.editingFinished.connect(datahandlefunction)
 
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             labelframelayout.addWidget(infobox, 1, 4, 1, -1)
@@ -145,7 +134,6 @@ class TypeWindow(QWidget):
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
             strategybox.activated.connect(lambda index: datahandlefunction())
     
-
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             labelframelayout.addWidget(infobox, 1, 4, 1, -1)
             labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
@@ -213,7 +201,6 @@ class TypeWindow(QWidget):
                 if(self.datatarget[typeName] == None):
                     self.datatarget.pop(typeName)
         self.updateInfo(checkbox, infobox, fieldobject)
-        print(self.datatarget)
 
 
     def dataHandleNum(self, fieldobject, inputarea, checkbox, strategybox, infobox):
@@ -225,23 +212,12 @@ class TypeWindow(QWidget):
                 strategy = strategybox.currentText()
                 if typeName not in self.datatarget:
                     self.datatarget[typeName] = {}
-                self.datatarget[typeName][fieldobject['name']] = {}
-                self.datatarget[typeName][fieldobject['name']]['values'] = numvalues
-                self.datatarget[typeName][fieldobject['name']]['strategy'] = strategy
+                DataTarget().updateParameterField(typeName, fieldobject['name'], numvalues, strategy)
             except Exception as e:
                 checkbox.setCheckState(Qt.CheckState.Unchecked)
                 ErrorPopup(str(e))
                 return
         else: 
-            if(typeName not in self.datatarget.keys()):
-                pass
-            else: 
-                try:
-                    self.datatarget[typeName].pop(fieldobject['name'])
-                except KeyError as ke:
-                    pass
-                if(self.datatarget[typeName] == None):
-                    self.datatarget.pop(typeName)
+            DataTarget().removeFromParameterField(typeName, fieldobject['name'])
         self.updateInfo(checkbox, infobox, fieldobject)
-        print(self.datatarget)
 

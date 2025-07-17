@@ -1,29 +1,29 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
+from components.DataTarget import DataTarget\
+
 
 class SimParameterFrame(QFrame):
 
-    def __init__(self, datatarget, wasteOutputData):
+    def __init__(self):
         super().__init__()
-        self.datatarget = datatarget
-        self.initSimParameter()
+        self.datatarget = DataTarget().target
+        self.data = DataTarget().data
         vbox = QVBoxLayout(self)
         vbox.addWidget(QLabel("Mandatory fields:"))
-        vbox.addWidget(self.setupWasteOutput(wasteOutputData))
+        vbox.addWidget(self.setupWasteOutput())
         vbox.addWidget(self.setupDuration())
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
         vbox.addWidget(self.setupSceneName())
 
-
-    def setupWasteOutput(self, wasteOutputData):
+    def setupWasteOutput(self):
         comboBox = QComboBox()
-        for item in wasteOutputData:
+        for item in self.data['wasteOutput']:
             comboBox.addItem(item['name'])
         comboBox.activated.connect(lambda x, id=item['id']: self.updateWasteOutput(id))
         return comboBox
-
 
     def setupDuration(self):
         frame = QFrame()
@@ -61,13 +61,7 @@ class SimParameterFrame(QFrame):
         hbox.addWidget(edit)
         return frame
     
-
-    def initSimParameter(self):
-        if 'simparameters' not in self.datatarget.keys():
-                self.datatarget['simparameters'] = {}
-
     def updateSimParameters(self, widget, field):
-        print(widget.text())
         try:
             val = int(widget.text())
             self.datatarget['simparameters'][field]= val
@@ -76,7 +70,7 @@ class SimParameterFrame(QFrame):
         print(self.datatarget)
 
     def updateWasteOutput(self, id):
-        self.datatarget['simparameters']["Waste Water"] = id
+        self.datatarget['simparameters']["WasteOutput"] = id
         print(self.datatarget)
 
     def updateString(self, widget, field):

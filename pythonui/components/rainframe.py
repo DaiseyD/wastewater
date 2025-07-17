@@ -10,7 +10,7 @@ class RainFrame(QFrame):
         self.targetdata = targetdata
 
         if "rainfallevents" not in self.targetdata.keys():
-            self.targetdata['rainfallevents'] = []  
+            self.targetdata['rainfallevents'] = []  #TODO REMOVE THIS
         vbox = QVBoxLayout(self)
         scrollRight = QScrollArea()
         vbox.addWidget(scrollRight)

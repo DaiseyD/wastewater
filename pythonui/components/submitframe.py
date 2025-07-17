@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
+from components.DataTarget import DataTarget
 import json
 
 class SubmitFrame(QFrame):
-    def __init__(self, target, mainwindow):
+    def __init__(self, mainwindow):
         super().__init__()
-        self.target = target
+        self.target = DataTarget().target
         self.mainwindow = mainwindow
         vbox = QVBoxLayout(self)
         button = QPushButton("Submit")

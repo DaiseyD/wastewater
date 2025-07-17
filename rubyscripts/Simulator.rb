@@ -20,6 +20,7 @@ class Simulator
             $logger.info("deleted#{scene}")
         end
     end
+    
     def massSimulation(icm, modificationObj)
         base = icm.db.model_object_from_type_and_id( icm.net.parent_type(), icm.net.parent_id())
         basename = modificationObj['SceneName']

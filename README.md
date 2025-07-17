@@ -19,7 +19,6 @@
 
 
 # Known improvement points
-- separate folder for network state and sim results
 - no rainfall event info, you will have to gamble on the duration and timestep in the ui
 - no adjusting non-numerical values
 - able to input a float where an int is needed (luckily ints are barely used in infoworks)

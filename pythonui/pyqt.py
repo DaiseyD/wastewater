@@ -6,6 +6,7 @@ from components.parameterframe import ParameterFrame
 from components.selectframe import SelectFrame
 from components.simparameterframe import SimParameterFrame
 from components.submitframe import SubmitFrame
+from components.DataTarget import DataTarget
 import style
 import json
 
@@ -21,9 +22,9 @@ def getjsondata():
 
 class Wastewindow(QMainWindow):
     
-    def __init__(self, data, datatarget):
-        self.data = data
-        self.datatarget = datatarget
+    def __init__(self):
+        self.data = DataTarget().data
+        self.datatarget = DataTarget().target
         super().__init__()
         self.setWindowTitle("My App")
         self.frame = QFrame()
@@ -32,14 +33,13 @@ class Wastewindow(QMainWindow):
         self.setLeftFrame()
         self.setRightFrame()
 
-
     def setLeftFrame(self):  
         leftFrame = QFrame()
         leftLayout = QGridLayout(leftFrame)
         self.hbox.addWidget(leftFrame)
-        paraframe = ParameterFrame(self.data['networkobjects'], self.datatarget, self.data['strategies'])
+        paraframe = ParameterFrame()
         leftLayout.addWidget(paraframe, 0, 0, 1, -1)
-        submitFrame = SubmitFrame(self.datatarget, self)
+        submitFrame = SubmitFrame(self)
         leftLayout.addWidget(submitFrame, 1, 0, 1, -1)
         leftLayout.setRowStretch(0, 3)
         leftLayout.setRowStretch(1, 2)
@@ -50,18 +50,19 @@ class Wastewindow(QMainWindow):
         vbox = QVBoxLayout(rightFrame)
         rainFrame = RainFrame(self.data['rainfallevents'], self.datatarget)
         vbox.addWidget(rainFrame)
-        simParameterFrame = SimParameterFrame(self.datatarget, self.data['wasteOutput'])
+        simParameterFrame = SimParameterFrame()
         vbox.addWidget(simParameterFrame)
         vbox.setStretch(0, 2)
         vbox.setStretch(1, 1)
 
 
 # Create the Qt Application
-outputObject = {}
+data = DataTarget()
+data.setData(getjsondata())
 app = QApplication(sys.argv)
 app.setStyleSheet(style.STYLEGLOBAL)
 
-mainwindow = Wastewindow(getjsondata(), outputObject)
+mainwindow = Wastewindow()
 # Create a button, connect it and show it
 
 mainwindow.show()

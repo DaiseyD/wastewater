@@ -15,8 +15,7 @@ icm.setupjsonfile(icm.openNetwork, icm.db, "communication/ICMInfo.json")
 $logger.info "finished setting up json file"
 
 $logger.info "launching ui"
-test=system("py pythonui/pyqt.py")
-puts test
+system("py pythonui/pyqt.py")
 $logger.info "Ui finished"
 $logger.info "reading ui results"
 
