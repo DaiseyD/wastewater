@@ -122,7 +122,7 @@ class TypeWindow(QWidget):
             for i in strategies:
                 strategybox.addItem(i)
             inputarea = QLineEdit()
-            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandle(fieldobject, inputarea, checkbox, strategybox, infobox)
+            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandleNum(fieldobject, inputarea, checkbox, strategybox, infobox)
             inputarea.editingFinished.connect(datahandlefunction)
 
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
@@ -164,44 +164,6 @@ class TypeWindow(QWidget):
         else:
             self.datatarget[typeName] = {}
             self.datatarget[typeName][fieldobject['name']] = values
-
-    def dataHandle(self, fieldobject, inputarea, checkbox, strategybox, infobox):
-        if(fieldobject['type'] in ["Single", "Double", "Short", "Long"]): 
-            self.dataHandleNum(fieldobject, inputarea, checkbox, strategybox, infobox)
-        elif fieldobject['type'] == "Boolean":
-            self.datahandleBool(fieldobject, inputarea, checkbox, strategybox, infobox)
-            
-        else:
-            ErrorPopup("Unsupported type found")
-
-
-    def datahandleBool(self, fieldobject, inputarea, checkbox, strategybox, infobox):
-        typeName = self.data['name']
-        if(checkbox.isChecked()):
-            try:
-                value = inputarea.currentText()=="True"
-                strategy = strategybox.currentText()
-                if typeName not in self.datatarget:
-                    self.datatarget[typeName] = {}
-                self.datatarget[typeName][fieldobject['name']] = {}
-                self.datatarget[typeName][fieldobject['name']]['values'] = [value]
-                self.datatarget[typeName][fieldobject['name']]['strategy'] = strategy
-            except Exception as e:
-                checkbox.setCheckState(Qt.CheckState.Unchecked)
-                ErrorPopup(str(e))
-                return
-        else: 
-            if(typeName not in self.datatarget.keys()):
-                pass
-            else: 
-                try:
-                    self.datatarget[typeName].pop(fieldobject['name'])
-                except KeyError as ke:
-                    pass
-                if(self.datatarget[typeName] == None):
-                    self.datatarget.pop(typeName)
-        self.updateInfo(checkbox, infobox, fieldobject)
-
 
     def dataHandleNum(self, fieldobject, inputarea, checkbox, strategybox, infobox):
         typeName = self.data['name']
