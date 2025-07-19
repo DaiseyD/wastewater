@@ -4,7 +4,9 @@
 
 
 ### CONSTS
-contains constants needed to run the program, only constant used is DBFILEPATH which contains the path of the .icmm database you wish to use for the simulations
+contains constants needed to run the program
+- DBFILEPATH: contains the path of the .icmm database you wish to use for the simulations
+-ALLTYPES: when set to true, will support changing all data types, when set to false, will only support numerical datatypes
 
 ### wasteautomation.rb
 This is the main script used to run the program, it does the following steps:

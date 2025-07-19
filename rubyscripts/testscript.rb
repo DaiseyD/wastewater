@@ -8,6 +8,6 @@ icm = ICMUtil.new('C:\Users\dijks\Documents\wastewatersimulation\wastewater\test
 icm.getNetworkInfo()
 
 icm.openNetwork.transaction_begin
-icm.changeValue(icm.openNetwork.row_objects("hw_subcatchment")[0], "area_measurement_type", "Percent" )
-puts  icm.openNetwork.row_objects("hw_subcatchment")[0].id
+icm.changeValue(icm.openNetwork.row_objects("hw_node")[0], "connection_type_flag", "#A" )
+puts  icm.openNetwork.row_objects("hw_node")[0].id
 icm.openNetwork.transaction_commit

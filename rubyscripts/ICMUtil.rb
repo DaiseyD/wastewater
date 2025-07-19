@@ -101,10 +101,12 @@ class ICMUtil
         name = object.table_info.name
         fieldarr = []
         object.table_info.fields.each do |field|
-            unsupported = ["Flag", "Date", "String", "Array:Long", "Array:Double", "GUID", "WSStructure"]
-            supported = ["Boolean", "Single", "Double", "Short", "Long"]
-            aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
-            fieldarr << aux
+            unsupported = ["Flag", "Boolean", "Date", "String", "Array:Long", "Array:Double", "GUID", "WSStructure"]
+            supported = ["Single", "Double", "Short", "Long"]
+            if(ALLTYPES or supported.include?(field.data_type))
+                aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
+                fieldarr << aux
+            end
         end
         jsonobject = {"fields"=> fieldarr}
         return jsonobject

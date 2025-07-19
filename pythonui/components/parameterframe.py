@@ -94,55 +94,64 @@ class TypeWindow(QWidget):
         def __init__(self, typeName, fieldObject):
             self.name = fieldObject['name']
             self.typeName = typeName
+            self.fieldObject = fieldObject
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
             super().__init__() 
             labelframelayout = QGridLayout(self)
-            styleForField = "color: hsl(200, 30%, 70%);"
-            styleForValue = "color:hsl(200, 30%, 40%);"
-            nameLabel0 = QLabel("name:")
-            nameLabel0.setStyleSheet(styleForField)
-            nameLabel1 = QLabel(f"{fieldObject["name"]}")
-            nameLabel1.setStyleSheet(styleForValue)
-            typeLabel0 = QLabel("type:")
-            typeLabel0.setStyleSheet(styleForField)
-            typeLabel1 = QLabel(f"{fieldObject["type"]}")
-            typeLabel1.setStyleSheet(styleForValue)
-            valueLabel0 = QLabel("value ex.:")
-            valueLabel0.setStyleSheet(styleForField)
-            valueLabel1 = QLabel(f"{fieldObject["value"]}")
-            valueLabel1.setStyleSheet(styleForValue)
-            labelframelayout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"), 0, 0, 1, 4)
-            labelframelayout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"), 1, 0, 1, 4)
-            labelframelayout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"), 2, 0, 1, 4)
+            self.fieldStyle = "color: hsl(200, 30%, 70%);"
+            self.valueStyle = "color:hsl(200, 30%, 40%);"
+            self.setupLabels(labelframelayout)
+            self.setupDataWidgets(labelframelayout)      
+           
+            self.setStyleSheet("LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
+            self.updateInfo(self.checkbox, self.infobox, fieldObject)
+        
+        def setupDataWidgets(self, layout):
             checkbox = QCheckBox()
+            self.checkbox = checkbox
             infobox = QLabel()
+            self.infobox = infobox
             strategybox = QComboBox()
-
+            self.strategybox = strategybox
             strategies = DataTarget().data['strategies']
             for i in strategies:
                 strategybox.addItem(i)
             inputarea = QLineEdit()
-            datahandlefunction = lambda fo=fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandleNum(fo, ia, checkbox, strategybox, infobox)
+            datahandlefunction = lambda fo=self.fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandle(fo, ia, checkbox, strategybox, infobox)
             inputarea.editingFinished.connect(datahandlefunction)
 
-            labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
-            labelframelayout.addWidget(infobox, 1, 4, 1, -1)
-            labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
-            labelframelayout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
+            layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
+            layout.addWidget(infobox, 1, 4, 1, -1)
+            layout.addWidget(inputarea, 2, 4, 1, -1)
+            layout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
             
-            labelframelayout.addWidget(strategybox, 3, 2, 1, -1)
+            layout.addWidget(strategybox, 3, 2, 1, -1)
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
             strategybox.activated.connect(lambda index: datahandlefunction())
     
-            labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
-            labelframelayout.addWidget(infobox, 1, 4, 1, -1)
-            labelframelayout.addWidget(inputarea, 2, 4, 1, -1)
-            labelframelayout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
-            self.setStyleSheet("LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
-            self.updateInfo(checkbox, infobox, fieldObject)
-            
+            layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
+            layout.addWidget(infobox, 1, 4, 1, -1)
+            layout.addWidget(inputarea, 2, 4, 1, -1)
+            layout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
 
+        def setupLabels(self, layout):
+            nameLabel0 = QLabel("name:")
+            nameLabel0.setStyleSheet(self.fieldStyle)
+            nameLabel1 = QLabel(f"{self.fieldObject["name"]}")
+            nameLabel1.setStyleSheet(self.valueStyle)
+            typeLabel0 = QLabel("type:")
+            typeLabel0.setStyleSheet(self.fieldStyle)
+            typeLabel1 = QLabel(f"{self.fieldObject["type"]}")
+            typeLabel1.setStyleSheet(self.valueStyle)
+            valueLabel0 = QLabel("value ex.:")
+            valueLabel0.setStyleSheet(self.fieldStyle)
+            valueLabel1 = QLabel(f"{self.fieldObject["value"]}")
+            valueLabel1.setStyleSheet(self.valueStyle)
+            layout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"), 0, 0, 1, 4)
+            layout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"), 1, 0, 1, 4)
+            layout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"), 2, 0, 1, 4)
+            
         def updateInfo(self, checkbox, infobox, fieldObject):
             #below line is a hard to read line which tests if data on the field has been written to the target for data passing
             if(self.typeName in self.datatarget and fieldObject['name'] in self.datatarget[self.typeName] and self.datatarget[self.typeName][fieldObject['name']]!=[]):
@@ -166,16 +175,18 @@ class TypeWindow(QWidget):
                 self.datatarget[typeName] = {}
                 self.datatarget[typeName][fieldObject['name']] = values
 
-        def dataHandleNum(self, fieldObject, inputarea, checkbox, strategybox, infobox):
+        def dataHandle(self, fieldObject, inputarea, checkbox, strategybox, infobox):
             typeName = self.typeName
             if(checkbox.isChecked()):
                 try:
                     values = inputarea.text().split(',')
-                    numvalues = list(map(lambda x : float(x), values))
+                    if fieldObject['type'] in ["Single", "Double", "Short", "Long"]:
+                       values = list(map(lambda x : float(x), values))
+                    
                     strategy = strategybox.currentText()
                     if typeName not in self.datatarget:
                         self.datatarget[typeName] = {}
-                    DataTarget().updateParameterField(typeName, fieldObject['name'], numvalues, strategy)
+                    DataTarget().updateParameterField(typeName, fieldObject['name'], values, strategy)
                 except Exception as e:
                     checkbox.setCheckState(Qt.CheckState.Unchecked)
                     ErrorPopup(str(e))
