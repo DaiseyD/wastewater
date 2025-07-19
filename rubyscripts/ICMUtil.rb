@@ -37,11 +37,11 @@ class ICMUtil
 
     # sets up the json file for the UI to show proper parameters
     def getNetworkInfo() # on means open network
-        networkobjects = []
+        networkobjects = {}
         @openNetwork.table_names.each do | tableName| 
             if @openNetwork.row_objects(tableName).length > 0
                 object = @openNetwork.row_objects(tableName)[0]
-                networkobjects << networkInfoHelper(object)
+                networkobjects[object.table_info.name] = networkInfoHelper(object)
             end
         end
         rainfallevents = []
@@ -106,7 +106,7 @@ class ICMUtil
             aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
             fieldarr << aux
         end
-        jsonobject = {"name"=> name, "fields"=> fieldarr}
+        jsonobject = {"fields"=> fieldarr}
         return jsonobject
     end
 

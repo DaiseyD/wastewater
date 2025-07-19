@@ -1,7 +1,6 @@
 {
-    "networkobjects": [
-        {
-            "name": "hw_sim_parameters",
+    "networkobjects": {
+        "hw_sim_parameters": {
             "fields": [
                 {
                     "name": "min_base_flow_depth",
@@ -315,8 +314,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_manhole_defaults",
+        "hw_manhole_defaults": {
             "fields": [
                 {
                     "name": "flood_area_1",
@@ -360,8 +358,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_conduit_defaults",
+        "hw_conduit_defaults": {
             "fields": [
                 {
                     "name": "us_headloss_type",
@@ -460,8 +457,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_subcatchment_defaults",
+        "hw_subcatchment_defaults": {
             "fields": [
                 {
                     "name": "additional_foul_flow",
@@ -510,8 +506,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_large_catchment_parameters",
+        "hw_large_catchment_parameters": {
             "fields": [
                 {
                     "name": "ck",
@@ -555,8 +550,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_snow_parameters",
+        "hw_snow_parameters": {
             "fields": [
                 {
                     "name": "antecedent_temp_idx",
@@ -590,8 +584,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_wq_params",
+        "hw_wq_params": {
             "fields": [
                 {
                     "name": "ammonia_20c_decay_rate",
@@ -1251,7 +1244,7 @@
                 {
                     "name": "na_pollutants",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f35fb0>"
+                    "value": "#<WSStructure:0x00021a7c1eda28>"
                 },
                 {
                     "name": "sweep_end_month",
@@ -1261,7 +1254,7 @@
                 {
                     "name": "pot_factors",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f35880>"
+                    "value": "#<WSStructure:0x00021a7c1ed0a0>"
                 },
                 {
                     "name": "sweep_end_day",
@@ -1490,8 +1483,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_node",
+        "hw_node": {
             "fields": [
                 {
                     "name": "node_id",
@@ -1506,7 +1498,7 @@
                 {
                     "name": "storage_array",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2efbb90>"
+                    "value": "#<WSStructure:0x00021a7b13f640>"
                 },
                 {
                     "name": "storage_array_flag",
@@ -2201,7 +2193,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e19600>"
+                    "value": "#<WSStructure:0x00021a7af90f10>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -2410,8 +2402,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_conduit",
+        "hw_conduit": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -3191,7 +3182,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c316f5e8>"
+                    "value": "#<WSStructure:0x00021a7b3a8238>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -3400,8 +3391,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_flap_valve",
+        "hw_flap_valve": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -3576,7 +3566,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e41718>"
+                    "value": "#<WSStructure:0x00021a7b077ed8>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -3805,8 +3795,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_orifice",
+        "hw_orifice": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -4031,7 +4020,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c316cd20>"
+                    "value": "#<WSStructure:0x00021a7b3bbab8>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -4260,8 +4249,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_pump",
+        "hw_pump": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -4576,7 +4564,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3161f10>"
+                    "value": "#<WSStructure:0x00021a7b3a9598>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -4805,8 +4793,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_sluice",
+        "hw_sluice": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -5141,7 +5128,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3ffb030>"
+                    "value": "#<WSStructure:0x00021a7c28e540>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -5370,8 +5357,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_user_control",
+        "hw_user_control": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -5516,7 +5502,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c40091f8>"
+                    "value": "#<WSStructure:0x00021a7c29c5f0>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -5745,8 +5731,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_weir",
+        "hw_weir": {
             "fields": [
                 {
                     "name": "us_node_id",
@@ -6101,7 +6086,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c403abe0>"
+                    "value": "#<WSStructure:0x00021a7c2ce190>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -6330,8 +6315,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_channel_defaults",
+        "hw_channel_defaults": {
             "fields": [
                 {
                     "name": "inflow",
@@ -6390,8 +6374,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_river_reach_defaults",
+        "hw_river_reach_defaults": {
             "fields": [
                 {
                     "name": "inflow",
@@ -6485,8 +6468,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_shape",
+        "hw_shape": {
             "fields": [
                 {
                     "name": "shape_id",
@@ -6521,7 +6503,7 @@
                 {
                     "name": "geometry",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e58af8>"
+                    "value": "#<WSStructure:0x00021a7b085650>"
                 },
                 {
                     "name": "geometry_flag",
@@ -6531,7 +6513,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e4a7a0>"
+                    "value": "#<WSStructure:0x00021a7b07cca8>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -6755,8 +6737,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_head_discharge",
+        "hw_head_discharge": {
             "fields": [
                 {
                     "name": "head_discharge_id",
@@ -6781,7 +6762,7 @@
                 {
                     "name": "HDP_table",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c403aa50>"
+                    "value": "#<WSStructure:0x00021a7c2ce078>"
                 },
                 {
                     "name": "HDP_table_flag",
@@ -6791,7 +6772,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c403a2a8>"
+                    "value": "#<WSStructure:0x00021a7c2cd970>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -7010,8 +6991,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_runoff_surface",
+        "hw_runoff_surface": {
             "fields": [
                 {
                     "name": "runoff_index",
@@ -7376,7 +7356,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3ff0b80>"
+                    "value": "#<WSStructure:0x00021a7c2841f8>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -7685,8 +7665,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_land_use",
+        "hw_land_use": {
             "fields": [
                 {
                     "name": "land_use_id",
@@ -7991,7 +7970,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e33438>"
+                    "value": "#<WSStructure:0x00021a7b06d460>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -8210,8 +8189,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_headloss",
+        "hw_headloss": {
             "fields": [
                 {
                     "name": "headloss_type",
@@ -8296,7 +8274,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c402ae70>"
+                    "value": "#<WSStructure:0x00021a7c2ad580>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -8515,8 +8493,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_subcatchment",
+        "hw_subcatchment": {
             "fields": [
                 {
                     "name": "subcatchment_id",
@@ -8541,7 +8518,7 @@
                 {
                     "name": "lateral_links",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f3ea70>"
+                    "value": "#<WSStructure:0x00021a7c1f4300>"
                 },
                 {
                     "name": "lateral_links_flag",
@@ -8551,7 +8528,7 @@
                 {
                     "name": "refh_descriptors",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f3d760>"
+                    "value": "#<WSStructure:0x00021a7c1eec98>"
                 },
                 {
                     "name": "refh_descriptors_flag",
@@ -8645,7 +8622,7 @@
                 {
                     "name": "suds_controls",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f2ce60>"
+                    "value": "#<WSStructure:0x00021a7b3c3d08>"
                 },
                 {
                     "name": "suds_controls_flag",
@@ -8655,7 +8632,7 @@
                 {
                     "name": "swmm_coverage",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3177a18>"
+                    "value": "#<WSStructure:0x00021a7b3c2930>"
                 },
                 {
                     "name": "capacity_limit",
@@ -9635,7 +9612,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c31627f8>"
+                    "value": "#<WSStructure:0x00021a7b3a8d28>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -9844,8 +9821,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_2d_zone_defaults",
+        "hw_2d_zone_defaults": {
             "fields": [
                 {
                     "name": "mesh_generation",
@@ -9859,8 +9835,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_2d_infil_surface",
+        "hw_2d_infil_surface": {
             "fields": [
                 {
                     "name": "surface_id",
@@ -9915,7 +9890,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2e12ad0>"
+                    "value": "#<WSStructure:0x00021a7b03d378>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -10244,8 +10219,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_sediment_grading",
+        "hw_sediment_grading": {
             "fields": [
                 {
                     "name": "grading_id",
@@ -10290,7 +10264,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c2f00aa0>"
+                    "value": "#<WSStructure:0x00021a7b0ee970>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -10509,8 +10483,7 @@
                 }
             ]
         },
-        {
-            "name": "hw_2d_turbulence_model",
+        "hw_2d_turbulence_model": {
             "fields": [
                 {
                     "name": "model_id",
@@ -10585,7 +10558,7 @@
                 {
                     "name": "hyperlinks",
                     "type": "WSStructure",
-                    "value": "#<WSStructure:0x000272c3f4be00>"
+                    "value": "#<WSStructure:0x00021a7b3bb9c8>"
                 },
                 {
                     "name": "hyperlinks_flag",
@@ -10804,7 +10777,7 @@
                 }
             ]
         }
-    ],
+    },
     "rainfallevents": [
         {
             "id": 1,
