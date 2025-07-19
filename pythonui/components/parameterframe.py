@@ -16,7 +16,6 @@ def packFrame(widgets, direction): # this function puts widgets into a frame and
     return frame
 
 class ParameterFrame(QFrame):
-
     def __init__(self):
         super().__init__()
         self.datatarget = DataTarget().target
@@ -62,9 +61,8 @@ class TypeWindow(QWidget):
         self.typeWidgets = []
         i = 0
         for (index,item) in enumerate(self.data['fields']):
-            if item['type'] in ["Single", "Double", "Short", "Long"]:
-                self.addlinegrid(gridbox, item)
-                i = i + 1 
+            self.addlinegrid(gridbox, item)
+            i = i + 1 
         scrollArea.setWidget(container)
 
 
@@ -122,7 +120,7 @@ class TypeWindow(QWidget):
             for i in strategies:
                 strategybox.addItem(i)
             inputarea = QLineEdit()
-            datahandlefunction = lambda fieldobject=fieldobject, inputarea=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandleNum(fieldobject, inputarea, checkbox, strategybox, infobox)
+            datahandlefunction = lambda fo=fieldobject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.parent.dataHandleNum(fo, ia, checkbox, strategybox, infobox)
             inputarea.editingFinished.connect(datahandlefunction)
 
             labelframelayout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)

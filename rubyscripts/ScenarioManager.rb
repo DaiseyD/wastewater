@@ -1,17 +1,22 @@
 STRATEGIES = ['changeAll', "randomRange", "randomSelect"]
-class StrategyPicker
-    attr_accessor :icm, :scenarios, :modObj        
 
-    def initialize(icm, scenarios, modObj)
+def merge_recursively(a, b)
+  a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
+end
+
+class ScenarioManager
+    attr_accessor :icm, :scenarios, :inputParams        
+
+    def initialize(icm, scenarios, inputParams)
         @icm = icm
         @scenarios = scenarios
-        @modObj = modObj
+        @inputParams = inputParams
     end
 
 
     def runLoop()
-        @modObj['parameters'].keys.each do |key|  
-            typeObject = @modObj['parameters'][key]
+        @inputParams['parameters'].keys.each do |key|  
+            typeObject = @inputParams['parameters'][key]
             typeObject.keys.each do  |fieldName|
                 self.callCorrectStrategy(key, fieldName, typeObject[fieldName])
             end
@@ -35,12 +40,12 @@ class StrategyPicker
 
 
     def changeAllStrategy(values, fieldName, typeName)
-        newscenarios = []
-        @scenarios.each do |s|
+        newscenarios = {}
+        @scenarios.keys.each do |s|
             @icm.openNetwork.current_scenario = s
             values.each_with_index do | value, index | 
                 scenarioName = "#{s}.#{index}"
-                newscenarios << scenarioName
+                newscenarios[scenarioName] = merge_recursively(@scenarios[s], {typeName => {fieldName => value} })
                 @icm.openNetwork.add_scenario(scenarioName, "#{s}", "#{s}.#{"#{typeName}-#{fieldName}-#{index}"}")
                 @icm.openNetwork.current_scenario = scenarioName
                 @icm.openNetwork.transaction_begin
@@ -54,23 +59,25 @@ class StrategyPicker
 
     def randomRange(values, fieldName, typeName)
         random = Random.new
-        @scenarios.each do |s| 
+        @scenarios.keys.each do |s| 
             @icm.openNetwork.current_scenario = s
             max = values.max()
             min = values.min()
             @icm.openNetwork.transaction_begin
             @icm.changeRandomRangeValues(typeName, fieldName, min, max, random)
             @icm.openNetwork.transaction_commit
+            merge_recursively(@scenarios[s], {typeName => {fieldName=> "random range #{min}-#{max}"}})
         end
     end
 
     def randomSelect(values, fieldName, typeName)
         random = Random.new
-        @scenarios.each do |s|
+        @scenarios.keys.each do |s|
             @icm.openNetwork.current_scenario = s
             @icm.openNetwork.transaction_begin
             @icm.changeRandomSelectValues(typeName, fieldName, values, random)
             @icm.openNetwork.transaction_commit
+            merge_recursively(@scenarios[s], {typeName => {fieldName=> "randomly selected"}})
         end
     end
 end

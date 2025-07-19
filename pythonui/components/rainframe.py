@@ -1,16 +1,13 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
+from components.DataTarget import DataTarget
 import json
 
 class RainFrame(QFrame):
-    def __init__(self, raindata, targetdata):
+    def __init__(self):
         super().__init__()
-        
-        self.raindata = raindata
-        self.targetdata = targetdata
-
-        if "rainfallevents" not in self.targetdata.keys():
-            self.targetdata['rainfallevents'] = []  #TODO REMOVE THIS
+        self.raindata = DataTarget().data['rainfallevents']
+        self.targetdata = DataTarget.target
         vbox = QVBoxLayout(self)
         scrollRight = QScrollArea()
         vbox.addWidget(scrollRight)
@@ -19,7 +16,6 @@ class RainFrame(QFrame):
         rainContainer = QFrame()
         hbox.addWidget(rainContainer)
         rainLayout = QVBoxLayout(rainContainer)
-
         self.setupRain(rainLayout)
         rainLayout.addStretch() # align elements to top
         scrollRight.setWidget(rightContainer)
@@ -37,9 +33,7 @@ class RainFrame(QFrame):
             rainhbox.addWidget(checkbox)
             checkbox.clicked.connect(lambda state, id=rainfallevent['id']: self.selectRainEvent(state,id))
 
-    
     def selectRainEvent(self,state, id):
-        
         if state == True:
             self.targetdata['rainfallevents'].append(id)
         else:

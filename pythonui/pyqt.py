@@ -48,7 +48,7 @@ class Wastewindow(QMainWindow):
         rightFrame = QFrame()
         self.hbox.addWidget(rightFrame)
         vbox = QVBoxLayout(rightFrame)
-        rainFrame = RainFrame(self.data['rainfallevents'], self.datatarget)
+        rainFrame = RainFrame()
         vbox.addWidget(rainFrame)
         simParameterFrame = SimParameterFrame()
         vbox.addWidget(simParameterFrame)

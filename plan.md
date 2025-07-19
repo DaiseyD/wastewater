@@ -5,15 +5,6 @@ Run the shell scripts from the wastewater folder, not from the shellscripts fold
 
 
 ## crucial
-- clean up code ruby
-    - error handling with datatarget in ui
-    - centralized datatarget singleton class
-- clean up code UI
-- logging to stdout AND logfile
-
-
-# requirements
-Ruby
-Python pyside6
-Iexchange
-Infoworks ICM
+- clean up code
+- add a base Scenario to start from
+- documentation

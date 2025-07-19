@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
-from components.DataTarget import DataTarget\
+from components.DataTarget import DataTarget
 
 
 class SimParameterFrame(QFrame):
@@ -16,7 +16,6 @@ class SimParameterFrame(QFrame):
         vbox.addWidget(self.setupDuration())
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
-        vbox.addWidget(self.setupSceneName())
 
     def setupWasteOutput(self):
         comboBox = QComboBox()
@@ -51,15 +50,6 @@ class SimParameterFrame(QFrame):
         edit.editingFinished.connect(lambda widget=edit: self.updateString(widget, "RunName"))
         hbox.addWidget(edit)
         return frame
-
-    def setupSceneName(self):
-        frame = QFrame()
-        hbox = QHBoxLayout(frame)
-        hbox.addWidget(QLabel("SceneName"))
-        edit = QLineEdit()
-        edit.editingFinished.connect(lambda widget=edit: self.updateString(widget, "SceneName"))
-        hbox.addWidget(edit)
-        return frame
     
     def updateSimParameters(self, widget, field):
         try:
@@ -70,7 +60,7 @@ class SimParameterFrame(QFrame):
         print(self.datatarget)
 
     def updateWasteOutput(self, id):
-        self.datatarget['simparameters']["WasteOutput"] = id
+        self.datatarget['simparameters']["Waste Water"] = id
         print(self.datatarget)
 
     def updateString(self, widget, field):

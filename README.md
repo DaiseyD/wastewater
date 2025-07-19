@@ -5,6 +5,9 @@
 - ICMExchange
 
 
+# What this program does exactly
+
+
 
 
 # How to run 
@@ -21,6 +24,11 @@
 # Known improvement points
 - no rainfall event info, you will have to gamble on the duration and timestep in the ui
 - no adjusting non-numerical values
-- able to input a float where an int is needed (luckily ints are barely used in infoworks)
-- ui is not well structured, every class does it in a different way
 - selection objects not implemented
+
+
+# requirements
+Ruby
+Python pyside6
+Iexchange
+Infoworks ICM

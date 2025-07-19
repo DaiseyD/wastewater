@@ -25,7 +25,6 @@ class DataTarget:
         self.target['rainfallevents'] = []
         self.target['simparameters'] = {}
 
-
     def updateParameterField(self, parameterName, fieldName, values, strategy):
         if parameterName not in self.target['parameters']:
             self.target['parameters'][parameterName] = {}
@@ -37,7 +36,11 @@ class DataTarget:
             if self.target['parameters'][parameterName] == {}:
                 self.target['parameters'].remove(parameterName)
     
+    def addToRain(self, rainid):
+        self.data['rainfallevents'].append(rainid)
     
+    def removeFromRain(self, rainid):
+        self.data['rainfallevents'].remove(rainid)
 
 
 

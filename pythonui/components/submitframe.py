@@ -22,9 +22,6 @@ class SubmitFrame(QFrame):
         if("RunName" not in self.target.keys()):
             canRun = False
             ErrorPopup("please set a RunName")
-        if("SceneName" not in self.target.keys()):
-            canRun = False
-            ErrorPopup("please set a scenename")
         if(canRun):
             self.writejsonresult(self.target)
             self.mainwindow.close()
