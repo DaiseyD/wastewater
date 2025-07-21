@@ -3,6 +3,7 @@ from PySide6.QtCore import *
 from components.DataTarget import DataTarget
 import json
 
+# A frame which contains all the rainfallevents and allows to select them to enable them in the simulation
 class RainFrame(QFrame):
     def __init__(self):
         super().__init__()
@@ -19,7 +20,6 @@ class RainFrame(QFrame):
         self.setupRain(rainLayout)
         rainLayout.addStretch() # align elements to top
         scrollRight.setWidget(rightContainer)
-
 
     def setupRain(self, rainLayout):
         title = QLabel("<b>Rainfall events</b>")

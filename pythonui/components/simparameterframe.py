@@ -3,7 +3,7 @@ from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
 
-
+# This frame contains the other simparameters which have to be set in order to run the simulation
 class SimParameterFrame(QFrame):
 
     def __init__(self):
