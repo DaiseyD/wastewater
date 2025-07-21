@@ -7,14 +7,3 @@ STYLEGLOBAL = """
                 font-size: 14px;
                   }
 """
-
-STYLELOW = """
-color: hsl(200, 30%, 80%);
-"""
-STYLEMED = """
-color: hsl(200, 30%, 60%);
-"""
-
-STYLEHIGH = """
-color: hsl(200, 30%, 30%);
-"""

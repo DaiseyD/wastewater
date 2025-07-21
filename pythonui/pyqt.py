@@ -60,7 +60,13 @@ class Wastewindow(QMainWindow):
 data = DataTarget()
 data.setData(getjsondata())
 app = QApplication(sys.argv)
-app.setStyleSheet(style.STYLEGLOBAL)
+app.setStyleSheet("""
+            QLabel, QFrame, QWindow {
+                background-color: hsl(200, 20%, 95% );
+                color: hsl(200, 30%, 10%);
+                font-size: 14px;
+                  }
+""")
 
 mainwindow = Wastewindow()
 # Create a button, connect it and show it

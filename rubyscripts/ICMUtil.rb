@@ -73,7 +73,7 @@ class ICMUtil
             end
             i = i + 1
         end   
-        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "wasteOutput" => wastewater}
+        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "wasteOutput" => wastewater, "strategies" => STRATEGIES}
         return jsonobject
     end
 

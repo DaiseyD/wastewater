@@ -1,3 +1,0 @@
-Combinatorial problem of changing a parameter for all "pipes"
-
-Possibility for changing individual

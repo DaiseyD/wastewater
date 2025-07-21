@@ -78,6 +78,7 @@ class Simulator
             Dir.mkdir basepath
         rescue Exception => e
         end
+        puts "Exporting to #{basepath}"
         File.open("#{basepath}/inputParams.json", "w"){|f| f.write(@inputParams.to_json())}
         sims.each_with_index do | sim, index | 
             path = "#{basepath}/#{sim.name}"
