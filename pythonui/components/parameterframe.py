@@ -15,6 +15,7 @@ def packFrame(widgets, direction): # this function puts widgets into a frame and
         layout.addWidget(w)
     return frame
 
+# The parameter frame is a part of the main window that shows each parameter and opens a TypeWindow when clicking the parameter
 class ParameterFrame(QFrame):
     def __init__(self):
         super().__init__()
@@ -40,6 +41,7 @@ class ParameterFrame(QFrame):
         self.w = TypeWindow(item)
         self.w.show()
 
+# the TypeWindow is a window which shows all fields of a parameter and allows for the modifying of said field for simulations
 class TypeWindow(QWidget):
     def __init__(self, typeName):
         super().__init__()
@@ -90,6 +92,7 @@ class TypeWindow(QWidget):
         vbox.addWidget(labFrame)
         self.typeWidgets.append(labFrame)
     
+    # the labelframe contains a single field of a parameter, it can be used to modify said field for the simulations
     class LabelFrame(QFrame):
         def __init__(self, typeName, fieldObject):
             self.name = fieldObject['name']
@@ -182,7 +185,15 @@ class TypeWindow(QWidget):
                     values = inputarea.text().split(',')
                     if fieldObject['type'] in ["Single", "Double", "Short", "Long"]:
                        values = list(map(lambda x : float(x), values))
-                    
+                    elif fieldObject['type'] == "Boolean":
+                        aux = []
+                        for val in values:
+                            if val.lower() == "true":
+                                aux.append(True)
+                            elif val.lower() == "false":
+                                aux.append(False)
+                            else:
+                                raise(Exception("value must be true or false"))
                     strategy = strategybox.currentText()
                     if typeName not in self.datatarget:
                         self.datatarget[typeName] = {}

@@ -11,7 +11,7 @@ class Simulator
     # read the params from the file created by the UI and sets up the simulation object, then runs and exports the simulations
     def setupAndRunSimulations()
         params = self.massSimulation()
-        self.runSimulations(@icm, params['sims'], params['runname'], params['scenarios'])
+        self.runSimulations(params['sims'], params['runname'], params['scenarios'])
     end
     
     # delete
@@ -30,7 +30,7 @@ class Simulator
         scenarioname = self.chooseScenarioName(basename) #helps with picking a unique base scenario name
         scenariotest = @icm.openNetwork.add_scenario(scenarioname, "Base", "testscenario")  
         $logger.info("Scenario #{scenarioname} created")
-        scenarioManager = ScenarioManager.new(@icm, {scenarioname => {}}, @inputParams)
+        scenarioManager = ScenarioManager.new(@icm, scenarioname, @inputParams)
         scenarioManager.runLoop()
         scenarioObject = scenarioManager.scenarios
         scenarios = scenarioObject.keys
@@ -38,8 +38,7 @@ class Simulator
         if validations.error_count > 0
             raise Exception.new("could not validate, please check in infoworks icm what is wrong with the scenario")
         end
-        @icm.net.commit("committing scenarios")
-        $logger.info("scenarios committed")
+        @icm.net.commit("committing #{scenarioname} changes")
         baseint =0 
         baserunname = @inputParams['RunName']
         runname = baserunname
@@ -52,7 +51,7 @@ class Simulator
             rescue Exception => e
                 if e.message != "new_run : name already in use"
                     $logger.fatal(e.message)
-                    exit
+                    raise(e)
                 else 
                     $logger.info( "name: #{runname} already in use, trying new name")
                     runname = "#{baserunname}#{baseint}"
@@ -69,7 +68,7 @@ class Simulator
     end
 
 
-    def runSimulations(icm, sims, runname, scenariosObject)
+    def runSimulations(sims, runname, scenariosObject)
         WSApplication.connect_local_agent(1)
         jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
         WSApplication.wait_for_jobs(jobids, true, 100000000)
@@ -79,6 +78,7 @@ class Simulator
             Dir.mkdir basepath
         rescue Exception => e
         end
+        File.open("#{basepath}/inputParams.json", "w"){|f| f.write(@inputParams.to_json())}
         sims.each_with_index do | sim, index | 
             path = "#{basepath}/#{sim.name}"
             resultpath = "#{path}/sim_results"
@@ -88,7 +88,7 @@ class Simulator
                 Dir.mkdir resultpath
             rescue Exception => e
                 $logger.error(e.message)
-                exit
+                raise(e)
             end
             scenarioFoundFlag = false
             scenarioName = ""
@@ -109,6 +109,7 @@ class Simulator
             sim.results_csv_export(nil,  resultpath)
         end 
         cleanupScenarios(scenariosObject.keys)
+        @icm.net.commit("deleted scenarios from #{runname}")
     end
 
     #function for picking a unique base name for the scenario to avoid duplicate scenario bugs

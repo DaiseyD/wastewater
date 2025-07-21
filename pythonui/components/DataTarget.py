@@ -1,6 +1,6 @@
 
 
-
+# Singleton class used for controlling access to the infoworks data and datatarget
 class DataTarget:
     target= {}
     data = None
@@ -18,9 +18,9 @@ class DataTarget:
             raise Exception("not allowed to rewrite data to singleton")
         else:
             self.data = data
-            self.initializeTarget()
+            self.__initializeTarget()
 
-    def initializeTarget(self):
+    def __initializeTarget(self):
         self.target['parameters'] = {}
         self.target['rainfallevents'] = []
         self.target['simparameters'] = {}

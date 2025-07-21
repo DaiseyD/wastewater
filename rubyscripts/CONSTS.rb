@@ -1,2 +1,2 @@
-DBFILEPATH = 'C:\Users\dijks\Documents\wastewatersimulation\wastewater\test0\test.icmm'
+DBFILEPATH = 'C:\Users\dijks\Documents\wastewatersimulation\wastewater\Daiseytest\desleytest1.icmm'
 ALLTYPES = true

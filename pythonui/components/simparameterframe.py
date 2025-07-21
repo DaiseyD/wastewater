@@ -11,18 +11,24 @@ class SimParameterFrame(QFrame):
         self.datatarget = DataTarget().target
         self.data = DataTarget().data
         vbox = QVBoxLayout(self)
-        vbox.addWidget(QLabel("Mandatory fields:"))
+        vbox.addWidget(QLabel("Mandatory simulation parameters:"))
         vbox.addWidget(self.setupWasteOutput())
         vbox.addWidget(self.setupDuration())
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
 
     def setupWasteOutput(self):
+        frame = QFrame()
+        hbox = QHBoxLayout(frame)
+
         comboBox = QComboBox()
+        comboBox.addItem("None")
         for item in self.data['wasteOutput']:
             comboBox.addItem(item['name'])
-        comboBox.activated.connect(lambda x, id=item['id']: self.updateWasteOutput(id))
-        return comboBox
+        comboBox.activated.connect(lambda x: self.updateWasteOutput(x))
+        hbox.addWidget(QLabel("Waste water output"))
+        hbox.addWidget(comboBox)
+        return frame
 
     def setupDuration(self):
         frame = QFrame()
@@ -51,6 +57,7 @@ class SimParameterFrame(QFrame):
         hbox.addWidget(edit)
         return frame
     
+    #updates a simparameter
     def updateSimParameters(self, widget, field):
         try:
             val = int(widget.text())
@@ -59,10 +66,17 @@ class SimParameterFrame(QFrame):
             ErrorPopup(str(e))
         print(self.datatarget)
 
-    def updateWasteOutput(self, id):
+    # updates wastewater parameter
+    def updateWasteOutput(self, index):
+        if(index==0):
+            self.datatarget['simparameters'].pop('Waste Water', None)
+            print(self.datatarget)
+            return
+        id = self.data['wasteOutput'][index - 1]['id']
         self.datatarget['simparameters']["Waste Water"] = id
         print(self.datatarget)
 
-    def updateString(self, widget, field):
-        self.datatarget[field] = widget.text()
+    # updates a string value of a key in the datatarget
+    def updateString(self, widget, key):
+        self.datatarget[key] = widget.text()
         print(self.datatarget)

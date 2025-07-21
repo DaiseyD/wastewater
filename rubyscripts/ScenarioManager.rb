@@ -1,5 +1,6 @@
 STRATEGIES = ['changeAll', "randomRange", "randomSelect"]
 
+# does a deep merge for 2 dictionary objects
 def merge_recursively(a, b)
   a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
 end
@@ -7,13 +8,13 @@ end
 class ScenarioManager
     attr_accessor :icm, :scenarios, :inputParams        
 
-    def initialize(icm, scenarios, inputParams)
+    def initialize(icm, baseScenarioName, inputParams)
         @icm = icm
-        @scenarios = scenarios
+        @scenarios = {baseScenarioName => {}}
         @inputParams = inputParams
     end
 
-
+    # goes through every parameter in the input params and calls the correct strategy
     def runLoop()
         @inputParams['parameters'].keys.each do |key|  
             typeObject = @inputParams['parameters'][key]
@@ -23,6 +24,7 @@ class ScenarioManager
         end    
     end
 
+    #calls the strategy that the inputParameter specifies on the type and field a specified
     def callCorrectStrategy(typeName, fieldName, fieldObject)
         stratName = fieldObject['strategy']
         values = fieldObject['values']
@@ -38,7 +40,7 @@ class ScenarioManager
         end
     end
 
-
+    # A strategy that changes all elements of typeName to each value, for i scenarios and k values: k*i scenarios will be created
     def changeAllStrategy(values, fieldName, typeName)
         newscenarios = {}
         @scenarios.keys.each do |s|
@@ -57,6 +59,7 @@ class ScenarioManager
         @scenarios = newscenarios
     end
 
+    # A strategy that sets each [fieldName] of all objects of [typeName] to a random value between the min and max of the values specified in the inputparameters
     def randomRange(values, fieldName, typeName)
         random = Random.new
         @scenarios.keys.each do |s| 
@@ -70,6 +73,7 @@ class ScenarioManager
         end
     end
 
+    # A strategy that sets each [fieldName] of all objects of [typeName] to a randomly selected value specified in inputparams
     def randomSelect(values, fieldName, typeName)
         random = Random.new
         @scenarios.keys.each do |s|

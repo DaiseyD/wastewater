@@ -3,7 +3,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.rainframe import RainFrame
 from components.parameterframe import ParameterFrame
-from components.selectframe import SelectFrame
+# from components.selectframe import SelectFrame
 from components.simparameterframe import SimParameterFrame
 from components.submitframe import SubmitFrame
 from components.DataTarget import DataTarget
@@ -26,7 +26,7 @@ class Wastewindow(QMainWindow):
         self.data = DataTarget().data
         self.datatarget = DataTarget().target
         super().__init__()
-        self.setWindowTitle("My App")
+        self.setWindowTitle("DG_Infoworks")
         self.frame = QFrame()
         self.hbox = QHBoxLayout(self.frame)        
         self.setCentralWidget(self.frame)

@@ -19,7 +19,7 @@ class ICMUtil
             end        
         rescue Exception=> e
         end
-        puts "what network do u want to choose (I recommend 2)"
+        puts "what network do u want to choose"
         choice = STDIN.gets
         return @db.model_object_from_type_and_id 'Model Network', choice.to_i
     end
@@ -72,27 +72,8 @@ class ICMUtil
                 $logger.info(e.message)
             end
             i = i + 1
-        end
-        i=1
-        selectionArray= []
-        while true
-            begin
-                selectionList = @db.model_object_from_type_and_id 'Selection List',i
-                selectionArray << selectionList.name
-
-                selectionList.children.each do | moc|
-                    puts moc.class
-                end
-            rescue Exception => e
-                if !e.message.include?("Error 50 : Attempting to access a recycled object")
-                    $logger.info(e.message)
-                    break
-                end
-                $logger.info(e.message)
-            end
-            i = i + 1
-        end     
-        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "selectionobjects" => selectionArray, "wasteOutput" => wastewater}
+        end   
+        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "wasteOutput" => wastewater}
         return jsonobject
     end
 
@@ -101,8 +82,8 @@ class ICMUtil
         name = object.table_info.name
         fieldarr = []
         object.table_info.fields.each do |field|
-            unsupported = ["Flag", "Boolean", "Date", "String", "Array:Long", "Array:Double", "GUID", "WSStructure"]
-            supported = ["Single", "Double", "Short", "Long"]
+            nonnumerical = ["Flag", "Boolean", "Date", "String", "Array:Long", "Array:Double", "GUID", "WSStructure"]
+            numerical = ["Single", "Double", "Short", "Long"]
             if(ALLTYPES or supported.include?(field.data_type))
                 aux = { "name" => field.name, "type" => field.data_type, "value" => object[field.name]}
                 fieldarr << aux
