@@ -6,8 +6,6 @@
 tasks:
 - contain variables for communicating with Infoworks
 
-things I dont like:
-- doing the getNetworkInfo and the complicated changeValues through strategies feels a bit weird, this could be done in the ScenarioManager class maybe
 
 ## DGInfoworks
 tasks:

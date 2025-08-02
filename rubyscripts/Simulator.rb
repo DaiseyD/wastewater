@@ -135,6 +135,5 @@ class Simulator
             baseint = baseint+1
         end
         return workname
-    end
-    
+    end 
 end
