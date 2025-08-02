@@ -10,15 +10,23 @@ class ICMUtil
 
     # initializes which network to use using STDIN
     def choosenetwork 
-        begin
-            i = 1
-            while true
+        i = 1
+        while true
+            begin
                 netex = @db.model_object_from_type_and_id 'Model Network', i
                 puts "#{i}: #{netex.name}"
-                i = i + 1
-            end        
-        rescue Exception=> e
-        end
+                i = i + 1    
+            rescue Exception => e
+                if e.message.include?("Error 13 : File Not Found")
+                    break
+                elsif e.message.include?("Error 50 : Attempting to access a recycled object")
+                    $logger.debug(e)
+                else
+                    $logger.fatal(e)
+                    raise e
+                end
+            end
+        end 
         puts "what network do u want to choose"
         choice = STDIN.gets
         return @db.model_object_from_type_and_id 'Model Network', choice.to_i
@@ -27,7 +35,7 @@ class ICMUtil
     # deletes all scenarios not named base or aux
     def deleteAllScenarios()
         @openNetwork.scenarios do |s|
-            if s.downcase!= "base" and s.downcase!= "aux"
+            if s.downcase!= "base"
                 @openNetwork.delete_scenario(s)
             end
         end
@@ -51,10 +59,14 @@ class ICMUtil
                 rainfallevent = @db.model_object_from_type_and_id 'Rainfall Event', i
                 rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
             rescue Exception => e
-                if !e.message.include?("Error 50 : Attempting to access a recycled object")
+                if e.message.include?("Error 13 : File Not Found")
                     break
+                elsif e.message.include?("Error 50 : Attempting to access a recycled object")
+                    $logger.debug(e)
+                else
+                    $logger.fatal(e)
+                    raise e
                 end
-                $logger.info(e.message)
             end
             i = i + 1
         end
@@ -65,11 +77,14 @@ class ICMUtil
                 wastewaterobj = @db.model_object_from_type_and_id 'Waste Water', i
                 wastewater << { 'id' => i, 'name' => wastewaterobj.name}
             rescue Exception => e
-                if !e.message.include?("Error 50 : Attempting to access a recycled object")
-                    $logger.info(e.message)
+                if e.message.include?("Error 13 : File Not Found")
                     break
+                elsif e.message.include?("Error 50 : Attempting to access a recycled object")
+                    $logger.debug(e)
+                else
+                    $logger.fatal(e)
+                    raise e
                 end
-                $logger.info(e.message)
             end
             i = i + 1
         end   
@@ -93,37 +108,30 @@ class ICMUtil
         return jsonobject
     end
 
-
         #updates the [field] of [object] to [newValue]
     def changeValue(object, field, newvalue)
         object[field] = newvalue
         object.write
     end
 
+    #changes the [field] of [objects] to [value]
+    def changeObjectsValues(objects, field, value)
+        objects.each do |object| 
+            changeValue(object, field, value)
+        end
+    end
+
+    # gets objects of [type]
+    def getObjectsOfType(type)
+        return @openNetwork.row_objects(type)
+    end
+
     #changes all values of the [field] of all objects of [type] to [value]
     def changeAllValues(type, field, value)
-        objects = @openNetwork.row_objects(type)
+        objects = getObjectsOfType(type)
         objects.each do | object | 
             changeValue(object,field, value)
         end
     end
 
-    # changes the values of the [field] of all objects of [type] to a random value between [min] and [max]
-    def changeRandomRangeValues(type, field, min, max, randomizer)
-        objects = @openNetwork.row_objects(type)
-        objects.each do | object |
-            value = randomizer.rand(min..max)
-            changeValue(object,field, value)
-        end
-    end
-
-    # changes the value of the [field] of all objects of [type] to a random value in [values] 
-    def changeRandomSelectValues(type, field, values, randomizer)
-        objects = @openNetwork.row_objects(type)
-        objects.each do |object| 
-            index = randomizer.rand(0...values.length()) # triple dot not single dot (exclude max value)
-            value = values[index]
-            changeValue(object,field, value)
-        end
-    end
 end

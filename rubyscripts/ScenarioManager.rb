@@ -2,15 +2,15 @@ STRATEGIES = ['changeAll', "randomRange", "randomSelect"]
 
 # does a deep merge for 2 dictionary objects
 def merge_recursively(a, b)
-  a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
+  return a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
 end
 
 class ScenarioManager
     attr_accessor :icm, :scenarios, :inputParams        
 
-    def initialize(icm, baseScenarioName, inputParams)
+    def initialize(icm, inputParams)
         @icm = icm
-        @scenarios = {baseScenarioName => {}}
+        @scenarios = {icm.openNetwork.current_scenario => {}}
         @inputParams = inputParams
     end
 
@@ -51,7 +51,8 @@ class ScenarioManager
                 @icm.openNetwork.add_scenario(scenarioName, "#{s}", "#{s}.#{"#{typeName}-#{fieldName}-#{index}"}")
                 @icm.openNetwork.current_scenario = scenarioName
                 @icm.openNetwork.transaction_begin
-                @icm.changeAllValues(typeName, fieldName, value)
+                objects = @icm.getObjectsOfType(typeName)
+                @icm.changeObjectsValues(objects, fieldName, value)
                 @icm.openNetwork.transaction_commit
             end
             @icm.openNetwork.delete_scenario(s)
@@ -67,9 +68,12 @@ class ScenarioManager
             max = values.max()
             min = values.min()
             @icm.openNetwork.transaction_begin
-            @icm.changeRandomRangeValues(typeName, fieldName, min, max, random)
+            objects = @icm.getObjectsOfType(typeName)
+            objects.each do |object|
+                @icm.changeValue(object, fieldName, random.rand(min..max))
+            end
             @icm.openNetwork.transaction_commit
-            merge_recursively(@scenarios[s], {typeName => {fieldName=> "random range #{min}-#{max}"}})
+            @scenarios[s] =  merge_recursively(@scenarios[s], {typeName => {fieldName=> "random range #{min}-#{max}"}})
         end
     end
 
@@ -80,8 +84,13 @@ class ScenarioManager
             @icm.openNetwork.current_scenario = s
             @icm.openNetwork.transaction_begin
             @icm.changeRandomSelectValues(typeName, fieldName, values, random)
+            objects = @icm.getObjectsOfType(typeName)
+            objects.each do |object|
+                newvalue = values[random.rand(0...values.length())]
+                @icm.changeValue(object, fieldName, newvalue)
+            end
             @icm.openNetwork.transaction_commit
-            merge_recursively(@scenarios[s], {typeName => {fieldName=> "randomly selected"}})
+            @scenarios[s] = merge_recursively(@scenarios[s], {typeName => {fieldName=> "randomly selected"}})
         end
     end
 end
