@@ -37,7 +37,7 @@ class Simulator
     def setupSimulation(scenarios)
         validations = @icm.openNetwork.validate(scenarios)
         if validations.error_count > 0
-            raise Exception.new("could not validate, please check in infoworks icm what is wrong with the scenario")
+            raise Exception.new("could not validate, you have probably supplied an impossible/illegal value, please check in infoworks icm what is wrong with the scenario")
         end
         @icm.net.commit("committing #{icm.openNetwork.current_scenario} changes")
         base = @icm.db.model_object_from_type_and_id( @icm.net.parent_type(), @icm.net.parent_id())
