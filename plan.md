@@ -1,8 +1,5 @@
 # Desley's plan for finishing the thesis 
 - coding
-    - create a proper architecture on paper first, documenting the decisions and reasons for making them
-    - decoupling in the backend
-    - frontend: single responsibility principle
     - fix the bugs
 - ui testing
     - write out manual test cases
