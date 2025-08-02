@@ -9,9 +9,6 @@ tasks:
 things I dont like:
 - doing the getNetworkInfo and the complicated changeValues through strategies feels a bit weird, this could be done in the ScenarioManager class maybe
 
-
-
-
 ## DGInfoworks
 tasks:
 - initialize classes and call the necessary functions
@@ -37,8 +34,3 @@ tasks:
 - apply changes as specified in scenariomanager
 things I dont like:
 - feels complicated (maybe improve the names of the functions)
-
-
-## Error handling
-- Custom error classes
-- Proper logging when encountering

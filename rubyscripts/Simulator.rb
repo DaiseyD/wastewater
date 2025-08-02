@@ -69,7 +69,6 @@ class Simulator
         return params
     end
 
-
     def runAndExportSimulations(sims, runname, scenariosObject)
         WSApplication.connect_local_agent(1)
         jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
