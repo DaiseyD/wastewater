@@ -1,4 +1,3 @@
-results
 test0
 Daiseytest
 test.json
@@ -6,6 +5,7 @@ uiresults.json
 __pycache__
 */__pycache__
 *.log
-communication
+communication/*
+results/*
 .vscode
 shellscripts
