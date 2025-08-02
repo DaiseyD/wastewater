@@ -17,8 +17,7 @@ tasks:
 tasks:
 - write json file for ui
 - read json file from ui
-things to improve:
-- potentially include more info in the parameterfile (like name of the network and stuff)
+
 
 ## Simulator
 tasks:
@@ -26,11 +25,9 @@ tasks:
 - setup initial scenarioname
 - run the simulations
 - export the simulations
-things I dont like:
-- theres a couple massive functions in there which shouldd be split into more function calls maybe: (setup(), run(), export(), cleanup())
+
 
 ## ScenarioManager
 tasks: 
 - apply changes as specified in scenariomanager
-things I dont like:
-- feels complicated (maybe improve the names of the functions)
+

@@ -32,20 +32,12 @@ class DataTarget:
     
     def removeFromParameterField(self, parameterName, fieldName):
         if parameterName in self.target['parameters'] and fieldName in self.target['parameters'][parameterName]:
-            self.target['parameters'][parameterName].remove(fieldName)
+            self.target['parameters'][parameterName].pop(fieldName)
             if self.target['parameters'][parameterName] == {}:
-                self.target['parameters'].remove(parameterName)
+                self.target['parameters'].pop(parameterName)
     
     def addToRain(self, rainid):
         self.data['rainfallevents'].append(rainid)
     
     def removeFromRain(self, rainid):
         self.data['rainfallevents'].remove(rainid)
-
-
-
-
-
-
-
-

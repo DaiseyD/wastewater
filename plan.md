@@ -20,5 +20,8 @@
 
 
 
-# Bugs
+# Sunday plan:
+- consider opening a UI before running the program for selecting model and filepath
+- consider marking fields in the UI
+- add more style to the UI
 
