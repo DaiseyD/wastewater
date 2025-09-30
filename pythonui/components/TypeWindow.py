@@ -33,19 +33,22 @@ class TypeWindow(QWidget):
         scrollArea = QScrollArea()
         boxCard.addWidget(scrollArea)
         container = QFrame()
-        gridbox = QVBoxLayout(container)
+        gridbox = QGridLayout(container)
+        # gridbox = QVBoxLayout(container)
         gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
         i = 0
         for (index,item) in enumerate(self.data['fields']):
-            self.addlinegrid(gridbox, typeName, item)
-            i = i + 1 
+            fieldFrame = self.addlinegrid(typeName, item)
+            horizIndex = index % 3
+            vertIndex = index // 3
+            gridbox.addWidget(fieldFrame, vertIndex, horizIndex)
         scrollArea.setWidget(container)
 
 
     def initTitleAndSearch(self, layout):
         title = QLabel(self.name)
-        title.setStyleSheet("font-size:14pt;")
+        title.setStyleSheet("font-size:16pt;")
         layout.addWidget(title)
         self.setupSearch(layout)
 
@@ -61,11 +64,11 @@ class TypeWindow(QWidget):
             else:
                 w.hide()
 
-    def addlinegrid(self, vbox, typeName, fieldObject):
+    def addlinegrid(self, typeName, fieldObject):
         labFrame = self.LabelFrame(typeName, fieldObject)
-        vbox.addWidget(labFrame)
         self.typeWidgets.append(labFrame)
-    
+        return labFrame
+
     # the labelframe contains a single field of a parameter, it can be used to modify said field for the simulations
     class LabelFrame(QFrame):
         def __init__(self, typeName, fieldObject):
@@ -74,14 +77,15 @@ class TypeWindow(QWidget):
             self.fieldObject = fieldObject
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
+            self.baseStyle = "LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}"
             super().__init__() 
             labelframelayout = QGridLayout(self)
             self.fieldStyle = "color: hsl(200, 30%, 70%);"
-            self.valueStyle = "color:hsl(200, 30%, 40%);"
+            self.valueStyle = "color: hsl(200, 30%, 40%);"
             self.setupLabels(labelframelayout)
             self.setupDataWidgets(labelframelayout)      
            
-            self.setStyleSheet("LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
+            self.setStyleSheet(self.baseStyle)
         
         def setupDataWidgets(self, layout):
             checkbox = QCheckBox()
@@ -96,14 +100,12 @@ class TypeWindow(QWidget):
             inputarea = QLineEdit()
             datahandlefunction = lambda fo=self.fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandle(fo, ia, checkbox, strategybox, infobox)
             
-
             layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(infobox, 1, 4, 1, -1)
             layout.addWidget(inputarea, 2, 4, 1, -1)
             layout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
             layout.addWidget(strategybox, 3, 2, 1, -1)
             self.updateInfo(self.checkbox, self.infobox, self.fieldObject)
-
 
             inputarea.editingFinished.connect(datahandlefunction)
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
@@ -168,7 +170,6 @@ class TypeWindow(QWidget):
                 self.datatarget[typeName][fieldObject['name']] = values
 
         def dataHandle(self, fieldObject, inputarea, checkbox, strategybox, infobox):
-            print(f"{fieldObject}testtest" )
             typeName = self.typeName
             if(checkbox.isChecked()):
                 try:
@@ -177,13 +178,14 @@ class TypeWindow(QWidget):
                        values = list(map(lambda x : float(x), basevalues))
                     elif fieldObject['type'] == "Boolean":
                         aux = []
-                        for val in values:
+                        for val in basevalues:
                             if val.lower() == "true":
                                 aux.append(True)
                             elif val.lower() == "false":
                                 aux.append(False)
                             else:
                                 raise(Exception("value must be true or false"))
+                        values = aux
                     strategy = strategybox.currentText()
                     if typeName not in self.datatarget:
                         self.datatarget[typeName] = {}
@@ -195,3 +197,4 @@ class TypeWindow(QWidget):
             else: 
                 DataTarget().removeFromParameterField(typeName, fieldObject['name'])
             self.updateInfo(checkbox, infobox, fieldObject)
+    

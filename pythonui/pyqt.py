@@ -69,7 +69,6 @@ app.setStyleSheet("""
 """)
 
 mainwindow = Wastewindow()
-# Create a button, connect it and show it
 
 mainwindow.show()
 # Run the main Qt loop

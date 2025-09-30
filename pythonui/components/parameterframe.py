@@ -29,4 +29,5 @@ class ParameterFrame(QFrame):
     
     def openTypeWindow(self, item):
         self.w = TypeWindow(item)
+        self.w.setGeometry(0,0, 1200, 800)
         self.w.show()

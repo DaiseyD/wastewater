@@ -1,0 +1,1 @@
+- How do I explain the ease of implementing new strategies in the future work section of my document?

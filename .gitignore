@@ -8,4 +8,5 @@ __pycache__
 communication/*
 results/*
 .vscode
-shellscripts
+shellscript
+test/*
