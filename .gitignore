@@ -10,3 +10,4 @@ results/*
 .vscode
 shellscript
 test/*
+plan.md
