@@ -25,10 +25,11 @@ class TypeWindow(QWidget):
         vboxBase = QVBoxLayout(self)
         frameTop = QFrame()
         vboxBase.addWidget(frameTop)
-        hboxTop = QVBoxLayout(frameTop)
-        self.initTitle(hboxTop)
-        self.initFilters(hboxTop)
-
+        vboxTop = QVBoxLayout(frameTop)
+        filterLayout = QHBoxLayout()
+        self.initTitle(vboxTop)
+        vboxTop.addLayout(filterLayout)
+        self.initFilters(filterLayout)
         frameBottom = QFrame()
         vboxBase.addWidget(frameBottom)
         boxCard = QVBoxLayout(frameBottom)
@@ -36,14 +37,14 @@ class TypeWindow(QWidget):
         boxCard.addWidget(scrollArea)
         container = QFrame()
         gridbox = QVBoxLayout(container)
-        gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
 
         for (index,item) in enumerate(self.data['fields']):
             fieldFrame = self.addlinegrid(typeName, item)
-            gridbox.addWidget(fieldFrame)
+            gridbox.addWidget(fieldFrame, 0)
             self.addToTypeFilter(item['type'])
         scrollArea.setWidget(container)
+        scrollArea.setWidgetResizable(True)
 
 
     def initTitle(self, layout):
@@ -54,11 +55,11 @@ class TypeWindow(QWidget):
     def initFilters(self, layout):
         self.searchBar = QLineEdit()
         self.searchBar.textChanged.connect(self.filterByName)
-        layout.addWidget(self.searchBar)
+        layout.addWidget(self.searchBar,1)
         self.typeFilter = QComboBox()
         self.typeFilter.addItem("all")
         self.typeFilter.activated.connect(self.filterByType)
-        layout.addWidget(self.typeFilter)
+        layout.addWidget(self.typeFilter,1)
     
     def filterByName(self, text):
         self.typeFilter.setCurrentIndex(0)
@@ -96,11 +97,18 @@ class TypeWindow(QWidget):
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
             self.baseStyle = "LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}"
-            labelframelayout = QGridLayout(self) # TODO change this to rows instead of grid
+            # labelframelayout = QGridLayout(self) # TODO change this to rows instead of grid
+            baselayout = QGridLayout(self)
+            infoframe = QFrame()
+            infolayout = QVBoxLayout(infoframe)
+            inputframe = QFrame()
+            inputlayout = QVBoxLayout(inputframe)
+            baselayout.addWidget(infoframe, 0, 0, 1, 1)
+            baselayout.addWidget(inputframe, 0, 1, 1, 1)
             self.fieldStyle = "color: hsl(200, 30%, 70%);"
             self.valueStyle = "color: hsl(200, 30%, 40%);"
-            self.setupLabels(labelframelayout)
-            self.setupDataWidgets(labelframelayout)         
+            self.setupLabels(infolayout)
+            self.setupDataWidgets(inputlayout)         
             self.setStyleSheet(self.baseStyle)
         
         def setupDataWidgets(self, layout):
@@ -114,11 +122,6 @@ class TypeWindow(QWidget):
             for i in strategies:
                 strategybox.addItem(i)
             inputarea = QLineEdit()
-            layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
-            layout.addWidget(infobox, 1, 4, 1, -1)
-            layout.addWidget(inputarea, 2, 4, 1, -1)
-            layout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
-            layout.addWidget(strategybox, 3, 2, 1, -1)
             self.updateInfo(self.checkbox, self.infobox, self.fieldObject)
 
             datahandlefunction = lambda fo=self.fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandle(fo, ia, checkbox, strategybox, infobox)          
@@ -126,10 +129,11 @@ class TypeWindow(QWidget):
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
             strategybox.activated.connect(lambda index: datahandlefunction())
     
-            layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
-            layout.addWidget(infobox, 1, 4, 1, -1)
-            layout.addWidget(inputarea, 2, 4, 1, -1)
-            layout.addWidget(QLabel("Strategy:"), 3, 0, 1, 2)
+            layout.addWidget(checkbox)
+            layout.addWidget(infobox)
+            layout.addWidget(inputarea)
+            layout.addWidget(QLabel("Strategy:"))
+            layout.addWidget(strategybox)
 
         def setupLabels(self, layout):
             nameLabel0 = QLabel("name:")
@@ -144,9 +148,9 @@ class TypeWindow(QWidget):
             valueLabel0.setStyleSheet(self.fieldStyle)
             valueLabel1 = QLabel(f"{self.fieldObject["value"]}")
             valueLabel1.setStyleSheet(self.valueStyle)
-            layout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"), 0, 0, 1, 4)
-            layout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"), 1, 0, 1, 4)
-            layout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"), 2, 0, 1, 4)
+            layout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"))
+            layout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"))
+            layout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"))
             
 
         def setInfoString(self, checkbox, infobox, fieldObject):
