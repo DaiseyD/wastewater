@@ -25,44 +25,61 @@ class TypeWindow(QWidget):
         vboxBase = QVBoxLayout(self)
         frameTop = QFrame()
         vboxBase.addWidget(frameTop)
-        hboxTop = QHBoxLayout(frameTop)
-        self.initTitleAndSearch(hboxTop)
+        hboxTop = QVBoxLayout(frameTop)
+        self.initTitle(hboxTop)
+        self.initFilters(hboxTop)
+
         frameBottom = QFrame()
         vboxBase.addWidget(frameBottom)
         boxCard = QVBoxLayout(frameBottom)
         scrollArea = QScrollArea()
         boxCard.addWidget(scrollArea)
         container = QFrame()
-        gridbox = QGridLayout(container)
-        # gridbox = QVBoxLayout(container)
+        gridbox = QVBoxLayout(container)
         gridbox.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.typeWidgets = []
-        i = 0
+
         for (index,item) in enumerate(self.data['fields']):
             fieldFrame = self.addlinegrid(typeName, item)
-            horizIndex = index % 3
-            vertIndex = index // 3
-            gridbox.addWidget(fieldFrame, vertIndex, horizIndex)
+            gridbox.addWidget(fieldFrame)
+            self.addToTypeFilter(item['type'])
         scrollArea.setWidget(container)
 
 
-    def initTitleAndSearch(self, layout):
+    def initTitle(self, layout):
         title = QLabel(self.name)
         title.setStyleSheet("font-size:16pt;")
         layout.addWidget(title)
-        self.setupSearch(layout)
 
-    def setupSearch(self, box):
-        searchBar = QLineEdit()
-        searchBar.textChanged.connect(self.filterLines)
-        box.addWidget(searchBar)
-
-    def filterLines(self, text):
+    def initFilters(self, layout):
+        self.searchBar = QLineEdit()
+        self.searchBar.textChanged.connect(self.filterByName)
+        layout.addWidget(self.searchBar)
+        self.typeFilter = QComboBox()
+        self.typeFilter.addItem("all")
+        self.typeFilter.activated.connect(self.filterByType)
+        layout.addWidget(self.typeFilter)
+    
+    def filterByName(self, text):
+        self.typeFilter.setCurrentIndex(0)
         for w in self.typeWidgets:
             if text.lower() in w.name.lower():
                 w.show()
             else:
                 w.hide()
+    
+    def filterByType(self, index):
+        self.searchBar.setText("")
+        value = self.typeFilter.itemText(index)
+        for w in self.typeWidgets:
+            if value == w.fieldObject['type'] or value.lower()=="all":
+                w.show()
+            else:
+                w.hide()
+
+    def addToTypeFilter(self, value):
+        if value not in [self.typeFilter.itemText(i) for i in range(self.typeFilter.count())]:
+            self.typeFilter.addItem(value)
 
     def addlinegrid(self, typeName, fieldObject):
         labFrame = self.LabelFrame(typeName, fieldObject)
@@ -72,19 +89,18 @@ class TypeWindow(QWidget):
     # the labelframe contains a single field of a parameter, it can be used to modify said field for the simulations
     class LabelFrame(QFrame):
         def __init__(self, typeName, fieldObject):
+            super().__init__() 
             self.name = fieldObject['name']
             self.typeName = typeName
             self.fieldObject = fieldObject
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
             self.baseStyle = "LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}"
-            super().__init__() 
-            labelframelayout = QGridLayout(self)
+            labelframelayout = QGridLayout(self) # TODO change this to rows instead of grid
             self.fieldStyle = "color: hsl(200, 30%, 70%);"
             self.valueStyle = "color: hsl(200, 30%, 40%);"
             self.setupLabels(labelframelayout)
-            self.setupDataWidgets(labelframelayout)      
-           
+            self.setupDataWidgets(labelframelayout)         
             self.setStyleSheet(self.baseStyle)
         
         def setupDataWidgets(self, layout):
@@ -98,8 +114,6 @@ class TypeWindow(QWidget):
             for i in strategies:
                 strategybox.addItem(i)
             inputarea = QLineEdit()
-            datahandlefunction = lambda fo=self.fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandle(fo, ia, checkbox, strategybox, infobox)
-            
             layout.addWidget(checkbox, 0, 4, 1, -1, Qt.AlignmentFlag.AlignRight)
             layout.addWidget(infobox, 1, 4, 1, -1)
             layout.addWidget(inputarea, 2, 4, 1, -1)
@@ -107,6 +121,7 @@ class TypeWindow(QWidget):
             layout.addWidget(strategybox, 3, 2, 1, -1)
             self.updateInfo(self.checkbox, self.infobox, self.fieldObject)
 
+            datahandlefunction = lambda fo=self.fieldObject, ia=inputarea, checkbox=checkbox, infobox=infobox, strategybox=strategybox : self.dataHandle(fo, ia, checkbox, strategybox, infobox)          
             inputarea.editingFinished.connect(datahandlefunction)
             checkbox.checkStateChanged.connect(lambda x: datahandlefunction())
             strategybox.activated.connect(lambda index: datahandlefunction())
