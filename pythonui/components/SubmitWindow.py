@@ -2,7 +2,14 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
 
-
+# utility function for toggling a widget's visibility
+def toggleWidget(self, state, widget):
+    if(state==Qt.CheckState.Checked):
+        widget.show()
+    elif state==Qt.CheckState.Unchecked :
+        widget.hide()
+    else:
+        ErrorPopup("unknown state of checkbox")
 
 class SubmitWindow(QWidget):
     def __init__(self, target):
@@ -15,8 +22,6 @@ class SubmitWindow(QWidget):
         mainvbox = QVBoxLayout(mainarea)
         self.setupMain(mainvbox)
         
-
-
     def setupMain(self, layout):
         self.setupTypeFrame(layout)
         rainfallFrame = QFrame()
@@ -28,20 +33,24 @@ class SubmitWindow(QWidget):
         vbox = QVBoxLayout(typeFrame)
         vbox.addWidget(QLabel("typeParameters"))
         toggleBox = QCheckBox()
-        contentFrame = QLabel("BRRRRRRRRRRRRR")
-        toggleBox.checkStateChanged.connect(lambda state, w = contentFrame: self.toggleWidget(state, w))
+        contentFrame = self.TypeFrame(self.target['parameters'])
+        toggleBox.checkStateChanged.connect(lambda state, w = contentFrame: toggleWidget(state, w))
         vbox.addWidget(toggleBox)
         vbox.addWidget(contentFrame)
         contentFrame.hide()
     
-    def toggleWidget(self, state, widget):
-        if(state==Qt.CheckState.Checked):
-            widget.show()
-        elif state==Qt.CheckState.Unchecked :
-            widget.hide()
-        else:
-            ErrorPopup("unknown state of checkbox")
+    class TypeFrame(QFrame):
+        def init(self, data):
+            super().init()
+            self.data = data
+            for item in self.data:
+                QLabel(item)
+
+
+    
+
         
+    
         
         
         

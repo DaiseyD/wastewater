@@ -18,6 +18,7 @@ class SubmitFrame(QFrame):
 
     def submit(self):
         self.sw = SubmitWindow(self.target)
+        self.w.setGeometry(0,0, 1200, 800)
         self.sw.show()
         print("testing purpose: returning from submit method")
         return
