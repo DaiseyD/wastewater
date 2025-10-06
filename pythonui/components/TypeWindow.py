@@ -97,14 +97,13 @@ class TypeWindow(QWidget):
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
             self.baseStyle = "LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}"
-            # labelframelayout = QGridLayout(self) # TODO change this to rows instead of grid
-            baselayout = QGridLayout(self)
+            baselayout = QHBoxLayout(self)
             infoframe = QFrame()
             infolayout = QVBoxLayout(infoframe)
             inputframe = QFrame()
             inputlayout = QVBoxLayout(inputframe)
-            baselayout.addWidget(infoframe, 0, 0, 1, 1)
-            baselayout.addWidget(inputframe, 0, 1, 1, 1)
+            baselayout.addWidget(infoframe,1)
+            baselayout.addWidget(inputframe,1)
             self.fieldStyle = "color: hsl(200, 30%, 70%);"
             self.valueStyle = "color: hsl(200, 30%, 40%);"
             self.setupLabels(infolayout)
