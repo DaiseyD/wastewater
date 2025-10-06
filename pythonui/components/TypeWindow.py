@@ -204,6 +204,8 @@ class TypeWindow(QWidget):
                             else:
                                 raise(Exception("value must be true or false"))
                         values = aux
+                    else:
+                        values = basevalues
                     strategy = strategybox.currentText()
                     if typeName not in self.datatarget:
                         self.datatarget[typeName] = {}
