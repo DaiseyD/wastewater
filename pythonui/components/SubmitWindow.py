@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
+from components.simparameterframe import SimParameterFrame
 # utility function for toggling a widget's visibility
 def toggleWidget(state, widget):
     if(state==Qt.CheckState.Checked):
@@ -24,6 +25,7 @@ class SubmitWindow(QWidget):
         self.setupMain(mainvbox)
         mainarea.setWidget(mainframe)
         mainarea.setWidgetResizable(True)
+        vboxBase.addWidget(SimParameterFrame())
         vboxBase.addWidget(QPushButton("Submit"))
         
     def setupMain(self, layout):
@@ -88,12 +90,16 @@ class SubmitWindow(QWidget):
             self.data = data
             self.raindata = DataTarget().data['rainfallevents']
             layout = QVBoxLayout(self)
+            layout.addWidget(QLabel("RainfallEvents"), 1,Qt.AlignmentFlag.AlignTop)
+            dataframe = QFrame()
+            layout.addWidget(dataframe,6)
+            datalayout = QVBoxLayout(dataframe)
             for i in self.data:
                 raineventlayout = QHBoxLayout()
                 raineventlayout.addWidget(QLabel(f"{i}"))
                 rainname = list(filter((lambda item: item['id'] == i), self.raindata))[0]['name']
                 raineventlayout.addWidget(QLabel(rainname))
-                layout.addLayout(raineventlayout)
+                datalayout.addLayout(raineventlayout)
 
 
 
