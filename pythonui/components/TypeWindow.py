@@ -96,7 +96,11 @@ class TypeWindow(QWidget):
             self.fieldObject = fieldObject
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
-            self.baseStyle = "LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}"
+            self.baseStyle = """
+                *[selected="true"]{background-color: hsl(79, 100%, 60%);}
+                LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}
+
+                """
             baselayout = QHBoxLayout(self)
             infoframe = QFrame()
             infolayout = QVBoxLayout(infoframe)
@@ -177,6 +181,8 @@ class TypeWindow(QWidget):
             else:
                 checkbox.setCheckState(Qt.CheckState.Unchecked)
                 infobox.setText("")
+            print(self.property("selected"))
+            self.setStyleSheet(self.styleSheet()) # this seems to be the only way to make dynamic styling properties work
                     
 
         def addToTarget(self, fieldObject, values):
@@ -210,11 +216,15 @@ class TypeWindow(QWidget):
                     if typeName not in self.datatarget:
                         self.datatarget[typeName] = {}
                     DataTarget().updateParameterField(typeName, fieldObject['name'], values, strategy)
+                    self.setProperty("selected", True)
                 except Exception as e:
                     checkbox.setCheckState(Qt.CheckState.Unchecked)
+                    self.setProperty("selected", False)
                     ErrorPopup(str(e))
                     return
             else: 
                 DataTarget().removeFromParameterField(typeName, fieldObject['name'])
+                self.setProperty("selected", False)
             self.updateInfo(checkbox, infobox, fieldObject)
+
     
