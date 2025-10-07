@@ -18,9 +18,13 @@ class SubmitWindow(QWidget):
         vboxBase = QVBoxLayout(self)
         vboxBase.addWidget(QLabel("Submission Window"), 1)
         mainarea = QScrollArea()
-        vboxBase.addWidget(mainarea, 7)
-        mainvbox = QVBoxLayout(mainarea)
+        vboxBase.addWidget(mainarea, 6)
+        mainframe = QFrame()
+        mainvbox = QVBoxLayout(mainframe)
         self.setupMain(mainvbox)
+        mainarea.setWidget(mainframe)
+        mainarea.setWidgetResizable(True)
+        vboxBase.addWidget(QPushButton("Submit"))
         
     def setupMain(self, layout):
         self.setupParamFrame(layout)
@@ -31,17 +35,21 @@ class SubmitWindow(QWidget):
         parametersBaseFrame = QFrame()
         layout.addWidget(parametersBaseFrame)
         vbox = QVBoxLayout(parametersBaseFrame)
-        vbox.addWidget(QLabel("typeParameters"))
+        paramTitleLayout = QHBoxLayout()
+        vbox.addLayout(paramTitleLayout)
+        paramTitleLayout.addWidget(QLabel("typeParameters"))
         toggleBox = QCheckBox()
         contentFrame = self.ParamFrame(data=self.target['parameters'])
         toggleBox.checkStateChanged.connect(lambda state, w = contentFrame: toggleWidget(state, w))
-        vbox.addWidget(toggleBox)
+        paramTitleLayout.addWidget(toggleBox)
         vbox.addWidget(contentFrame)
         contentFrame.hide()
     
     class ParamFrame(QFrame):
         def __init__(self, data):
             super().__init__()
+            self.setStyleSheet("ParamFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
+            self.data = data
             layout = QVBoxLayout(self)
             self.data = data
             for item in self.data:
@@ -76,6 +84,7 @@ class SubmitWindow(QWidget):
     class RainSubmitFrame(QFrame):
         def __init__(self, data):
             super().__init__()
+            self.setStyleSheet("RainSubmitFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
             self.data = data
             self.raindata = DataTarget().data['rainfallevents']
             layout = QVBoxLayout(self)
