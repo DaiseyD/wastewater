@@ -18,3 +18,5 @@ class SubmitFrame(QFrame):
         self.sw = SubmitWindow(self.target, self.mainwindow)
         self.sw.setGeometry(0,0, 1200, 800)
         self.sw.show()
+    
+    

@@ -49,7 +49,7 @@ class TypeWindow(QWidget):
 
     def initTitle(self, layout):
         title = QLabel(self.name)
-        title.setStyleSheet("font-size:16pt;")
+        styleAppend("font-size:16pt;", title)
         layout.addWidget(title)
 
     def initFilters(self, layout):
@@ -107,8 +107,6 @@ class TypeWindow(QWidget):
             inputlayout = QVBoxLayout(inputframe)
             baselayout.addWidget(infoframe,1)
             baselayout.addWidget(inputframe,1)
-            self.fieldStyle = TEXT_SEMIHIDDEN
-            self.valueStyle = TEXT_SEMIHIGHLIGHT
             self.setupLabels(infolayout)
             self.setupDataWidgets(inputlayout)         
             self.setStyleSheet(self.baseStyle)
@@ -120,6 +118,7 @@ class TypeWindow(QWidget):
             self.infobox = infobox
             strategybox = QComboBox()
             self.strategybox = strategybox
+            styleAppend("* { font-size: 16px; }", self.strategybox)
             strategies = DataTarget().data['strategies']
             for i in strategies:
                 strategybox.addItem(i)
@@ -139,17 +138,17 @@ class TypeWindow(QWidget):
 
         def setupLabels(self, layout):
             nameLabel0 = QLabel("name:")
-            nameLabel0.setStyleSheet(self.fieldStyle)
+            styleAppend(TEXT_SEMIHIDDEN, nameLabel0)
             nameLabel1 = QLabel(f"{self.fieldObject["name"]}")
-            nameLabel1.setStyleSheet(self.valueStyle)
+            styleAppend(TEXT_SEMIHIGHLIGHT, nameLabel1)
             typeLabel0 = QLabel("type:")
-            typeLabel0.setStyleSheet(self.fieldStyle)
+            styleAppend(TEXT_SEMIHIDDEN, typeLabel0)
             typeLabel1 = QLabel(f"{self.fieldObject["type"]}")
-            typeLabel1.setStyleSheet(self.valueStyle)
+            styleAppend(TEXT_SEMIHIGHLIGHT, typeLabel1)
             valueLabel0 = QLabel("value ex.:")
-            valueLabel0.setStyleSheet(self.fieldStyle)
+            styleAppend(TEXT_SEMIHIDDEN, valueLabel0)
             valueLabel1 = QLabel(f"{self.fieldObject["value"]}")
-            valueLabel1.setStyleSheet(self.valueStyle)
+            styleAppend(TEXT_SEMIHIGHLIGHT, valueLabel1)
             layout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"))
             layout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"))
             layout.addWidget(packFrame([valueLabel0, valueLabel1], direction="H"))

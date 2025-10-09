@@ -53,7 +53,7 @@ class SubmitWindow(QWidget):
     class ParamFrame(QFrame):
         def __init__(self, data):
             super().__init__()
-            self.setStyleSheet("ParamFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
+            styleAppend("ParamFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}", self)
             self.data = data
             layout = QVBoxLayout(self)
             self.data = data
@@ -63,7 +63,7 @@ class SubmitWindow(QWidget):
         class FieldFrame(QFrame):
             def __init__(self, typeName, data):
                 super().__init__()
-                self.setStyleSheet("FieldFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
+                styleAppend("FieldFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}", self)
                 self.typeName = typeName
                 self.data = data
                 baseLayout = QVBoxLayout(self)
@@ -76,15 +76,39 @@ class SubmitWindow(QWidget):
                 toggleBox.checkStateChanged.connect(lambda x, frame=frame : toggleWidget(x, frame))
                 frame.hide()
                 titleLayout.addWidget(toggleBox)
-                baseLayout.addWidget(frame)
             
             def setupFieldFrames(self, layout):
                 frame = QFrame()
                 layout.addWidget(frame)
-                frameLayout = QVBoxLayout(frame)    
+                frameLayout = QVBoxLayout(frame)  
                 for i in self.data:
-                    frameLayout.addWidget(QLabel(f"Strategy:{self.data[i]['strategy']}"))
-                    frameLayout.addWidget(QLabel(i))
+                    singleFieldFrame = QFrame()
+                    frameLayout.addWidget(singleFieldFrame)
+                    fieldFrameLayout = QGridLayout(singleFieldFrame)
+                    stratLayout = QHBoxLayout()
+                    valuesLayout = QHBoxLayout()
+                    typeTitle = QLabel(i)
+                    styleAppend(TEXT_HIGHLIGHT, typeTitle)
+                    fieldFrameLayout.addWidget(typeTitle)
+                    fieldFrameLayout.addLayout(stratLayout, 1, 0)
+                    fieldFrameLayout.addLayout(valuesLayout, 2, 0)
+                    
+                    strategyTitle = QLabel("Strategy:")
+                    strategyTitle.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+                    styleAppend(TEXT_SEMIHIDDEN, strategyTitle)
+                    stratLayout.addWidget(strategyTitle)
+                    strategyVal = QLabel(f"{self.data[i]['strategy']}")
+                    styleAppend(TEXT_SEMIHIGHLIGHT, strategyVal)
+                    stratLayout.addWidget(strategyVal, Qt.AlignmentFlag.AlignLeft)
+                    
+                    valuesTitle = QLabel("Values:")
+                    styleAppend(TEXT_SEMIHIDDEN, valuesTitle)
+                    valuesTitle.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+                    valuesLayout.addWidget(valuesTitle)
+                    values = QLabel(f"{self.data[i]['values']}")
+                    styleAppend(TEXT_SEMIHIGHLIGHT, values)
+                    valuesLayout.addWidget(values, 0, Qt.AlignmentFlag.AlignLeft)
+
                 return frame
             
     class RainSubmitFrame(QFrame):

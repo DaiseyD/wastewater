@@ -3,7 +3,7 @@ from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
 from components.TypeWindow import TypeWindow
-
+from style import *
 
 # The parameter frame is a part of the main window that shows each parameter and opens a TypeWindow when clicking the parameter
 class ParameterFrame(QFrame):
@@ -17,11 +17,11 @@ class ParameterFrame(QFrame):
         container = QFrame()
         rightLayout= QVBoxLayout(container)
         title = QLabel("Parameters")
-        title.setStyleSheet("color: hsl(200, 30%, 10%); font-size:16px;")
+        styleAppend("color: hsl(200, 30%, 10%); font-size:16px;", title)
         rightLayout.addWidget(title)
         for (index, typeName) in enumerate(self.data['networkobjects'].keys()):
             button = QPushButton(f"{index} {typeName}")
-            button.setStyleSheet("color: hsl(200, 30%, 20%); padding: 10px 2px;")
+            styleAppend("color: hsl(200, 30%, 20%); padding: 10px 2px;",button)
             button.clicked.connect(lambda checked, typeName=typeName: self.openTypeWindow(typeName))
             rightLayout.addWidget(button)
         

@@ -20,3 +20,5 @@ TEXT_SEMIHIGHLIGHT = "* { font-size:15px; color: hsl(200, 30%, 30%); }"
 TEXT_PLAIN = "* { font-size:14px; color: hsl(200, 30%, 50%); }"
 TEXT_SEMIHIDDEN = "* { font-size:14px; color: hsl(200, 30%, 70%); }"
 
+def styleAppend(stylestring, widget):
+    widget.setStyleSheet(widget.styleSheet() + stylestring)
