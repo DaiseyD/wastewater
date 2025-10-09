@@ -4,7 +4,6 @@ from PySide6.QtCore import *
 from components.rainframe import RainFrame
 from components.parameterframe import ParameterFrame
 # from components.selectframe import SelectFrame
-from components.simparameterframe import SimParameterFrame
 from components.submitframe import SubmitFrame
 from components.DataTarget import DataTarget
 import style
@@ -50,10 +49,6 @@ class Wastewindow(QMainWindow):
         vbox = QVBoxLayout(rightFrame)
         rainFrame = RainFrame()
         vbox.addWidget(rainFrame)
-        simParameterFrame = SimParameterFrame()
-        vbox.addWidget(simParameterFrame)
-        vbox.setStretch(0, 2)
-        vbox.setStretch(1, 1)
 
 
 # Create the Qt Application
