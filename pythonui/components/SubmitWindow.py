@@ -3,6 +3,8 @@ from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
 from components.simparameterframe import SimParameterFrame
+import json
+
 # utility function for toggling a widget's visibility
 def toggleWidget(state, widget):
     if(state==Qt.CheckState.Checked):
@@ -13,7 +15,7 @@ def toggleWidget(state, widget):
         ErrorPopup("unknown state of checkbox")
 
 class SubmitWindow(QWidget):
-    def __init__(self, target):
+    def __init__(self, target, mainwindow):
         self.target = target
         super().__init__()
         vboxBase = QVBoxLayout(self)
@@ -26,7 +28,7 @@ class SubmitWindow(QWidget):
         mainarea.setWidget(mainframe)
         mainarea.setWidgetResizable(True)
         vboxBase.addWidget(SimParameterFrame())
-        vboxBase.addWidget(QPushButton("Submit"))
+        vboxBase.addWidget(self.SubmitArea(mainwindow))
         
     def setupMain(self, layout):
         self.setupParamFrame(layout)
@@ -60,6 +62,7 @@ class SubmitWindow(QWidget):
         class FieldFrame(QFrame):
             def __init__(self, typeName, data):
                 super().__init__()
+                self.setStyleSheet("FieldFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}")
                 self.typeName = typeName
                 self.data = data
                 baseLayout = QVBoxLayout(self)
@@ -90,16 +93,53 @@ class SubmitWindow(QWidget):
             self.data = data
             self.raindata = DataTarget().data['rainfallevents']
             layout = QVBoxLayout(self)
-            layout.addWidget(QLabel("RainfallEvents"), 1,Qt.AlignmentFlag.AlignTop)
+            title = QLabel("RainfallEvents")
+            title.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+            layout.addWidget(title, 1,Qt.AlignmentFlag.AlignTop)
             dataframe = QFrame()
-            layout.addWidget(dataframe,6)
+            layout.addWidget(dataframe,7)
             datalayout = QVBoxLayout(dataframe)
+            dataframe.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
             for i in self.data:
                 raineventlayout = QHBoxLayout()
                 raineventlayout.addWidget(QLabel(f"{i}"))
                 rainname = list(filter((lambda item: item['id'] == i), self.raindata))[0]['name']
                 raineventlayout.addWidget(QLabel(rainname))
                 datalayout.addLayout(raineventlayout)
+    
+    class SubmitArea(QFrame):
+        def __init__(self, mainwindow):
+            super().__init__()
+            self.target = DataTarget().target
+            self.mainwindow = mainwindow
+            vbox = QVBoxLayout(self)
+            button = QPushButton("Submit")
+            vbox.addWidget(button)
+            button.clicked.connect(self.submit)
+        
+        def submit(self):
+            canRun = True
+            if(self.target['rainfallevents']==[]):
+                canRun = False
+                ErrorPopup("please select a rainfallevent")
+            if("RunName" not in self.target.keys()):
+                canRun = False
+                ErrorPopup("please set a RunName")
+            if(canRun):
+                self.writejsonresult(self.target)
+                self.mainwindow.close()
+                exit(0)
+
+        def writejsonresult(self, result):
+            try:
+                with(open("communication/uiresults.json", "w")) as f:
+                    f.write(json.dumps(result))
+
+            except Exception as e:
+                print(f"Error writing to JSON file: {e}")
+                exit(1)
+
+
 
 
 
