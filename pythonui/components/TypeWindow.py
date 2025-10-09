@@ -178,10 +178,11 @@ class TypeWindow(QWidget):
                 infostring = infostring + f"\n{uiresults["strategy"]}"
                 infobox.setText(infostring)
                 checkbox.setCheckState(Qt.CheckState.Checked)
+                self.setProperty("selected", True)
             else:
                 checkbox.setCheckState(Qt.CheckState.Unchecked)
                 infobox.setText("")
-            print(self.property("selected"))
+                self.setProperty("selected", False)
             self.setStyleSheet(self.styleSheet()) # this seems to be the only way to make dynamic styling properties work
                     
 
