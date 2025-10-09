@@ -18,9 +18,7 @@ def getjsondata():
         print(f"Error reading JSON file: {e}")
         exit(1)
 
-
 class Wastewindow(QMainWindow):
-    
     def __init__(self):
         self.data = DataTarget().data
         self.datatarget = DataTarget().target

@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
+from style import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
 from components.simparameterframe import SimParameterFrame
@@ -95,7 +96,7 @@ class SubmitWindow(QWidget):
             layout = QVBoxLayout(self)
             title = QLabel("RainfallEvents")
             title.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-            layout.addWidget(title, 1,Qt.AlignmentFlag.AlignTop)
+            layout.addWidget(title, 1, Qt.AlignmentFlag.AlignTop)
             dataframe = QFrame()
             layout.addWidget(dataframe,7)
             datalayout = QVBoxLayout(dataframe)

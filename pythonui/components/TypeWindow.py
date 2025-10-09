@@ -2,7 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
-
+from style import *
 def packFrame(widgets, direction): # this function puts widgets into a frame and into a vbox if direction = 'V' or an hbox if direction = 'H'
     frame = QFrame()
     if(direction=='V'):
@@ -97,9 +97,8 @@ class TypeWindow(QWidget):
             self.data = DataTarget().data
             self.datatarget = DataTarget.target['parameters']
             self.baseStyle = """
-                *[selected="true"]{background-color: hsl(79, 100%, 60%);}
+                *[selected="true"]{background-color: hsl(80, 100%, 60%);}
                 LabelFrame{border-color: hsl(200, 30%, 20%); border-width: 1; border-style: solid; border-radius: 5;}
-
                 """
             baselayout = QHBoxLayout(self)
             infoframe = QFrame()
@@ -108,8 +107,8 @@ class TypeWindow(QWidget):
             inputlayout = QVBoxLayout(inputframe)
             baselayout.addWidget(infoframe,1)
             baselayout.addWidget(inputframe,1)
-            self.fieldStyle = "color: hsl(200, 30%, 70%);"
-            self.valueStyle = "color: hsl(200, 30%, 40%);"
+            self.fieldStyle = TEXT_SEMIHIDDEN
+            self.valueStyle = TEXT_SEMIHIGHLIGHT
             self.setupLabels(infolayout)
             self.setupDataWidgets(inputlayout)         
             self.setStyleSheet(self.baseStyle)
