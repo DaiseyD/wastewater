@@ -221,7 +221,7 @@ class TypeWindow(QWidget):
                 except Exception as e:
                     checkbox.setCheckState(Qt.CheckState.Unchecked)
                     self.setProperty("selected", False)
-                    ErrorPopup(str(e))
+                    ErrorPopup(f"Error parsing input into values:\n{str(e)}")
                     return
             else: 
                 DataTarget().removeFromParameterField(typeName, fieldObject['name'])
