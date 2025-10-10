@@ -15,6 +15,10 @@ def toggleWidget(state, widget):
     else:
         ErrorPopup("unknown state of checkbox")
 
+def dropdownOpen(state, widget):
+    toggleWidget(Qt.CheckState.Checked if state else Qt.CheckState.Unchecked , widget)
+    
+
 class SubmitWindow(QWidget):
     def __init__(self, target, mainwindow):
         self.target = target
@@ -43,13 +47,16 @@ class SubmitWindow(QWidget):
         paramTitleLayout = QHBoxLayout()
         vbox.addLayout(paramTitleLayout)
         paramTitleLayout.addWidget(QLabel("typeParameters"))
-        toggleBox = QCheckBox()
+        toggleBox = QToolButton()
+        toggleBox.setArrowType(Qt.ArrowType.DownArrow)
+        toggleBox.setCheckable(True)
         contentFrame = self.ParamFrame(data=self.target['parameters'])
-        toggleBox.checkStateChanged.connect(lambda state, w = contentFrame: toggleWidget(state, w))
+        toggleBox.clicked.connect(lambda state, w = contentFrame, tb=toggleBox: dropdownOpen(state, w))
         paramTitleLayout.addWidget(toggleBox)
         vbox.addWidget(contentFrame)
         contentFrame.hide()
     
+
     class ParamFrame(QFrame):
         def __init__(self, data):
             super().__init__()
@@ -71,9 +78,11 @@ class SubmitWindow(QWidget):
                 baseLayout.addLayout(titleLayout)
                 titleLayout.addWidget(QLabel(typeName),7)
 
-                toggleBox = QCheckBox()
+                toggleBox = QToolButton()
+                toggleBox.setCheckable(True)
+                toggleBox.setArrowType(Qt.ArrowType.DownArrow)
                 frame = self.setupFieldFrames(baseLayout)
-                toggleBox.checkStateChanged.connect(lambda x, frame=frame : toggleWidget(x, frame))
+                toggleBox.clicked.connect(lambda x, frame=frame : dropdownOpen(x, frame))
                 frame.hide()
                 titleLayout.addWidget(toggleBox)
             
