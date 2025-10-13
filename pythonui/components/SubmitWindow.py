@@ -24,9 +24,11 @@ class SubmitWindow(QWidget):
         self.target = target
         super().__init__()
         vboxBase = QVBoxLayout(self)
-        vboxBase.addWidget(QLabel("Submission Window"), 1)
+        title = QLabel("Submission Window")
+        styleAppend(TEXT_HIGHLIGHT, title)
+        vboxBase.addWidget(title)
         mainarea = QScrollArea()
-        vboxBase.addWidget(mainarea, 6)
+        vboxBase.addWidget(mainarea)
         mainframe = QFrame()
         mainvbox = QVBoxLayout(mainframe)
         self.setupMain(mainvbox)
@@ -42,11 +44,14 @@ class SubmitWindow(QWidget):
 
     def setupParamFrame(self, layout):
         parametersBaseFrame = QFrame()
+        parametersBaseFrame.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         layout.addWidget(parametersBaseFrame)
         vbox = QVBoxLayout(parametersBaseFrame)
         paramTitleLayout = QHBoxLayout()
         vbox.addLayout(paramTitleLayout)
-        paramTitleLayout.addWidget(QLabel("typeParameters"))
+        title = QLabel("typeParameters")
+        styleAppend(TEXT_HIGHLIGHT, title)
+        paramTitleLayout.addWidget(title)
         toggleBox = QToolButton()
         toggleBox.setArrowType(Qt.ArrowType.DownArrow)
         toggleBox.setCheckable(True)
@@ -128,6 +133,7 @@ class SubmitWindow(QWidget):
             self.raindata = DataTarget().data['rainfallevents']
             layout = QVBoxLayout(self)
             title = QLabel("RainfallEvents")
+            styleAppend(TEXT_HIGHLIGHT, title)
             title.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
             layout.addWidget(title, 1, Qt.AlignmentFlag.AlignTop)
             dataframe = QFrame()
@@ -140,6 +146,7 @@ class SubmitWindow(QWidget):
                 rainname = list(filter((lambda item: item['id'] == i), self.raindata))[0]['name']
                 raineventlayout.addWidget(QLabel(rainname))
                 datalayout.addLayout(raineventlayout)
+            self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
     
     class SubmitArea(QFrame):
         def __init__(self, mainwindow):
