@@ -8,15 +8,27 @@ class SubmitFrame(QFrame):
     def __init__(self, mainwindow):
         super().__init__()
         self.target = DataTarget().target
+        DataTarget().observers.append(self)
         self.mainwindow = mainwindow
         vbox = QVBoxLayout(self)
+        self.infoBox = QLabel("")
+        vbox.addWidget(self.infoBox)
         button = QPushButton("Submit")
         vbox.addWidget(button)
         button.clicked.connect(self.submit)
+        self.update()
+
+    def update(self):
+        nParams = 0
+        for item in self.target['parameters']:
+            nParams += len(self.target['parameters'][item])
+        nRainEvents = len(self.target['rainfallevents'])
+        self.infoBox.setText(f"fields changed: {nParams}\nrainfallevents: {nRainEvents}")
 
     def submit(self):
         self.sw = SubmitWindow(self.target, self.mainwindow)
         self.sw.setGeometry(0,0, 1200, 800)
         self.sw.show()
+    
     
     
