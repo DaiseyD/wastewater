@@ -17,6 +17,8 @@ def packFrame(widgets, direction): # this function puts widgets into a frame and
 
 # the TypeWindow is a window which shows all fields of a parameter and allows for the modifying of said field for simulations
 class TypeWindow(QWidget):
+    searchBar = None
+    typeFilter = None
     def __init__(self, typeName):
         super().__init__()
         self.name = typeName
@@ -53,26 +55,19 @@ class TypeWindow(QWidget):
 
     def initFilters(self, layout):
         self.searchBar = QLineEdit()
-        self.searchBar.textChanged.connect(self.filterByName)
+        self.searchBar.textChanged.connect(self.applyFilters)
         layout.addWidget(self.searchBar,1)
         self.typeFilter = QComboBox()
         self.typeFilter.addItem("all")
-        self.typeFilter.activated.connect(self.filterByType)
+        self.typeFilter.activated.connect(self.applyFilters)
         layout.addWidget(self.typeFilter,1)
     
-    def filterByName(self, text):
-        self.typeFilter.setCurrentIndex(0)
+
+    def applyFilters(self):
+        searchText = self.searchBar.text()
+        typeText = self.typeFilter.currentText()
         for w in self.typeWidgets:
-            if text.lower() in w.name.lower():
-                w.show()
-            else:
-                w.hide()
-    
-    def filterByType(self, index):
-        self.searchBar.setText("")
-        value = self.typeFilter.itemText(index)
-        for w in self.typeWidgets:
-            if value == w.fieldObject['type'] or value.lower()=="all":
+            if searchText.lower() in w.name.lower() and (typeText == w.fieldObject['type'] or typeText.lower()=="all"):
                 w.show()
             else:
                 w.hide()
