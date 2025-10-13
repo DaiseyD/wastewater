@@ -20,8 +20,6 @@ def getjsondata():
 
 class Wastewindow(QMainWindow):
     def __init__(self):
-        self.data = DataTarget().data
-        self.datatarget = DataTarget().target
         super().__init__()
         self.setWindowTitle("DG_Infoworks")
         self.frame = QFrame()

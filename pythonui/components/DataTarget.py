@@ -2,6 +2,7 @@
 
 # Singleton class used for controlling access to the infoworks data and datatarget
 class DataTarget:
+    observers = [] 
     target= {}
     data = None
     instance = None
@@ -29,15 +30,26 @@ class DataTarget:
         if parameterName not in self.target['parameters']:
             self.target['parameters'][parameterName] = {}
         self.target['parameters'][parameterName][fieldName] = { "values": values, "strategy": strategy} 
-    
+        self.updateObservers()
+
     def removeFromParameterField(self, parameterName, fieldName):
         if parameterName in self.target['parameters'] and fieldName in self.target['parameters'][parameterName]:
             self.target['parameters'][parameterName].pop(fieldName)
             if self.target['parameters'][parameterName] == {}:
                 self.target['parameters'].pop(parameterName)
+        self.updateObservers()
     
     def addToRain(self, rainid):
-        self.data['rainfallevents'].append(rainid)
+        self.target['rainfallevents'].append(rainid)
+        self.updateObservers()
     
     def removeFromRain(self, rainid):
-        self.data['rainfallevents'].remove(rainid)
+        self.target['rainfallevents'].remove(rainid)
+        self.updateObservers()
+
+    def updateSimParameters(self, key, value):
+        self.updateObservers()
+
+    def updateObservers(self):
+        for i in self.observers:
+            i.update()

@@ -46,7 +46,6 @@ class TypeWindow(QWidget):
         scrollArea.setWidget(container)
         scrollArea.setWidgetResizable(True)
 
-
     def initTitle(self, layout):
         title = QLabel(self.name)
         styleAppend("font-size:16pt;", title)

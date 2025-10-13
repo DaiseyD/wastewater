@@ -9,7 +9,7 @@ class RainFrame(QFrame):
     def __init__(self):
         super().__init__()
         self.raindata = DataTarget().data['rainfallevents']
-        self.targetdata = DataTarget.target
+        self.target = DataTarget()
         vbox = QVBoxLayout(self)
         scrollRight = QScrollArea()
         vbox.addWidget(scrollRight)
@@ -43,9 +43,8 @@ class RainFrame(QFrame):
 
     def selectRainEvent(self,state, id):
         if state == True:
-            self.targetdata['rainfallevents'].append(id)
+            self.target.addToRain(id)
         else:
-            self.targetdata['rainfallevents'].remove(id)
-        print(self.targetdata)
+            self.target.removeFromRain(id)
 
 
