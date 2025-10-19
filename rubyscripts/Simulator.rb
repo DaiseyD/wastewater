@@ -1,19 +1,23 @@
 require_relative "./ScenarioManager.rb"
+require_relative './Timer.rb'
+
 class Simulator
-    attr_accessor :icm, :inputParams, :scenarioInfo
+    attr_accessor :icm, :inputParams, :scenarioInfo, :timer
 
     def initialize(icm, inputParams)
         @icm = icm
         @inputParams = inputParams
         @scenarioInfo = {}
+        @timer = Timer.instance
     end
 
     # read the params from the file created by the UI and sets up the simulation object, then runs and exports the simulations
     def setupAndRunSimulations()
         setupBase()
         scenarioManager = ScenarioManager.new(@icm, @inputParams)
-        scenarioManager.runLoop()
+        scenarioManager.setupScenarios()
         params = setupSimulation(scenarioManager.scenarios.keys)
+        @timer.addBreakpoint("Scenariosetup")
         runAndExportSimulations(params['sims'], params['runname'], scenarioManager.scenarios)
     end
     
@@ -73,14 +77,16 @@ class Simulator
         WSApplication.connect_local_agent(1)
         jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
         WSApplication.wait_for_jobs(jobids, true, 100000000)
+        @timer.addBreakpoint("Simulations finished")
         currpath = Dir.pwd
         basepath = "#{currpath}\/results\/#{runname}"
         begin
             Dir.mkdir basepath
         rescue Exception => e
         end
-        puts "Exporting to #{basepath}"
         File.open("#{basepath}/inputParams.json", "w"){|f| f.write(@inputParams.to_json())}
+        puts "Simulations have finished, exporting to #{basepath}"
+        @timer.addBreakpoint("Export setup done")
         sims.each_with_index do | sim, index | 
             path = "#{basepath}/#{sim.name}"
             resultpath = "#{path}/sim_results"
@@ -106,12 +112,16 @@ class Simulator
             end
             relativepath = "results/#{runname}/#{sim.name}"
             @icm.openNetwork.csv_export("#{relativepath}/current_network/#{icm.openNetwork.current_scenario}", {'Multiple Files' => true}) # this argument takes relative file position
-            $logger.info( "exporting to: #{path}")
+            $logger.info("exporting to: #{path}")
             File.open("#{relativepath}/changes.json", "w"){|f| f.write(scenariosObject[@icm.openNetwork.current_scenario].to_json())}
             sim.results_csv_export(nil,  resultpath)
+            @timer.addBreakpoint(sim.name)
         end 
         cleanupScenarios(scenariosObject.keys)
         @icm.net.commit("deleted scenarios from #{runname}")
+        @timer.addBreakpoint("cleanup")
+        @timer.finish()
+        @timer.export("results/#{runname}")
     end
 
     #function for picking a unique base name for the scenario to avoid duplicate scenario bugs

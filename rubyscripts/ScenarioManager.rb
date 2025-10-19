@@ -15,7 +15,7 @@ class ScenarioManager
     end
 
     # goes through every parameter in the input params and calls the correct strategy
-    def runLoop()
+    def setupScenarios()
         @inputParams['parameters'].keys.each do |key|  
             typeObject = @inputParams['parameters'][key]
             typeObject.keys.each do  |fieldName|

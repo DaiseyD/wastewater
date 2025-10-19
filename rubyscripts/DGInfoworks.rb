@@ -3,6 +3,7 @@ require_relative './Simulator.rb'
 require_relative './CONSTS.rb'
 require_relative './UICommunicator.rb'
 require_relative './ScenarioManager.rb'
+require_relative './Timer.rb'
 require 'logger'
 
 
@@ -26,8 +27,10 @@ class DGInfoworks
 
     # runs the simulations as specified in the file created by the ui
     def runSimulations()
+        timer = Timer.instance
         modificationObj =  UICommunicator.readParameterFile("communication/uiresults.json")
         puts "finished processing ui results, setting up simulations"
+        timer.addBreakpoint("UIresults read")
         simulator = Simulator.new(@icm, modificationObj)
         simulator.setupAndRunSimulations()
         puts "Simulation has finished and is exported"
