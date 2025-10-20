@@ -21,7 +21,7 @@ class DGInfoworks
     def launchui()
         UICommunicator.writeNetworkInfo("communication/ICMInfo.json", @networkInfo)
         pythonStatus = system("py pythonui/pyqt.py")
-        if(pythonStatus == false)
+        if(DEBUG != true && pythonStatus == false)
             raise Exception.new "UI was closed instead of submitted, exiting"
         end
     end

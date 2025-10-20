@@ -19,7 +19,8 @@ class Simulator
         params = setupSimulation(scenarioManager.scenarios.keys)
         @timer.addBreakpoint("Scenariosetup")
         puts "Scenarios have been set up: commencing simulations"
-        runAndExportSimulations(params['sims'], params['runname'], scenarioManager.scenarios)
+        runSimulations(params['sims'])
+        exportSimulations(params['sims'], params['runname'], scenarioManager.scenarios)
     end
     
     # delete all scenarios that are in [scenarios]
@@ -75,11 +76,15 @@ class Simulator
         return params
     end
 
-    def runAndExportSimulations(sims, runname, scenariosObject)
+    def runSimulations(sims)
         WSApplication.connect_local_agent(1)
         jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
         WSApplication.wait_for_jobs(jobids, true, 100000000)
         @timer.addBreakpoint("Simulations finished")
+        return 
+    end
+
+    def exportSimulations(sims, runname, scenariosObject)
         currpath = Dir.pwd
         basepath = "#{currpath}\/results\/#{runname}"
         begin
