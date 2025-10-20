@@ -16,7 +16,7 @@ class Timer
         @end_time = Time.now
     end
 
-    def export(filepath)
+    def export()
         result = {}
         prevtime = @start_time
         @summary.each{ |breakinfo|
@@ -27,10 +27,7 @@ class Timer
             prevtime = finishtime
         }
         result['totaltime'] = @end_time - @start_time
-        File.open("#{filepath}/timer.json", "w"){
-            |f|
-            f.write(result.to_json())
-        }
+        return result
     end
 end
 

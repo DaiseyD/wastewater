@@ -11,6 +11,7 @@ logfile = File.open("logs/logfile.log", "a")
 $logger = Logger.new(logfile)
 
 class DGInfoworks
+    attr_accessor :icm
     def initialize(dbfilepath)
         @icm = ICMUtil.new(dbfilepath)
         @networkInfo = @icm.getNetworkInfo()

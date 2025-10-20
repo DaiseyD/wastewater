@@ -18,6 +18,7 @@ class Simulator
         scenarioManager.setupScenarios()
         params = setupSimulation(scenarioManager.scenarios.keys)
         @timer.addBreakpoint("Scenariosetup")
+        puts "Scenarios have been set up: commencing simulations"
         runAndExportSimulations(params['sims'], params['runname'], scenarioManager.scenarios)
     end
     
@@ -41,6 +42,7 @@ class Simulator
     def setupSimulation(scenarios)
         validations = @icm.openNetwork.validate(scenarios)
         if validations.error_count > 0
+            validationErrorHandling(validations)
             raise Exception.new("could not validate, you have probably supplied an impossible/illegal value, please check in infoworks icm what is wrong with the scenario")
         end
         @icm.net.commit("committing #{icm.openNetwork.current_scenario} changes")
@@ -121,7 +123,12 @@ class Simulator
         @icm.net.commit("deleted scenarios from #{runname}")
         @timer.addBreakpoint("cleanup")
         @timer.finish()
-        @timer.export("results/#{runname}")
+        runSummary = @timer.export()
+        runSummary['total Simulations'] = sims.length
+        runSummary['total Timestep per simulation'] = (@inputParams['simparameters']['Duration']*60) / @inputParams['simparameters']['TimeStep']
+        File.open("results/#{runname}/summaryInfo.json", "w"){ |f|
+            f.write(runSummary.to_json())
+        }
     end
 
     #function for picking a unique base name for the scenario to avoid duplicate scenario bugs
@@ -146,4 +153,12 @@ class Simulator
         end
         return workname
     end 
+
+    def validationErrorHandling(validations)
+        validations.each{ |validation|
+            if validation.type == "error"
+                @logger.error(validation.object_message)
+            end
+        }
+    end
 end
