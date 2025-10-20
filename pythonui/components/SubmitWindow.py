@@ -166,6 +166,9 @@ class SubmitWindow(QWidget):
             if("RunName" not in self.target.keys()):
                 canRun = False
                 ErrorPopup("please set a RunName")
+            if('ExecuteRun' not in self.target.keys()):
+                canRun = False
+                ErrorPopup("Please select if you want to execute the run")
             if(canRun):
                 self.writejsonresult(self.target)
                 self.mainwindow.close()
@@ -179,15 +182,3 @@ class SubmitWindow(QWidget):
             except Exception as e:
                 print(f"Error writing to JSON file: {e}")
                 exit(1)
-
-
-
-
-
-    
-
-        
-    
-        
-        
-        
