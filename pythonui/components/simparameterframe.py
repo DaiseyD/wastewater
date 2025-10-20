@@ -16,6 +16,7 @@ class SimParameterFrame(QFrame):
         vbox.addWidget(self.setupDuration())
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
+        vbox.addWidget(self.setupExecuteCheckbox())
 
     def setupWasteOutput(self):
         frame = QFrame()
@@ -57,6 +58,15 @@ class SimParameterFrame(QFrame):
         hbox.addWidget(edit)
         return frame
     
+    def setupExecuteCheckbox(self):
+        frame = QFrame()
+        hbox = QHBoxLayout(frame)
+        hbox.addWidget(QLabel("Execute run"))
+        check = QCheckBox()
+        check.checkStateChanged.connect(lambda x: self.updateBool(x, "ExecuteRun"))
+        hbox.addWidget(check)
+        return frame
+
     #updates a simparameter
     def updateSimParameters(self, widget, field):
         try:
@@ -64,19 +74,18 @@ class SimParameterFrame(QFrame):
             self.datatarget['simparameters'][field]= val
         except Exception as e:
             ErrorPopup(str(e))
-        print(self.datatarget)
 
     # updates wastewater parameter
     def updateWasteOutput(self, index):
         if(index==0):
             self.datatarget['simparameters'].pop('Waste Water', None)
-            print(self.datatarget)
             return
         id = self.data['wasteOutput'][index - 1]['id']
         self.datatarget['simparameters']["Waste Water"] = id
-        print(self.datatarget)
 
     # updates a string value of a key in the datatarget
     def updateString(self, widget, key):
         self.datatarget[key] = widget.text()
-        print(self.datatarget)
+
+    def updateBool(self, state, key):
+        self.datatarget[key] = True if state==Qt.CheckState.Checked else False

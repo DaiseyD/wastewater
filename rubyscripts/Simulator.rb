@@ -18,8 +18,26 @@ class Simulator
         scenarioManager.setupScenarios()
         params = setupSimulation(scenarioManager.scenarios.keys)
         @timer.addBreakpoint("Scenariosetup")
+        basepath = setupResultDir(params['runname'])
         puts "Scenarios have been set up: commencing simulations"
-        runAndExportSimulations(params['sims'], params['runname'], scenarioManager.scenarios)
+        if @inputParams['ExecuteRun'] == true
+            runSimulations(params['sims'])
+            exportSimulations(params['sims'], params['runname'], scenarioManager.scenarios, basepath)
+            cleanupScenarios(scenarioManager.scenarios)
+        end
+        @timer.finish()
+        exportRunSummary(params['sims'], params['runname'])
+    end
+
+    def setupResultDir(runname)
+        currpath = Dir.pwd
+        basepath = "#{currpath}\/results\/#{runname}"
+        begin
+            Dir.mkdir basepath
+        rescue Exception => e
+        end
+        File.open("#{basepath}/inputParams.json", "w"){|f| f.write(@inputParams.to_json())}
+        return basepath
     end
     
     # delete all scenarios that are in [scenarios]
@@ -29,6 +47,7 @@ class Simulator
             @icm.openNetwork.delete_scenario(scene)
             $logger.info("deleted scenario: #{scene}")
         end
+        @timer.addBreakpoint("cleanup") 
     end
     
     def setupBase()
@@ -75,19 +94,16 @@ class Simulator
         return params
     end
 
-    def runAndExportSimulations(sims, runname, scenariosObject)
+    def runSimulations(sims)
         WSApplication.connect_local_agent(1)
         jobids = WSApplication.launch_sims(sims, '.', false, 1, 0)
         WSApplication.wait_for_jobs(jobids, true, 100000000)
         @timer.addBreakpoint("Simulations finished")
-        currpath = Dir.pwd
-        basepath = "#{currpath}\/results\/#{runname}"
-        begin
-            Dir.mkdir basepath
-        rescue Exception => e
-        end
-        File.open("#{basepath}/inputParams.json", "w"){|f| f.write(@inputParams.to_json())}
-        puts "Simulations have finished, exporting to #{basepath}"
+        puts "Simulations finished"
+    end
+
+    def exportSimulations(sims, runname, scenariosObject, basepath)
+        puts "Exporting to #{basepath}"
         @timer.addBreakpoint("Export setup done")
         sims.each_with_index do | sim, index | 
             path = "#{basepath}/#{sim.name}"
@@ -121,14 +137,15 @@ class Simulator
         end 
         cleanupScenarios(scenariosObject.keys)
         @icm.net.commit("deleted scenarios from #{runname}")
-        @timer.addBreakpoint("cleanup")
-        @timer.finish()
+    end
+
+    def exportRunSummary(sims, runname)
         runSummary = @timer.export()
         runSummary['total Simulations'] = sims.length
         runSummary['total Timestep per simulation'] = (@inputParams['simparameters']['Duration']*60) / @inputParams['simparameters']['TimeStep']
         File.open("results/#{runname}/summaryInfo.json", "w"){ |f|
             f.write(runSummary.to_json())
-        }
+        } 
     end
 
     #function for picking a unique base name for the scenario to avoid duplicate scenario bugs
