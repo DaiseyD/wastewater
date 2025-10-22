@@ -143,6 +143,7 @@ class Simulator
         runSummary = @timer.export()
         runSummary['total Simulations'] = sims.length
         runSummary['total Timestep per simulation'] = (@inputParams['simparameters']['Duration']*60) / @inputParams['simparameters']['TimeStep']
+        runSummary['total fields changed'] = @inputParams['FieldsChanged']
         File.open("results/#{runname}/summaryInfo.json", "w"){ |f|
             f.write(runSummary.to_json())
         } 

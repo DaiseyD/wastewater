@@ -20,7 +20,7 @@ class ParameterFrame(QFrame):
         styleAppend("color: hsl(200, 30%, 10%); font-size:16px;", title)
         rightLayout.addWidget(title)
         for (index, typeName) in enumerate(self.data['networkobjects'].keys()):
-            button = QPushButton(f"{index} {typeName}")
+            button = QPushButton(f"{index} {typeName} ({self.data['networkobjects'][typeName]['length']})")
             styleAppend("color: hsl(200, 30%, 20%); padding: 10px 2px;",button)
             button.clicked.connect(lambda checked, typeName=typeName: self.openTypeWindow(typeName))
             rightLayout.addWidget(button)

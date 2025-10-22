@@ -83,7 +83,6 @@ class ScenarioManager
         @scenarios.keys.each do |s|
             @icm.openNetwork.current_scenario = s
             @icm.openNetwork.transaction_begin
-            @icm.changeRandomSelectValues(typeName, fieldName, values, random)
             objects = @icm.getObjectsOfType(typeName)
             objects.each do |object|
                 newvalue = values[random.rand(0...values.length())]

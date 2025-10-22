@@ -47,9 +47,11 @@ class ICMUtil
     def getNetworkInfo() # on means open network
         networkobjects = {}
         @openNetwork.table_names.each do | tableName| 
-            if @openNetwork.row_objects(tableName).length > 0
+            n = @openNetwork.row_objects(tableName).length
+            if n > 0
                 object = @openNetwork.row_objects(tableName)[0]
                 networkobjects[object.table_info.name] = networkInfoHelper(object)
+                networkobjects[object.table_info.name]['length'] = n
             end
         end
         rainfallevents = []
@@ -58,6 +60,24 @@ class ICMUtil
             begin
                 rainfallevent = @db.model_object_from_type_and_id 'Rainfall Event', i
                 rainfallevents << { 'id' => i, 'name' => rainfallevent.name}
+            rescue Exception => e
+                if e.message.include?("Error 13 : File Not Found")
+                    break
+                elsif e.message.include?("Error 50 : Attempting to access a recycled object")
+                    $logger.debug(e)
+                else
+                    $logger.fatal(e)
+                    raise e
+                end
+            end
+            i = i + 1
+        end
+        selectionLists = []
+        i = 1
+        while true
+            begin
+                selectionList = @db.model_object_from_type_and_id 'Selection list', i
+                selectionLists << { 'id' => i, 'name' => selectionList.name}
             rescue Exception => e
                 if e.message.include?("Error 13 : File Not Found")
                     break
@@ -88,7 +108,7 @@ class ICMUtil
             end
             i = i + 1
         end   
-        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "wasteOutput" => wastewater, "strategies" => STRATEGIES}
+        jsonobject = {"networkobjects" => networkobjects, "rainfallevents" => rainfallevents, "wasteOutput" => wastewater, "selectionLists" => selectionLists, "strategies" => STRATEGIES}
         return jsonobject
     end
 

@@ -41,5 +41,6 @@ end
 
 dgi = DGInfoworks.new(DBFILEPATH)
 dgi.launchui()
+timer = Timer.instance # initialize timer
 dgi.runSimulations()
 puts "exiting"

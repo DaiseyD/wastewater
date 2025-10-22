@@ -3,11 +3,12 @@ from PySide6.QtCore import *
 from components.DataTarget import DataTarget
 from components.SubmitWindow import SubmitWindow
 
-# This class is responsible for checking if all mandatory parameters are set, opens error popup if theyre not, otherwise, closes the window and return exit code 0
+# This class is responsible for providing info on the parameters that have been set currently
 class SubmitFrame(QFrame):
     def __init__(self, mainwindow):
         super().__init__()
         self.target = DataTarget().target
+        self.data = DataTarget().data
         DataTarget().observers.append(self)
         self.mainwindow = mainwindow
         vbox = QVBoxLayout(self)
@@ -20,10 +21,30 @@ class SubmitFrame(QFrame):
 
     def update(self):
         nParams = 0
-        for item in self.target['parameters']:
-            nParams += len(self.target['parameters'][item])
+        nSims = 1
+        fieldsChanged = 0
+        for itemKey in self.target['parameters']:
+            item = self.target['parameters'][itemKey]
+            paramICMLength = self.data['networkobjects'][itemKey]['length']
+            for fieldKey in item:
+                field = self.target['parameters'][itemKey][fieldKey]
+                if field["strategy"] == "changeAll":
+                    nSims = nSims * len(field["values"])
+                    fieldsChanged += paramICMLength*nSims
+                else:
+                    fieldsChanged += paramICMLength*nSims
         nRainEvents = len(self.target['rainfallevents'])
-        self.infoBox.setText(f"fields changed: {nParams}\nrainfallevents: {nRainEvents}")
+        self.infoBox.setText(
+            f"rainfallevents: {nRainEvents}\n"+
+            f"nSims: {nSims}\n"+
+            f"fields to Change: {fieldsChanged}\n"
+            )
+        self.target['FieldsChanged'] = fieldsChanged
+
+    def getTotalFields(self, typeName):
+        fieldsChanged = self.data['networkobjects'][typeName]['length']
+        return fieldsChanged
+
 
     def submit(self):
         self.sw = SubmitWindow(self.target, self.mainwindow)
