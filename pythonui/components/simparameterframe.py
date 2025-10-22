@@ -17,54 +17,61 @@ class SimParameterFrame(QFrame):
         vbox.addWidget(self.setupTimeStep())
         vbox.addWidget(self.setupRunName())
         vbox.addWidget(self.setupExecuteCheckbox())
+        self.getCurrentState()
 
     def setupWasteOutput(self):
         frame = QFrame()
         hbox = QHBoxLayout(frame)
-
-        comboBox = QComboBox()
-        comboBox.addItem("None")
+        wasteComboBox = QComboBox()
+        self.wasteComboBox = wasteComboBox
+        wasteComboBox.addItem("None")
         for item in self.data['wasteOutput']:
-            comboBox.addItem(item['name'])
-        comboBox.activated.connect(lambda x: self.updateWasteOutput(x))
+            wasteComboBox.addItem(item['name'])
+        wasteComboBox.activated.connect(lambda x: self.updateWasteOutput(x))
         hbox.addWidget(QLabel("Waste water output"))
-        hbox.addWidget(comboBox)
+        hbox.addWidget(wasteComboBox)
         return frame
 
     def setupDuration(self):
         frame = QFrame()
         hbox = QHBoxLayout(frame)
         hbox.addWidget(QLabel("Duration (in minutes):"))
-        edit = QLineEdit()
-        edit.editingFinished.connect(lambda widget=edit: self.updateSimParameters(widget, "Duration"))
-        hbox.addWidget(edit)
+        durationField = QLineEdit()
+        self.durationField = durationField
+        durationField.editingFinished.connect(lambda widget=durationField: self.updateSimParameters(widget, "Duration"))
+        hbox.addWidget(durationField)
         return frame
 
     def setupTimeStep(self):
         frame = QFrame()
         hbox = QHBoxLayout(frame)
         hbox.addWidget(QLabel("Timestep (in seconds):"))
-        edit = QLineEdit()
-        edit.editingFinished.connect(lambda widget=edit: self.updateSimParameters(widget, "TimeStep"))
-        hbox.addWidget(edit)
+        timestepField = QLineEdit()
+        self.timestepField = timestepField
+        timestepField.editingFinished.connect(lambda widget=timestepField: self.updateSimParameters(widget, "TimeStep"))
+        hbox.addWidget(timestepField)
         return frame
 
     def setupRunName(self):
         frame = QFrame()
         hbox = QHBoxLayout(frame)
         hbox.addWidget(QLabel("RunName"))
-        edit = QLineEdit()
-        edit.editingFinished.connect(lambda widget=edit: self.updateString(widget, "RunName"))
-        hbox.addWidget(edit)
+        runNameField = QLineEdit()
+        self.runNameField = runNameField
+        runNameField.editingFinished.connect(lambda widget=runNameField: self.updateString(widget, "RunName"))
+        hbox.addWidget(runNameField)
         return frame
     
     def setupExecuteCheckbox(self):
+        if "ExecuteRun" not in self.datatarget:
+            self.datatarget["ExecuteRun"] = False
         frame = QFrame()
         hbox = QHBoxLayout(frame)
         hbox.addWidget(QLabel("Execute run"))
-        check = QCheckBox()
-        check.checkStateChanged.connect(lambda x: self.updateBool(x, "ExecuteRun"))
-        hbox.addWidget(check)
+        executeRunCheck = QCheckBox()
+        self.executeRunCheck = executeRunCheck
+        executeRunCheck.checkStateChanged.connect(lambda x: self.updateBool(x, "ExecuteRun"))
+        hbox.addWidget(executeRunCheck)
         return frame
 
     #updates a simparameter
@@ -89,3 +96,25 @@ class SimParameterFrame(QFrame):
 
     def updateBool(self, state, key):
         self.datatarget[key] = True if state==Qt.CheckState.Checked else False
+
+    def getCurrentState(self):
+        try:
+            duration = self.datatarget['simparameters']['Duration']
+            self.durationField.setText( str(duration) )
+        except Exception as e:
+            pass
+        try:
+            timestep = self.datatarget['simparameters']['TimeStep']
+            self.timestepField.setText(str(timestep) )
+        except:
+            pass
+        try:
+            runname = self.datatarget['RunName']
+            self.runNameField.setText(runname)
+        except: 
+            pass
+        try:
+            executeRun = self.datatarget['ExecuteRun']
+            self.executeRunCheck.setCheckState(Qt.CheckState.Checked if executeRun else Qt.CheckState.Unchecked)
+        except:
+            pass
