@@ -18,13 +18,13 @@ class RainFrame(QFrame):
         rainContainer = QFrame()
         hbox.addWidget(rainContainer)
         rainLayout = QVBoxLayout(rainContainer)
+        self.setTitleDesc(rainLayout)
         self.setupRain(rainLayout)
         rainLayout.addStretch() # align elements to top
         scrollRight.setWidget(rightContainer)
 
     def setupRain(self, rainLayout):
-        title = QLabel("<b>Rainfall events</b>")
-        rainLayout.addWidget(title)
+
         for (index, rainfallevent) in enumerate(self.raindata):
             rainholder = QFrame()
             rainLayout.addWidget(rainholder)
@@ -40,6 +40,15 @@ class RainFrame(QFrame):
             checkbox = QCheckBox()
             rainhbox.addWidget(checkbox, 0, Qt.AlignmentFlag.AlignRight)
             checkbox.clicked.connect(lambda state, id=rainfallevent['id']: self.selectRainEvent(state,id))
+
+    def setTitleDesc(self, layout):
+        title = QLabel("Rainfall events")
+        styleAppend(TEXT_HIGHLIGHT, title)
+        layout.addWidget(title)
+        description = QLabel("Select the rainfall events you wish to include in the simulation")
+        styleAppend(TEXT_SEMIHIGHLIGHT, description)
+        description.setWordWrap(True)
+        layout.addWidget(description)
 
     def selectRainEvent(self,state, id):
         if state == True:

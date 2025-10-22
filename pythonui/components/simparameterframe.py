@@ -21,7 +21,6 @@ class SimParameterFrame(QFrame):
     def setupWasteOutput(self):
         frame = QFrame()
         hbox = QHBoxLayout(frame)
-
         comboBox = QComboBox()
         comboBox.addItem("None")
         for item in self.data['wasteOutput']:

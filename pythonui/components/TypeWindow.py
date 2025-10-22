@@ -52,7 +52,11 @@ class TypeWindow(QWidget):
         title = QLabel(self.name)
         styleAppend("font-size:16pt;", title)
         layout.addWidget(title)
-
+        description = QLabel(
+            "Find a field you wish to manipulate, select the values and the strategy you wish to apply, then click the checkbox")
+        styleAppend(TEXT_SEMIHIGHLIGHT, description)
+        description.setWordWrap(True)
+        layout.addWidget(description)
     def initFilters(self, layout):
         self.searchBar = QLineEdit()
         self.searchBar.textChanged.connect(self.applyFilters)

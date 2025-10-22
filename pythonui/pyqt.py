@@ -60,7 +60,7 @@ app.setStyleSheet("""
 """)
 
 mainwindow = Wastewindow()
-
+mainwindow.setGeometry(0,0, 1200, 1000)
 mainwindow.show()
 # Run the main Qt loop
 app.exec()

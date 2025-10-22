@@ -24,9 +24,7 @@ class SubmitWindow(QWidget):
         self.target = target
         super().__init__()
         vboxBase = QVBoxLayout(self)
-        title = QLabel("Submission Window")
-        styleAppend(TEXT_HIGHLIGHT, title)
-        vboxBase.addWidget(title)
+        self.setupTitleDesc(vboxBase)
         mainarea = QScrollArea()
         vboxBase.addWidget(mainarea)
         mainframe = QFrame()
@@ -36,7 +34,18 @@ class SubmitWindow(QWidget):
         mainarea.setWidgetResizable(True)
         vboxBase.addWidget(SimParameterFrame())
         vboxBase.addWidget(self.SubmitArea(mainwindow))
-        
+    
+    def setupTitleDesc(self, layout):
+        title = QLabel("Submission Window")
+        styleAppend(TEXT_HIGHLIGHT, title)
+        layout.addWidget(title)
+        description = QLabel(
+            "This window contains an overview of the parameters and rainfall events,"
+             + "if those are correct, set the SimParameters in the bottom and click submit and the simulations will be set up")
+        styleAppend(TEXT_SEMIHIGHLIGHT, description)
+        description.setWordWrap(True)
+        layout.addWidget(description)
+
     def setupMain(self, layout):
         self.setupParamFrame(layout)
         rainfallFrame = self.RainSubmitFrame(self.target['rainfallevents'])

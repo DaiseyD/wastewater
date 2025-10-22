@@ -19,6 +19,10 @@ class ParameterFrame(QFrame):
         title = QLabel("Parameters")
         styleAppend("color: hsl(200, 30%, 10%); font-size:16px;", title)
         rightLayout.addWidget(title)
+        description = QLabel("Select a type to manipulate the fields of elements of that type")
+        styleAppend(TEXT_SEMIHIGHLIGHT, description)
+        description.setWordWrap(True)
+        rightLayout.addWidget(description)
         for (index, typeName) in enumerate(self.data['networkobjects'].keys()):
             button = QPushButton(f"{index} {typeName} ({self.data['networkobjects'][typeName]['length']})")
             styleAppend("color: hsl(200, 30%, 20%); padding: 10px 2px;",button)
