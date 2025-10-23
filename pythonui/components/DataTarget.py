@@ -1,7 +1,9 @@
 
 
-# Singleton class used for controlling access to the infoworks data and datatarget
 class DataTarget:
+    """
+    Singleton class used for controlling access to the infoworks data and datatarget, additionally updates observers when certain data gets changed
+    """
     observers = [] 
     target= {}
     data = None

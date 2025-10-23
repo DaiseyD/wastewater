@@ -5,8 +5,10 @@ from components.DataTarget import DataTarget
 from components.TypeWindow import TypeWindow
 from style import *
 
-# The parameter frame is a part of the main window that shows each parameter and opens a TypeWindow when clicking the parameter
 class ParameterFrame(QFrame):
+    """  
+# The parameter frame is a part of the main window that shows each parameter and opens a TypeWindow when clicking the parameter
+    """
     def __init__(self):
         super().__init__()
         self.datatarget = DataTarget().target

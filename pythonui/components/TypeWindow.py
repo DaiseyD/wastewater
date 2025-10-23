@@ -15,8 +15,11 @@ def packFrame(widgets, direction): # this function puts widgets into a frame and
         layout.addWidget(w)
     return frame
 
-# the TypeWindow is a window which shows all fields of a parameter and allows for the modifying of said field for simulations
+
 class TypeWindow(QWidget):
+    """
+    the TypeWindow is a window which shows all fields of a parameter and allows for the modifying of said field for simulations
+    """
     searchBar = None
     typeFilter = None
     def __init__(self, typeName):

@@ -10,6 +10,9 @@ import style
 import json
 
 def getjsondata():
+    """
+    This function is responsible for opening the data from Infoworks ICM
+    """
     try:
         with(open("communication/ICMInfo.json", "r")) as f:
             data = json.load(f)
@@ -19,6 +22,7 @@ def getjsondata():
         exit(1)
 
 class Wastewindow(QMainWindow):
+    """The Main Window, contains the ParameterFrame, RainFrame and the submitframe"""
     def __init__(self):
         super().__init__()
         self.setWindowTitle("DG_Infoworks")

@@ -20,6 +20,10 @@ def dropdownOpen(state, widget):
     
 
 class SubmitWindow(QWidget):
+    """
+    This window shows a summary of all the rainfallevents and parametyers that have been set.
+    Additionally it contains simparameter frame.
+    """
     def __init__(self, target, mainwindow):
         self.target = target
         super().__init__()

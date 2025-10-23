@@ -4,8 +4,10 @@ from components.DataTarget import DataTarget
 from style import *
 import json
 
-# A frame which contains all the rainfallevents and allows to select them to enable them in the simulation
 class RainFrame(QFrame):
+    """
+    A frame which contains all the rainfallevents and allows to select them to enable them in the simulation
+    """
     def __init__(self):
         super().__init__()
         self.raindata = DataTarget().data['rainfallevents']

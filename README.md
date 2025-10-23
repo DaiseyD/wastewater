@@ -26,6 +26,7 @@ Make sure you have ICMExchange installed, this comes with the installation of In
 contains constants needed to run the program
 - DBFILEPATH: contains the path of the .icmm database you wish to use for the simulations
 - ALLTYPES: when set to true, will support changing all data types, when set to false, will only support numerical datatypes
+- DEBUG: allows for the execution of simulations when closingthe UI instead of submitting to allow for quick testing
 
 ## Modifying strategies
 It is possible to create a custom strategy, to do this, create a new function in the ScenarioManager. If the strategy should create new scenarios, follow the example of the ChangeAllStrategy method. Otherwise, follow the example of the randomRange method. 

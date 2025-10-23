@@ -3,9 +3,11 @@ from PySide6.QtCore import *
 from components.popup import ErrorPopup
 from components.DataTarget import DataTarget
 
-# This frame contains the other simparameters which have to be set in order to run the simulation
 class SimParameterFrame(QFrame):
-
+    """
+    This frame contains textfields for setting parameters for the simulation itself, such as duration and name. Additionally,
+    this frame contains a submit button which, when clicked, writes the saved parameters to a file and closes the UI so the ruby code can continue
+    """
     def __init__(self):
         super().__init__()
         self.datatarget = DataTarget().target

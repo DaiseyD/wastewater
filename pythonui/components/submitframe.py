@@ -3,8 +3,10 @@ from PySide6.QtCore import *
 from components.DataTarget import DataTarget
 from components.SubmitWindow import SubmitWindow
 
-# This class is responsible for providing info on the parameters that have been set currently
 class SubmitFrame(QFrame):
+    """
+    This class is responsible for providing info on the parameters that have been set currently
+    """
     def __init__(self, mainwindow):
         super().__init__()
         self.target = DataTarget().target
