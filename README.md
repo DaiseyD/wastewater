@@ -1,6 +1,7 @@
 # DG.Infoworks
 ## Requirements
 - python (pip)
+- Pyside6
 - Ruby
 - Infoworks ICM
 - ICMExchange

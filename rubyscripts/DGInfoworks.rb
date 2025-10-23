@@ -6,7 +6,10 @@ require_relative './ScenarioManager.rb'
 require_relative './Timer.rb'
 require 'logger'
 
-
+begin
+    Dir.mkdir "logs/logfile.log"
+rescue
+end
 logfile = File.open("logs/logfile.log", "a")
 $logger = Logger.new(logfile)
 
