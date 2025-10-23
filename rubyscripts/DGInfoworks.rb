@@ -10,6 +10,14 @@ begin
     Dir.mkdir Dir.pwd + "/logs"
 rescue
 end
+begin
+    Dir.mkdir Dir.pwd + "/results"
+rescue
+end
+begin
+    Dir.mkdir Dir.pwd + "/communication"
+rescue
+end
 logfile = File.open("logs/logfile.log", "a")
 $logger = Logger.new(logfile)
 
