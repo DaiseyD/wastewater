@@ -90,7 +90,10 @@ class SubmitWindow(QWidget):
                 baseLayout = QVBoxLayout(self)
                 titleLayout = QHBoxLayout()
                 baseLayout.addLayout(titleLayout)
-                titleLayout.addWidget(QLabel(typeName),7)
+
+                typeNameTitle = QLabel(typeName)
+                styleAppend(TEXT_HIGHLIGHT, typeNameTitle)
+                titleLayout.addWidget(typeNameTitle,7)
 
                 toggleBox = QToolButton()
                 toggleBox.setCheckable(True)
@@ -111,7 +114,7 @@ class SubmitWindow(QWidget):
                     stratLayout = QHBoxLayout()
                     valuesLayout = QHBoxLayout()
                     typeTitle = QLabel(i)
-                    styleAppend(TEXT_HIGHLIGHT, typeTitle)
+                    styleAppend(TEXT_SEMIHIGHLIGHT, typeTitle)
                     fieldFrameLayout.addWidget(typeTitle)
                     fieldFrameLayout.addLayout(stratLayout, 1, 0)
                     fieldFrameLayout.addLayout(valuesLayout, 2, 0)

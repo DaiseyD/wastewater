@@ -15,7 +15,7 @@ BACKGROUND_SEMIHIGHLIGHT = "* { background-color: hsl(200,50%,90%); }"
 BACKGROUND_PLAIN = "* { background-color: hsl(200,10%, 90%); }"
 
 
-TEXT_HIGHLIGHT = " * { font-size:16px; color: hsl(200,30%, 10%) }"
+TEXT_HIGHLIGHT = " * { font-size:18px; color: hsl(200,30%, 10%) }"
 TEXT_SEMIHIGHLIGHT = "* { font-size:15px; color: hsl(200, 30%, 30%); }"
 TEXT_PLAIN = "* { font-size:14px; color: hsl(200, 30%, 50%); }"
 TEXT_SEMIHIDDEN = "* { font-size:14px; color: hsl(200, 30%, 70%); }"
