@@ -7,11 +7,12 @@ require_relative './Timer.rb'
 require 'logger'
 
 begin
-    Dir.mkdir "logs/logfile.log"
+    Dir.mkdir Dir.pwd + "/logs"
 rescue
 end
 logfile = File.open("logs/logfile.log", "a")
 $logger = Logger.new(logfile)
+
 
 class DGInfoworks
     attr_accessor :icm
