@@ -97,3 +97,11 @@ custom_legend = [
 ax.legend(handles=custom_legend)
 
 plt.show()
+
+df= df.sort_values(by='setupTime')
+print(df)
+
+with(open("C:\\Users\\dijks\\Documents\\wastewatersimulation\\wastewater\\efficiencyanalysis\\latex.txt", "w") as f):
+    for (index,row) in df.iterrows():
+        f.write(f"\t{int(row['nSims'])}\t& {int(row['fieldsChanged'])}\t& {round(row['setupTime'],2)} \\\\ \\hline \n")
+    

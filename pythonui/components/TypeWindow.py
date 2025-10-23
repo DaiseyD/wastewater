@@ -146,6 +146,7 @@ class TypeWindow(QWidget):
             valueLabel0 = QLabel("value ex.:")
             styleAppend(TEXT_SEMIHIDDEN, valueLabel0)
             valueLabel1 = QLabel(f"{self.fieldObject["value"]}")
+            valueLabel1.setWordWrap(True)
             styleAppend(TEXT_SEMIHIGHLIGHT, valueLabel1)
             layout.addWidget(packFrame([nameLabel0, nameLabel1], direction="H"))
             layout.addWidget(packFrame([typeLabel0, typeLabel1], direction="H"))
